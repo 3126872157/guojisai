@@ -54,7 +54,7 @@
 24warehouse\chassis_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 24warehouse\chassis_task.o: ../Application/pid.h
 24warehouse\chassis_task.o: ../Compoents/algorithm/user_lib.h
-24warehouse\chassis_task.o: ..\Compoents\algorithm\Include\arm_math.h
+24warehouse\chassis_task.o: ../Compoents/algorithm/Include/arm_math.h
 24warehouse\chassis_task.o: ../Drivers/CMSIS/Include/core_cm4.h
 24warehouse\chassis_task.o: C:\Users\Ken.Liang\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\string.h
 24warehouse\chassis_task.o: C:\Users\Ken.Liang\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\math.h

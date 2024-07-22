@@ -31,6 +31,9 @@
 /* USER CODE BEGIN Includes */
 
 #include "bsp_can.h"
+#include "INS_task.h"
+#include "calibrate_task.h"
+#include "bsp_delay.h"
 
 /* USER CODE END Includes */
 
@@ -103,9 +106,12 @@ int main(void)
   MX_I2C3_Init();
   MX_SPI1_Init();
   MX_TIM10_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
 
 	can_filter_init();
+	delay_init();
+    cali_param_init();
 
   /* USER CODE END 2 */
 

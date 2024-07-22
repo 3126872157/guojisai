@@ -1,7 +1,7 @@
 24warehouse\ahrs_middleware.o: ..\Compoents\algorithm\AHRS_middleware.c
 24warehouse\ahrs_middleware.o: ..\Compoents\algorithm\AHRS_MiddleWare.h
 24warehouse\ahrs_middleware.o: ..\Compoents\algorithm\AHRS.h
-24warehouse\ahrs_middleware.o: ..\Compoents\algorithm\Include\arm_math.h
+24warehouse\ahrs_middleware.o: ../Compoents/algorithm/Include/arm_math.h
 24warehouse\ahrs_middleware.o: ../Drivers/CMSIS/Include/core_cm4.h
 24warehouse\ahrs_middleware.o: C:\Users\Ken.Liang\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
 24warehouse\ahrs_middleware.o: ../Drivers/CMSIS/Include/cmsis_version.h

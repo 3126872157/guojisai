@@ -21,13 +21,19 @@
 #include "CAN_receive.h"
 #include "pid.h"
 #include "arm_math.h"
+#include "INS_task.h"
+#include "chassis_behaviour.h"
 
 //调试保护标志位，1为开启安全模式；因为无线dap退出调试的时候有概率会疯掉
 uint8_t safe_flag = 0;
+
+//陀螺仪数据
+extern fp32 my_angle[3];
+
 //调试用！！！！！！！！！！！！
-fp32 vx_set = 0.0f,
-	 vy_set = 0.0f,
-	 angle_set = 0.0f;
+//fp32 vx_set = 0.0f,
+//	 vy_set = 0.0f,
+//	 angle_set = 0.0f;
 
 //底盘运动数据
 chassis_move_t chassis_move;
@@ -98,23 +104,28 @@ static void chassis_init(chassis_move_t *chassis_move_init)
         PID_init(&chassis_move_init->motor_speed_pid[i], PID_POSITION, motor_speed_pid, M2006_MOTOR_SPEED_PID_MAX_OUT, M2006_MOTOR_SPEED_PID_MAX_IOUT);
     }
 	
-	//稍后完善！！！！！！！！！！！
 	//平动环（里程环）
+	const static fp32 motor_distance_pid[3] = {M2006_MOTOR_DISTANCE_PID_KP, M2006_MOTOR_DISTANCE_PID_KI, M2006_MOTOR_DISTANCE_PID_KD};
+	PID_init(&chassis_move_init->motor_distance_pid, PID_POSITION, motor_distance_pid, M2006_MOTOR_DISTANCE_PID_MAX_OUT, M2006_MOTOR_DISTANCE_PID_MAX_IOUT);
 	
 	//角度环
+	const static fp32 motor_gyro_pid[3] = {M2006_MOTOR_GYRO_PID_KP, M2006_MOTOR_GYRO_PID_KI, M2006_MOTOR_GYRO_PID_KD};
+	PID_init(&chassis_move_init->motor_gyro_pid, PID_POSITION, motor_gyro_pid, M2006_MOTOR_GYRO_PID_MAX_OUT, M2006_MOTOR_GYRO_PID_MAX_IOUT);
 	
+    //转向环
+    const static fp32 motor_move_gyro_pid[3] = {M2006_MOTOR_MOVE_GYRO_PID_KP, M2006_MOTOR_MOVE_GYRO_PID_KI, M2006_MOTOR_MOVE_GYRO_PID_KD};
+	PID_init(&chassis_move_init->motor_move_gyro_pid, PID_POSITION, motor_move_gyro_pid, M2006_MOTOR_MOVE_GYRO_PID_MAX_OUT, M2006_MOTOR_MOVE_GYRO_PID_MAX_IOUT);
 	
-    //底盘角度pid值
-    //const static fp32 chassis_yaw_pid[3] = {CHASSIS_FOLLOW_GIMBAL_PID_KP, CHASSIS_FOLLOW_GIMBAL_PID_KI, CHASSIS_FOLLOW_GIMBAL_PID_KD};
-    
-    //初始化角度PID
-    //PID_init(&chassis_move_init->chassis_angle_pid, PID_POSITION, chassis_yaw_pid, CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT, CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);
-    
+	//陀螺仪数据置0
+	chassis_move_init->gyro=0.0f;
+	//chassis_move_init->gyro_set=0.0f;
+	chassis_move_init->last_gyro=0.0f;
+	
     //底盘开机状态为停止状态
-    //chassis_move_init->chassis_mode = CHASSIS_STOP;
+    chassis_move_init->chassis_mode = CHASSIS_STOP;
     
     //获取陀螺仪姿态角指针
-    //chassis_move_init->chassis_INS_angle = get_INS_angle_point();
+    chassis_move_init->chassis_INS_angle = get_INS_angle_point();
    
     //各方向的最大 最小速度
     chassis_move_init->vx_max_speed =  NORMAL_MAX_CHASSIS_SPEED_X;
@@ -157,8 +168,19 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
         return;
     }
 
+	//稍后完善这个里程计
     for (uint8_t i = 0; i < 4; i++)
     {
+		fp32 temp_angle = chassis_move_update->motor_chassis[i].chassis_motor_measure->ecd - chassis_move_update->motor_chassis[i].chassis_motor_measure->last_ecd;
+		if(temp_angle >= 4096)
+		{
+			temp_angle = (8192.0f - chassis_move_update->motor_chassis[1].chassis_motor_measure->ecd) + chassis_move_update->motor_chassis[1].chassis_motor_measure->last_ecd;
+		}
+		else if(temp_angle <= -4096)
+		{
+			temp_angle = (8192.0f - chassis_move_update->motor_chassis[1].chassis_motor_measure->last_ecd) + chassis_move_update->motor_chassis[1].chassis_motor_measure->ecd;
+		}
+		
         //更新电机速度，加速度是速度的PID微分
         chassis_move_update->motor_chassis[i].speed = CHASSIS_MOTOR_RPM_TO_VECTOR_SEN * chassis_move_update->motor_chassis[i].chassis_motor_measure->speed_rpm;
         chassis_move_update->motor_chassis[i].accel = chassis_move_update->motor_speed_pid[i].Dbuf[0] * CHASSIS_CONTROL_FREQUENCE;
@@ -182,8 +204,14 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 								- chassis_move_update->motor_chassis[2].speed
 								- chassis_move_update->motor_chassis[3].speed)
 								* MOTOR_SPEED_TO_CHASSIS_SPEED_WZ;
-
-	//还有里程计，转子角度计，陀螺仪更新，pid更新
+	
+	//稍后完善，用指针的方法？？get_angle函数到底是啥
+	//更新陀螺仪数据
+	chassis_move_update->gyro = my_angle[0];
+	chassis_move_update->last_gyro = chassis_move_update->gyro;
+	
+	
+	//还有里程计，转子角度计，pid更新
 }
 
 /**
@@ -199,20 +227,28 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
         return;
     }
 
-	//稍后完善！！！！！！！！！
-    //fp32 vx_set = 0.0f, vy_set = 0.0f, angle_set = 0.0f;
+    fp32 vx_set = 0.0f, vy_set = 0.0f, wz_set = 0.0f;
     //获取三个控制设置值
-    //chassis_behaviour_control_set(&vx_set, &vy_set, &angle_set, chassis_move_control);
-
-	fp32 wz_set = angle_set;
+    chassis_behaviour_control_set(&vx_set, &vy_set, &wz_set, chassis_move_control);
 	
-	chassis_move_control->vx_set = vx_set;
-	chassis_move_control->vy_set = vy_set;
-	chassis_move_control->wz_set = wz_set;
+	//稍后完善其他几种模式
+	if(chassis_move_control->chassis_mode == CHASSIS_STOP)
+	{
+		safe_flag = 1;
+	}
+	else if(chassis_move_control->chassis_mode == CHASSIS_MOVE_AND_ROTATE)
+	{
+		chassis_move_control->vx_set = vx_set;
+		chassis_move_control->vy_set = vy_set;
+		chassis_move_control->wz_set = wz_set;
+		
+		//稍后完善缓起功能
+		
+		chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
+		chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed, chassis_move_control->vy_max_speed);
+		chassis_move_control->wz_set = fp32_constrain(chassis_move_control->wz_set, chassis_move_control->wz_min_speed, chassis_move_control->wz_max_speed);
+	}
 	
-    chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
-	chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed, chassis_move_control->vy_max_speed);
-	chassis_move_control->wz_set = fp32_constrain(chassis_move_control->wz_set, chassis_move_control->wz_min_speed, chassis_move_control->wz_max_speed);
 }
 
 /**

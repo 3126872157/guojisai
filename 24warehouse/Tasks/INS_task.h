@@ -25,7 +25,7 @@
 #define INS_Task_H
 #include "struct_typedef.h"
 
-
+#define RAD 57.2957795131f
 #define SPI_DMA_GYRO_LENGHT       8
 #define SPI_DMA_ACCEL_LENGHT      9
 #define SPI_DMA_ACCEL_TEMP_LENGHT 4

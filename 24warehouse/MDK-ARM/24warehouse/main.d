@@ -58,3 +58,6 @@
 24warehouse\main.o: ../Core/Inc/gpio.h
 24warehouse\main.o: ../Boards/bsp_can.h
 24warehouse\main.o: ../Application/struct_typedef.h
+24warehouse\main.o: ../Application/INS_task.h
+24warehouse\main.o: ../Application/calibrate_task.h
+24warehouse\main.o: ../Boards/bsp_delay.h

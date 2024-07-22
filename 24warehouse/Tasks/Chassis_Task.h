@@ -29,12 +29,36 @@
 #include "pid.h"
 #include "user_lib.h"
 
-//底盘电机速度环PID
+//速度环PID
 #define M2006_MOTOR_SPEED_PID_KP 330.0f
 #define M2006_MOTOR_SPEED_PID_KI 0.4f
 #define M2006_MOTOR_SPEED_PID_KD 0.0f
 #define M2006_MOTOR_SPEED_PID_MAX_OUT MAX_MOTOR_CAN_CURRENT
 #define M2006_MOTOR_SPEED_PID_MAX_IOUT 4000.0f
+
+//位置环PID（平动/距离）
+#define M2006_MOTOR_DISTANCE_PID_KP 4.6f
+#define M2006_MOTOR_DISTANCE_PID_KI 0.0000028f
+#define M2006_MOTOR_DISTANCE_PID_KD 0.0000006f
+#define M2006_MOTOR_DISTANCE_PID_MAX_OUT MAX_MOTOR_CAN_CURRENT
+#define M2006_MOTOR_DISTANCE_PID_MAX_IOUT 4000.0f
+
+//陀螺仪角度环PID
+#define M2006_MOTOR_GYRO_PID_KP 1.2f
+#define M2006_MOTOR_GYRO_PID_KI 0.0f
+#define M2006_MOTOR_GYRO_PID_KD 50.0f
+#define M2006_MOTOR_GYRO_PID_MAX_OUT MAX_MOTOR_CAN_CURRENT
+#define M2006_MOTOR_GYRO_PID_MAX_IOUT 2000.0f
+#define MAX_MOTOR_CAN_CURRENT 8000.0f
+
+//底盘转向环PID
+#define M2006_MOTOR_MOVE_GYRO_PID_KP 10.0f
+#define M2006_MOTOR_MOVE_GYRO_PID_KI 0.0f
+#define M2006_MOTOR_MOVE_GYRO_PID_KD 100.0f
+#define M2006_MOTOR_MOVE_GYRO_PID_MAX_OUT MAX_MOTOR_CAN_CURRENT
+#define M2006_MOTOR_MOVE_GYRO_PID_MAX_IOUT 2000.0f
+#define MAX_MOTOR_CAN_CURRENT 8000.0f
+
 #define MAX_MOTOR_CAN_CURRENT 8000.0f
 
 //任务开始空闲一段时间
@@ -102,12 +126,10 @@ typedef struct
 	
   pid_type_def motor_speed_pid[4];             	//底盘电机速度pid
   pid_type_def motor_distance_pid;				//底盘电机平动pid
+  pid_type_def motor_gyro_pid;					//底盘电机角度环，修正偏航
+  pid_type_def motor_move_gyro_pid;				//底盘电机转向环
   
-  pid_type_def chassis_angle_pid;              	//底盘跟随角度pid
-  pid_type_def motor_gyro_pid;
-  pid_type_def motor_move_gyro_pid;
-  
-  fp32 x;
+  fp32 x;							//底盘行驶里程
   fp32 y;
   fp32 vx;                          //底盘速度 前进方向 前为正，单位 m/s
   fp32 vy;                          //底盘速度 左右方向 左为正  单位 m/s
@@ -117,9 +139,9 @@ typedef struct
   fp32 vx_set;                      //底盘设定速度 前进方向 前为正，单位 m/s
   fp32 vy_set;                      //底盘设定速度 左右方向 左为正，单位 m/s
   fp32 wz_set;                      //底盘设定旋转角速度，逆时针为正 单位 rad/s
-  fp32 chassis_relative_angle;      //底盘与云台的相对角度，单位 rad
-  fp32 chassis_relative_angle_set;  //设置相对云台控制角度
-  fp32 chassis_yaw_set;             
+  fp32 gyro;   						//底盘相对0时刻的角度
+  fp32 gyro_set;					//设置的控制角度
+  fp32 last_gyro;            
 
   fp32 vx_max_speed;  				//前进方向最大速度 单位m/s
   fp32 vx_min_speed;  				//后退方向最大速度 单位m/s
@@ -127,6 +149,9 @@ typedef struct
   fp32 vy_min_speed;  				//右方向最大速度 单位m/s
   fp32 wz_max_speed;  				//旋转最大速度
   fp32 wz_min_speed;  				//旋转最小速度
+  
+  //稍后完善！！
+  int Dis_fm_set;
   
 } chassis_move_t;
 

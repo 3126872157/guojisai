@@ -19,41 +19,6 @@
   *
   @verbatim
   ==============================================================================
-  *             use the remote control begin calibrate,
-  *             first: two switchs of remote control are down
-  *             second:hold for 2 seconds, two rockers set to V, like \../;  \. means the letf rocker go bottom right.
-  *             third:hold for 2 seconds, two rockers set to ./\., begin the gyro calibration
-  *                     or set to '\/', begin the gimbal calibration
-  *                     or set to /''\, begin the chassis calibration
-  *
-  *             data in flash, include cali data and name[3] and cali_flag
-  *             for example, head_cali has 8 bytes, and it need 12 bytes in flash. if it starts in 0x080A0000
-  *             0x080A0000-0x080A0007: head_cali data
-  *             0x080A0008: name[0]
-  *             0x080A0009: name[1]
-  *             0x080A000A: name[2]
-  *             0x080A000B: cali_flag, when cali_flag == 0x55, means head_cali has been calibrated.
-  *             if add a sensor
-  *             1.add cail sensro name in cali_id_e at calibrate_task.h, like
-  *             typedef enum
-  *             {
-  *                 ...
-  *                 //add more...
-  *                 CALI_XXX,
-  *                 CALI_LIST_LENGHT,
-  *             } cali_id_e;
-  *             2. add the new data struct in calibrate_task.h, must be 4 four-byte mulitple  like
-  *
-  *             typedef struct
-  *             {
-  *                 uint16_t xxx;
-  *                 uint16_t yyy;
-  *                 fp32 zzz;
-  *             } xxx_cali_t; //size: 8 bytes, must be 4, 8, 12, 16...
-  *             3.in "FLASH_WRITE_BUF_LENGHT", add "sizeof(xxx_cali_t)", and implement new function.
-  *             bool_t cali_xxx_hook(uint32_t *cali, bool_t cmd), and add the name in "cali_name[CALI_LIST_LENGHT][3]"
-  *             and declare variable xxx_cali_t xxx_cail, add the data address in cali_sensor_buf[CALI_LIST_LENGHT]
-  *             and add the data lenght in cali_sensor_size, at last, add function in cali_hook_fun[CALI_LIST_LENGHT]
   *             使用遥控器进行开始校准
   *             第一步:遥控器的两个开关都打到下
   *             第二步:两个摇杆打成\../,保存两秒.\.代表左摇杆向右下打.
@@ -102,10 +67,10 @@
 #include "struct_typedef.h"
 
 //when imu is calibrating ,buzzer set frequency and strength. 当imu在校准,蜂鸣器的设置频率和强度
-#define imu_start_buzzer()          __nop()    
+#define imu_start_buzzer()          buzzer_on(91, 10000)    
 //when gimbal is calibrating ,buzzer set frequency and strength.当云台在校准,蜂鸣器的设置频率和强度
-#define gimbal_start_buzzer()       __nop()    
-#define cali_buzzer_off()           __nop()            //buzzer off，关闭蜂鸣器
+#define gimbal_start_buzzer()       buzzer_on(31, 19999)    
+#define cali_buzzer_off()           buzzer_off()            //buzzer off，关闭蜂鸣器
 
 
 //get stm32 chip temperature, to calc imu control temperature.获取stm32片内温度，计算imu的控制温度
@@ -118,9 +83,9 @@
 #define cali_flash_erase(address, page_num) flash_erase_address((address), (page_num))              //flash erase function,flash擦除函数
 
 
-#define get_remote_ctrl_point_cali()        get_remote_control_point()  //get the remote control point，获取遥控器指针
-#define gyro_cali_disable_control()         RC_unable()                 //when imu is calibrating, disable the remote control.当imu在校准时候,失能遥控器
-#define gyro_cali_enable_control()          RC_restart(SBUS_RX_BUF_NUM)
+//#define get_remote_ctrl_point_cali()        get_remote_control_point()  //get the remote control point，获取遥控器指针
+//#define gyro_cali_disable_control()         RC_unable()                 //when imu is calibrating, disable the remote control.当imu在校准时候,失能遥控器
+//#define gyro_cali_enable_control()          RC_restart(SBUS_RX_BUF_NUM)
 
 // calc the zero drift function of gyro, 计算陀螺仪零漂
 #define gyro_cali_fun(cali_scale, cali_offset, time_count)  INS_cali_gyro((cali_scale), (cali_offset), (time_count))
@@ -166,10 +131,9 @@
 typedef enum
 {
     CALI_HEAD = 0,
-    CALI_GIMBAL = 1,
-    CALI_GYRO = 2,
-    CALI_ACC = 3,
-    CALI_MAG = 4,
+    CALI_GYRO = 1,
+    CALI_ACC = 2,
+    CALI_MAG = 3,
     //add more...
     CALI_LIST_LENGHT,
 } cali_id_e;

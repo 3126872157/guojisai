@@ -19,41 +19,6 @@
   *
   @verbatim
   ==============================================================================
-  *             use the remote control begin calibrate,
-  *             first: two switchs of remote control are down
-  *             second:hold for 2 seconds, two rockers set to V, like \../;  \. means the letf rocker go bottom right.
-  *             third:hold for 2 seconds, two rockers set to ./\., begin the gyro calibration
-  *                     or set to '\/', begin the gimbal calibration
-  *                     or set to /''\, begin the chassis calibration
-  *
-  *             data in flash, include cali data and name[3] and cali_flag
-  *             for example, head_cali has 8 bytes, and it need 12 bytes in flash. if it starts in 0x080A0000
-  *             0x080A0000-0x080A0007: head_cali data
-  *             0x080A0008: name[0]
-  *             0x080A0009: name[1]
-  *             0x080A000A: name[2]
-  *             0x080A000B: cali_flag, when cali_flag == 0x55, means head_cali has been calibrated.
-  *             if add a sensor
-  *             1.add cail sensro name in cali_id_e at calibrate_task.h, like
-  *             typedef enum
-  *             {
-  *                 ...
-  *                 //add more...
-  *                 CALI_XXX,
-  *                 CALI_LIST_LENGHT,
-  *             } cali_id_e;
-  *             2. add the new data struct in calibrate_task.h, must be 4 four-byte mulitple  like
-  *
-  *             typedef struct
-  *             {
-  *                 uint16_t xxx;
-  *                 uint16_t yyy;
-  *                 fp32 zzz;
-  *             } xxx_cali_t; //size: 8 bytes, must be 4, 8, 12, 16...
-  *             3.in "FLASH_WRITE_BUF_LENGHT", add "sizeof(xxx_cali_t)", and implement new function.
-  *             bool_t cali_xxx_hook(uint32_t *cali, bool_t cmd), and add the name in "cali_name[CALI_LIST_LENGHT][3]"
-  *             and declare variable xxx_cali_t xxx_cail, add the data address in cali_sensor_buf[CALI_LIST_LENGHT]
-  *             and add the data lenght in cali_sensor_size, at last, add function in cali_hook_fun[CALI_LIST_LENGHT]
   *             使用遥控器进行开始校准
   *             第一步:遥控器的两个开关都打到下
   *             第二步:两个摇杆打成\../,保存两秒.\.代表左摇杆向右下打.
@@ -103,15 +68,17 @@
 #include "bsp_flash.h"
 
 #include "can_receive.h"
-//#include "remote_control.h"
 #include "INS_task.h"
 
 
 //include head,gimbal,gyro,accel,mag. gyro,accel and mag have the same data struct. total 5(CALI_LIST_LENGHT) devices, need data lenght + 5 * 4 bytes(name[3]+cali)
-#define FLASH_WRITE_BUF_LENGHT  (sizeof(head_cali_t) + sizeof(gimbal_cali_t) + sizeof(imu_cali_t) * 3  + CALI_LIST_LENGHT * 4)
+//#define FLASH_WRITE_BUF_LENGHT  (sizeof(head_cali_t) + sizeof(gimbal_cali_t) + sizeof(imu_cali_t) * 3  + CALI_LIST_LENGHT * 4)
+#define FLASH_WRITE_BUF_LENGHT  (sizeof(imu_cali_t) * 3  + CALI_LIST_LENGHT * 4)
 
-
-
+uint8_t my_cali_flag = 0;
+uint8_t my_cnt_flag = 0;	//使用這個來自動校準，不用遙控器，0為開始校準
+uint8_t my_head_flag = 0;
+uint8_t my_gyro_flag = 0;
 
 /**
   * @brief          use remote control to begin a calibrate,such as gyro, gimbal, chassis
@@ -208,7 +175,7 @@ static bool_t cali_gyro_hook(uint32_t *cali, bool_t cmd);   //gyro device cali f
   * @retval         0:校准任务还没有完
                     1:校准任务已经完成
   */
-static bool_t cali_gimbal_hook(uint32_t *cali, bool_t cmd); //gimbal device cali function
+//static bool_t cali_gimbal_hook(uint32_t *cali, bool_t cmd); //gimbal device cali function
 
 
 
@@ -219,7 +186,7 @@ uint32_t calibrate_task_stack;
 
 //static const RC_ctrl_t *calibrate_RC;   //remote control point
 static head_cali_t     head_cali;       //head cali data
-static gimbal_cali_t   gimbal_cali;     //gimbal cali data
+//static gimbal_cali_t   gimbal_cali;     //gimbal cali data
 static imu_cali_t      accel_cali;      //accel cali data
 static imu_cali_t      gyro_cali;       //gyro cali data
 static imu_cali_t      mag_cali;        //mag cali data
@@ -229,21 +196,21 @@ static uint8_t flash_write_buf[FLASH_WRITE_BUF_LENGHT];
 
 cali_sensor_t cali_sensor[CALI_LIST_LENGHT]; 
 
-static const uint8_t cali_name[CALI_LIST_LENGHT][3] = {"HD", "GM", "GYR", "ACC", "MAG"};
+static const uint8_t cali_name[CALI_LIST_LENGHT][3] = {"HD", "GYR", "ACC", "MAG"};
 
 //cali data address
 static uint32_t *cali_sensor_buf[CALI_LIST_LENGHT] = {
-        (uint32_t *)&head_cali, (uint32_t *)&gimbal_cali,
+        (uint32_t *)&head_cali,
         (uint32_t *)&gyro_cali, (uint32_t *)&accel_cali,
         (uint32_t *)&mag_cali};
 
 
 static uint8_t cali_sensor_size[CALI_LIST_LENGHT] =
     {
-        sizeof(head_cali_t) / 4, sizeof(gimbal_cali_t) / 4,
+        sizeof(head_cali_t) / 4,
         sizeof(imu_cali_t) / 4, sizeof(imu_cali_t) / 4, sizeof(imu_cali_t) / 4};
 
-void *cali_hook_fun[CALI_LIST_LENGHT] = {cali_head_hook, cali_gimbal_hook, cali_gyro_hook, NULL, NULL};
+void *cali_hook_fun[CALI_LIST_LENGHT] = {cali_head_hook, cali_gyro_hook, NULL, NULL};
 
 static uint32_t calibrate_systemTick;
 
@@ -262,36 +229,39 @@ void calibrate_task(void const *pvParameters)
 {
     static uint8_t i = 0;
     
-//    calibrate_RC = get_remote_ctrl_point_cali();
+    //calibrate_RC = get_remote_ctrl_point_cali();
 
     while (1)
     {
 
-        RC_cmd_to_calibrate();
+        if(my_cali_flag != 1)
+		{
+			RC_cmd_to_calibrate();
 
-        for (i = 0; i < CALI_LIST_LENGHT; i++)
-        {
-            if (cali_sensor[i].cali_cmd)
-            {
-                if (cali_sensor[i].cali_hook != NULL)
-                {
-
-                    if (cali_sensor[i].cali_hook(cali_sensor_buf[i], CALI_FUNC_CMD_ON))
-                    {
-                        //done
-                        cali_sensor[i].name[0] = cali_name[i][0];
-                        cali_sensor[i].name[1] = cali_name[i][1];
-                        cali_sensor[i].name[2] = cali_name[i][2];
-                        //set 0x55
-                        cali_sensor[i].cali_done = CALIED_FLAG;
-
-                        cali_sensor[i].cali_cmd = 0;
-                        //write
-                        cali_data_write();
-                    }
-                }
-            }
-        }
+			for (i = 0; i < CALI_LIST_LENGHT; i++)
+			{
+				if (cali_sensor[i].cali_cmd)
+				{
+					if (cali_sensor[i].cali_hook != NULL)
+					{
+	
+						if (cali_sensor[i].cali_hook(cali_sensor_buf[i], CALI_FUNC_CMD_ON))
+						{
+							//done
+							cali_sensor[i].name[0] = cali_name[i][0];
+							cali_sensor[i].name[1] = cali_name[i][1];
+							cali_sensor[i].name[2] = cali_name[i][2];
+							//set 0x55
+							cali_sensor[i].cali_done = CALIED_FLAG;
+	
+							cali_sensor[i].cali_cmd = 0;
+							//write
+							cali_data_write();
+						}
+					}
+				}
+			}
+		}
         osDelay(CALIBRATE_CONTROL_TIME);
 #if INCLUDE_uxTaskGetStackHighWaterMark
         calibrate_task_stack = uxTaskGetStackHighWaterMark(NULL);
@@ -356,9 +326,9 @@ void get_flash_latitude(float *latitude)
 static void RC_cmd_to_calibrate(void)
 {
     static const uint8_t BEGIN_FLAG   = 1;
-    static const uint8_t GIMBAL_FLAG  = 2;
-    static const uint8_t GYRO_FLAG    = 3;
-    static const uint8_t CHASSIS_FLAG = 4;
+//    static const uint8_t GIMBAL_FLAG  = 2;
+    static const uint8_t GYRO_FLAG    = 2;
+//    static const uint8_t CHASSIS_FLAG = 4;
 
     static uint8_t  i;
     static uint32_t rc_cmd_systemTick = 0;
@@ -379,22 +349,30 @@ static void RC_cmd_to_calibrate(void)
             return;
         }
     }
+	
+//	if(my_cali_flag == 1)	//全部校準完成，退出，不要死循環
+//	{
+//		return;
+//	}
 
     if (rc_action_flag == 0 && rc_cmd_time > RC_CMD_LONG_TIME)
     {
         rc_cmd_systemTick = xTaskGetTickCount();
         rc_action_flag = BEGIN_FLAG;
         rc_cmd_time = 0;
+		
+		my_cnt_flag = 1;	//1為準備校準陀螺儀
+		
     }
-    else if (rc_action_flag == GIMBAL_FLAG && rc_cmd_time > RC_CMD_LONG_TIME)
-    {
-        //gimbal cali, 
-        rc_action_flag = 0;
-        rc_cmd_time = 0;
-        cali_sensor[CALI_GIMBAL].cali_cmd = 1;
-        cali_buzzer_off();
-    }
-    else if (rc_action_flag == 3 && rc_cmd_time > RC_CMD_LONG_TIME)
+//    else if (rc_action_flag == GIMBAL_FLAG && rc_cmd_time > RC_CMD_LONG_TIME)
+//    {
+//        //gimbal cali
+//        rc_action_flag = 0;
+//        rc_cmd_time = 0;
+//        cali_sensor[CALI_GIMBAL].cali_cmd = 1;
+//        cali_buzzer_off();
+//    }
+    else if (rc_action_flag == 2 && rc_cmd_time > RC_CMD_LONG_TIME)
     {
         //gyro cali
         rc_action_flag = 0;
@@ -407,33 +385,36 @@ static void RC_cmd_to_calibrate(void)
             head_cali.temperature = (int8_t)(GYRO_CONST_MAX_TEMP);
         }
         cali_buzzer_off();
+		
+		my_cnt_flag = 2;	//到2就校準完成了
+		
     }
-    else if (rc_action_flag == CHASSIS_FLAG && rc_cmd_time > RC_CMD_LONG_TIME)
-    {
-        rc_action_flag = 0;
-        rc_cmd_time = 0;
-        //send CAN reset ID cmd to M3508
-        //发送CAN重设ID命令到3508
+//    else if (rc_action_flag == CHASSIS_FLAG && rc_cmd_time > RC_CMD_LONG_TIME)
+//    {
+//        rc_action_flag = 0;
+//        rc_cmd_time = 0;
+//        //send CAN reset ID cmd to M3508
+//        //发送CAN重设ID命令到3508
 //        CAN_cmd_chassis_reset_ID();
 //        CAN_cmd_chassis_reset_ID();
 //        CAN_cmd_chassis_reset_ID();
-        cali_buzzer_off();
-    }
+//        cali_buzzer_off();
+//    }
 
-//    if (calibrate_RC->rc.ch[0] < -RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[1] < -RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[2] > RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[3] < -RC_CALI_VALUE_HOLE && switch_is_down(calibrate_RC->rc.s[0]) && switch_is_down(calibrate_RC->rc.s[1]) && rc_action_flag == 0)
+    if (my_cnt_flag == 0 && rc_action_flag == 0)
     {
         //two rockers set to  \../, hold for 2 seconds,
         //两个摇杆打成 \../,保持2s
         rc_cmd_time++;
     }
 //    else if (calibrate_RC->rc.ch[0] > RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[1] > RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[2] < -RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[3] > RC_CALI_VALUE_HOLE && switch_is_down(calibrate_RC->rc.s[0]) && switch_is_down(calibrate_RC->rc.s[1]) && rc_action_flag != 0)
-    {
-        //two rockers set '\/', hold for 2 seconds
-        //两个摇杆打成'\/',保持2s
-        rc_cmd_time++;
-        rc_action_flag = GIMBAL_FLAG;
-    }
-//    else if (calibrate_RC->rc.ch[0] > RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[1] < -RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[2] < -RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[3] < -RC_CALI_VALUE_HOLE && switch_is_down(calibrate_RC->rc.s[0]) && switch_is_down(calibrate_RC->rc.s[1]) && rc_action_flag != 0)
+//    {
+//        //two rockers set '\/', hold for 2 seconds
+//        //两个摇杆打成'\/',保持2s
+//        rc_cmd_time++;
+//        rc_action_flag = GIMBAL_FLAG;
+//    }
+    else if (my_cnt_flag == 1 && rc_action_flag != 0)
     {
         //two rocker set to ./\., hold for 2 seconds
         //两个摇杆打成./\.,保持2s
@@ -441,13 +422,13 @@ static void RC_cmd_to_calibrate(void)
         rc_action_flag = GYRO_FLAG;
     }
 //    else if (calibrate_RC->rc.ch[0] < -RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[1] > RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[2] > RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[3] > RC_CALI_VALUE_HOLE && switch_is_down(calibrate_RC->rc.s[0]) && switch_is_down(calibrate_RC->rc.s[1]) && rc_action_flag != 0)
-    {
-        //two rocker set to /''\, hold for 2 seconds
-        //两个摇杆打成/''\,保持2s
-        rc_cmd_time++;
-        rc_action_flag = CHASSIS_FLAG;
-    }
-//    else
+//    {
+//        //two rocker set to /''\, hold for 2 seconds
+//        //两个摇杆打成/''\,保持2s
+//        rc_cmd_time++;
+//        rc_action_flag = CHASSIS_FLAG;
+//    }
+    else
     {
         rc_cmd_time = 0;
     }
@@ -459,6 +440,9 @@ static void RC_cmd_to_calibrate(void)
         //over 20 seconds, end
         //超过20s,停止
         rc_action_flag = 0;
+		
+		my_cali_flag = 6;	//此爲超過20秒
+		
         return;
     }
     else if (calibrate_systemTick - rc_cmd_systemTick > RC_CALI_BUZZER_MIDDLE_TIME && rc_cmd_systemTick != 0 && rc_action_flag != 0)
@@ -637,6 +621,8 @@ static bool_t cali_head_hook(uint32_t *cali, bool_t cmd)
     //shenzhen latitude 
     local_cali_t->latitude = 22.0f;
 
+	my_head_flag = 1;
+	
     return 1;
 }
 
@@ -675,14 +661,15 @@ static bool_t cali_gyro_hook(uint32_t *cali, bool_t cmd)
         {
             count_time = 0;
             cali_buzzer_off();
-//            gyro_cali_enable_control();
+            //gyro_cali_enable_control();
+			my_cali_flag = 1;	//檢查這個看校準是否完成
             return 1;
         }
         else
         {
-//            gyro_cali_disable_control(); //disable the remote control to make robot no move
+            //gyro_cali_disable_control(); //disable the remote control to make robot no move
             imu_start_buzzer();
-            
+			my_cali_flag = 9;	//這個代表陀螺儀校準未完成
             return 0;
         }
     }
@@ -708,8 +695,8 @@ static bool_t cali_gyro_hook(uint32_t *cali, bool_t cmd)
   * @retval         0:校准任务还没有完
                     1:校准任务已经完成
   */
-static bool_t cali_gimbal_hook(uint32_t *cali, bool_t cmd)
-{
+//static bool_t cali_gimbal_hook(uint32_t *cali, bool_t cmd)
+//{
 
-    return 1;
-}
+//    return 1;
+//}

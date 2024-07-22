@@ -157,7 +157,7 @@ static fp32 INS_accel[3] = {0.0f, 0.0f, 0.0f};
 static fp32 INS_mag[3] = {0.0f, 0.0f, 0.0f};
 static fp32 INS_quat[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 fp32 INS_angle[3] = {0.0f, 0.0f, 0.0f};      //euler angle, unit rad.欧拉角 单位 rad
-
+fp32 my_angle[3] = {0.0f, 0.0f, 0.0f};		//转换成角度制
 
 
 
@@ -266,7 +266,9 @@ void INS_task(void const *pvParameters)
 
         AHRS_update(INS_quat, timing_time, INS_gyro, accel_fliter_3, INS_mag);
         get_angle(INS_quat, INS_angle + INS_YAW_ADDRESS_OFFSET, INS_angle + INS_PITCH_ADDRESS_OFFSET, INS_angle + INS_ROLL_ADDRESS_OFFSET);
-
+		my_angle[0] = INS_angle[0] * RAD;
+		my_angle[1] = INS_angle[1] * RAD;
+		my_angle[2] = INS_angle[2] * RAD;
 
         //because no use ist8310 and save time, no use
         if(mag_update_flag &= 1 << IMU_DR_SHFITS)

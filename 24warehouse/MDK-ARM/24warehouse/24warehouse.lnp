@@ -51,6 +51,7 @@
 "24warehouse\bsp_flash.o"
 "24warehouse\bsp_imu_pwm.o"
 "24warehouse\bsp_spi.o"
+"24warehouse\bsp_buzzer.o"
 "24warehouse\chassis_task.o"
 "24warehouse\ins_task.o"
 "24warehouse\calibrate_task.o"
