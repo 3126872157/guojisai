@@ -1,0 +1,11 @@
+24warehouse\user_lib.o: ..\Compoents\algorithm\user_lib.c
+24warehouse\user_lib.o: ..\Compoents\algorithm\user_lib.h
+24warehouse\user_lib.o: ../Application/struct_typedef.h
+24warehouse\user_lib.o: ..\Compoents\algorithm\Include\arm_math.h
+24warehouse\user_lib.o: ../Drivers/CMSIS/Include/core_cm4.h
+24warehouse\user_lib.o: C:\Users\Ken.Liang\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
+24warehouse\user_lib.o: ../Drivers/CMSIS/Include/cmsis_version.h
+24warehouse\user_lib.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
+24warehouse\user_lib.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
+24warehouse\user_lib.o: C:\Users\Ken.Liang\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\string.h
+24warehouse\user_lib.o: C:\Users\Ken.Liang\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\math.h
