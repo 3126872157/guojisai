@@ -110,7 +110,6 @@ static void chassis_ultrasonic_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set,
   */
 static void chassis_move_and_rotate_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, chassis_move_t *chassis_move_vector);
 
-//这个干啥的？？？？？？？？？？？
 static void chassis_V_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, chassis_move_t *chassis_move_vector);
 
 //留意，这个底盘模式变量
@@ -217,8 +216,8 @@ static void  chassis_infrared_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, 
   * @param[in]      vy_set左右的速度,正值 左移速度， 负值 右移速度
   * @param[in]      wz_set底盘设置的旋转速度,正值 顺时针旋转，负值 逆时针旋转
   * @param[in]      chassis_move_vector底盘数据
-	* @param[in]			这个函数PID用的是陀螺仪角度环，PID函数的3个参数分别是传入陀螺仪PID的各项数据，传入由陀螺仪总共转了多少角度，传入我们想要转到的角度，解算完后把数据赋值给wz
-									（数据为正则顺时针，负则逆时针）至于为什么是陀螺仪总共转了多少度，主要是因为陀螺仪数据处理后只能是-180到180，超过这个限制就永远达不到目标了比如360度
+  * @param[in]		这个函数PID用的是陀螺仪角度环，PID函数的3个参数分别是传入陀螺仪PID的各项数据，传入由陀螺仪总共转了多少角度，传入我们想要转到的角度，解算完后把数据赋值给wz
+					（数据为正则顺时针，负则逆时针）至于为什么是陀螺仪总共转了多少度，主要是因为陀螺仪数据处理后只能是-180到180，超过这个限制就永远达不到目标了比如360度
   * @retval         返回空
   */
 bool_t flag_ultrasonic=0;
@@ -264,8 +263,7 @@ static void chassis_ultrasonic_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set,
 	{
 		*vx_set=0.0f;
 	}
-	//稍后完善！！！！！！！！！！！！！
-	//*wz_set = PID_calc(&chassis_move_vector->motor_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
+	*wz_set = PID_calc(&chassis_move_vector->motor_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
 }
 
 /**
@@ -310,7 +308,7 @@ static void chassis_move_and_rotate_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz
 	}
 }
 
-//这个是啥？？？？稍后完善！！！！！！！！！
+//稍后完善！！！！！！！！！
 static void chassis_V_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, chassis_move_t *chassis_move_vector)
 {
 	if (vx_set == NULL || vy_set == NULL || wz_set == NULL || chassis_move_vector == NULL)

@@ -43,11 +43,15 @@ typedef enum
 //rm motor data
 typedef struct
 {
-    uint16_t ecd;
+    uint16_t ecd;			//机械角度，范围是0-8191，对应0-360度
     int16_t speed_rpm;
     int16_t given_current;
     uint8_t temperate;
     int16_t last_ecd;
+	fp32 code;				//此为里程计，记录转子从开机到当前的总机械角度
+	uint16_t offset_code;	//此为上电时的初始偏移角度
+	int32_t round_cnt;		//转动圈数
+							//计算公式为：code = round_cnt * 8192 + ecd - offset_code 
 } motor_measure_t;
 
 /**

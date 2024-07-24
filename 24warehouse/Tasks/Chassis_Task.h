@@ -91,6 +91,14 @@
 #define OMNI_WHEEL_SPEED_COMPOSITION 0.7071067812f
 //旋转修正因子,全向轮车四四方方所以不用的
 #define CHASSIS_WZ_SET_SCALE 0.5f
+//m2006转子里程转化成坐标轴路程的比例（cm)
+#define M2006_MOTOR_ECD_TO_DISTANCE 0.0002162308648546f
+
+//缓起参数
+#define SLOWSTART_V_K 0.001f	//0.005f
+#define SLOWSTART_WZ_K 0.002f
+#define SLOWSTART_MINDIS_V 10	//20
+#define SLOWSTART_MINDIS_W 8
 
 //底盘运动模式
 typedef enum

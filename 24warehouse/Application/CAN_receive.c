@@ -35,6 +35,7 @@ extern CAN_HandleTypeDef hcan1;
         (ptr)->given_current = (uint16_t)((data)[4] << 8 | (data)[5]);  \
         (ptr)->temperate = (data)[6];                                   \
     }
+#define abs(x)	( (x>0) ? (x) : (-x) )
 	
 /*
 	电机数据：
@@ -45,6 +46,8 @@ extern CAN_HandleTypeDef hcan1;
 		4:转盘电机 2006电机;
 */
 motor_measure_t motor_chassis[5];
+uint8_t start_flag[5] = {0};			//开机的flag，用于设置开机的code值
+bool_t can_reset_flag[5]={0};			//里程计归零的标志
 
 static CAN_TxHeaderTypeDef  chassis_tx_message;
 static uint8_t              chassis_can_send_data[8];
@@ -74,11 +77,39 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
             //get motor id
             i = rx_header.StdId - CAN_2006_M1_ID;
             get_motor_measure(&motor_chassis[i], rx_data);
-            //detect_hook(CHASSIS_MOTOR1_TOE + i);	//这个干嘛的
 			
-			//这里有关于里程计code的代码待移植
-			
-            break;
+			//里程计
+			if(start_flag[i] != 0)
+			{
+				//方法一
+				if(motor_chassis[i].ecd - motor_chassis[i].last_ecd > 4096)
+					motor_chassis[i].round_cnt --;
+				else if(motor_chassis[i].ecd - motor_chassis[i].last_ecd < -4096)
+					motor_chassis[i].round_cnt ++;
+				motor_chassis[i].code = motor_chassis[i].round_cnt * 8192 + motor_chassis[i].ecd - motor_chassis[i].offset_code;
+				
+				//方法二
+//				int16_t temp1 = motor_chassis[i].ecd - motor_chassis[i].last_ecd;
+//				int16_t temp2 = temp1 + (temp1 < 0 ? 8192 : -8192);
+//				motor_chassis[i].code += abs(temp2) < abs(temp1) ? temp2 : temp1;
+				
+				//重置code值时
+				if(can_reset_flag[i] != 0 )
+				{
+					motor_chassis[i].code = 0;
+					motor_chassis[i].round_cnt = 0;
+					motor_chassis[i].offset_code = motor_chassis[i].ecd;
+					can_reset_flag[i] = 0;
+				}
+			}
+			else
+			{
+				start_flag[i] = 1;
+				motor_chassis[i].code = 0;
+				motor_chassis[i].round_cnt = 0;
+				motor_chassis[i].offset_code = motor_chassis[i].ecd;
+			}
+			break;
         }
 
         default:

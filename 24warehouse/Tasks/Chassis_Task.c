@@ -24,8 +24,18 @@
 #include "INS_task.h"
 #include "chassis_behaviour.h"
 
+#define abs(x)	( (x>0) ? (x) : (-x) )
+
 //调试保护标志位，1为开启安全模式；因为无线dap退出调试的时候有概率会疯掉
-uint8_t safe_flag = 0;
+uint8_t safe_flag = 1;
+
+//缓起函数用的变量
+fp32 limit_xspeed_set=0;
+fp32 limit_yspeed_set=0;
+fp32 limit_wspeed_set=0;
+uint8_t cntx=0;
+uint8_t cnty=0;
+uint8_t cntw=0;
 
 //陀螺仪数据
 extern fp32 my_angle[3];
@@ -56,7 +66,7 @@ void chassis_task(void const * argument)
 	
 	while(1)
 	{
-		if(safe_flag == 0 )
+		if(safe_flag == 1 )
 		{
 			CAN_cmd_chassis(0, 0, 0, 0);
 		}
@@ -168,9 +178,9 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
         return;
     }
 
-	//稍后完善这个里程计
     for (uint8_t i = 0; i < 4; i++)
     {
+		//转子角度计
 		fp32 temp_angle = chassis_move_update->motor_chassis[i].chassis_motor_measure->ecd - chassis_move_update->motor_chassis[i].chassis_motor_measure->last_ecd;
 		if(temp_angle >= 4096)
 		{
@@ -184,9 +194,11 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
         //更新电机速度，加速度是速度的PID微分
         chassis_move_update->motor_chassis[i].speed = CHASSIS_MOTOR_RPM_TO_VECTOR_SEN * chassis_move_update->motor_chassis[i].chassis_motor_measure->speed_rpm;
         chassis_move_update->motor_chassis[i].accel = chassis_move_update->motor_speed_pid[i].Dbuf[0] * CHASSIS_CONTROL_FREQUENCE;
+		
+		//chassis_move_update->motor_chassis[i].total_angle +=(temp_angle)/8192.0f*360.0f;
     }
 
-    //更新底盘纵向速度 x， 平移速度y，旋转速度wz，坐标系为右手系，注意正负号，正方形右上起逆时针分别是0，1，2，3号电机，wz方向为逆时针，就是和大疆麦轮代码一样
+    //速度更新：更新底盘纵向速度 x， 平移速度y，旋转速度wz，坐标系为右手系，注意正负号，正方形右上起逆时针分别是0，1，2，3号电机，wz方向为逆时针，就是和大疆麦轮代码一样
     chassis_move_update->vx = ( - chassis_move_update->motor_chassis[0].speed
 								+ chassis_move_update->motor_chassis[1].speed
 								+ chassis_move_update->motor_chassis[2].speed
@@ -205,13 +217,27 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 								- chassis_move_update->motor_chassis[3].speed)
 								* MOTOR_SPEED_TO_CHASSIS_SPEED_WZ;
 	
+	//位置更新，同样要运动学解算
+	chassis_move_update->x = ( - chassis_move_update->motor_chassis[0].chassis_motor_measure->code
+							   + chassis_move_update->motor_chassis[1].chassis_motor_measure->code
+							   + chassis_move_update->motor_chassis[2].chassis_motor_measure->code
+							   - chassis_move_update->motor_chassis[3].chassis_motor_measure->code)
+							   * OMNI_WHEEL_SPEED_COMPOSITION / 4.0f
+							   * M2006_MOTOR_ECD_TO_DISTANCE;
+	chassis_move_update->y = ( - chassis_move_update->motor_chassis[0].chassis_motor_measure->code
+							   - chassis_move_update->motor_chassis[1].chassis_motor_measure->code
+							   + chassis_move_update->motor_chassis[2].chassis_motor_measure->code
+							   + chassis_move_update->motor_chassis[3].chassis_motor_measure->code)
+							   * OMNI_WHEEL_SPEED_COMPOSITION / 4.0f
+							   * M2006_MOTOR_ECD_TO_DISTANCE;
+	
 	//稍后完善，用指针的方法？？get_angle函数到底是啥
 	//更新陀螺仪数据
 	chassis_move_update->gyro = my_angle[0];
 	chassis_move_update->last_gyro = chassis_move_update->gyro;
 	
 	
-	//还有里程计，转子角度计，pid更新
+	//转子角度计，pid更新和重置稍后完善
 }
 
 /**
@@ -238,11 +264,60 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 	}
 	else if(chassis_move_control->chassis_mode == CHASSIS_MOVE_AND_ROTATE)
 	{
+		safe_flag = 0;
+		
 		chassis_move_control->vx_set = vx_set;
 		chassis_move_control->vy_set = vy_set;
 		chassis_move_control->wz_set = wz_set;
 		
-		//稍后完善缓起功能
+		//缓起功能,为什么这里不能用abs？？？
+		if(chassis_move_control->vx - chassis_move_control->vx_set > SLOWSTART_MINDIS_V || chassis_move_control->vx - chassis_move_control->vx_set < -SLOWSTART_MINDIS_V)
+		{
+			limit_xspeed_set += (chassis_move_control->vx_set * SLOWSTART_V_K);
+			chassis_move_control->vx_set = limit_xspeed_set;
+			cntx = 0; 
+		}		 
+		else
+		{
+			cntx ++;
+		}
+		if(cntx > 10)		//退出缓起
+		{
+			cntx = 0;
+			limit_xspeed_set = 0;
+		}
+		
+		if(chassis_move_control->vy - chassis_move_control->vy_set > SLOWSTART_MINDIS_V || chassis_move_control->vy - chassis_move_control->vy_set < -SLOWSTART_MINDIS_V)
+		{
+			limit_yspeed_set += (chassis_move_control->vy_set * SLOWSTART_V_K);
+			chassis_move_control->vy_set = limit_yspeed_set;
+			cnty=0;	 
+		}		 
+		else
+		{
+			cnty ++;
+		}				 
+		if(cnty > 10)
+		{
+			limit_yspeed_set = 0;
+			cnty = 0;
+		}		 
+		
+		if(chassis_move_control->wz - chassis_move_control->wz_set > SLOWSTART_MINDIS_W || chassis_move_control->wz - chassis_move_control->wz_set < -SLOWSTART_MINDIS_W)
+		{
+			limit_wspeed_set += (chassis_move_control->wz_set * SLOWSTART_WZ_K);
+			chassis_move_control->wz_set = limit_wspeed_set;
+			cnty = 0;	 
+		}
+		else
+		{
+			cntw ++;
+		}				 
+		if(cntw>10)
+		{
+			limit_wspeed_set = 0;
+			cntw = 0;
+		}
 		
 		chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
 		chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed, chassis_move_control->vy_max_speed);

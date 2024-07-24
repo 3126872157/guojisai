@@ -58,3 +58,5 @@
 24warehouse\chassis_task.o: ../Drivers/CMSIS/Include/core_cm4.h
 24warehouse\chassis_task.o: C:\Users\Ken.Liang\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\string.h
 24warehouse\chassis_task.o: C:\Users\Ken.Liang\AppData\Local\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\math.h
+24warehouse\chassis_task.o: ..\Tasks\INS_task.h
+24warehouse\chassis_task.o: ../Application/chassis_behaviour.h
