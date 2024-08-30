@@ -57,6 +57,8 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
-    "compare": "c"
+    "compare": "c",
+    "arm_ctrl.h": "c",
+    "stm32f4xx_it.h": "c"
   }
 }

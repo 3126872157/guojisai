@@ -239,7 +239,7 @@ void USART6_IRQHandler(void)
   HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART6_IRQn 1 */
 
-	//此处须在.h文件里声明
+	//此为空闲中断，此处须在.h文件里声明
 	USER_USART6_IRQHandler();
 	
   /* USER CODE END USART6_IRQn 1 */

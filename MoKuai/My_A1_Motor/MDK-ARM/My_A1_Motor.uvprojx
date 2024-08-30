@@ -545,9 +545,9 @@
           <GroupName>Arm</GroupName>
           <Files>
             <File>
-              <FileName>Arm_Struct.c</FileName>
+              <FileName>arm_ctrl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Arm\Arm_Struct.c</FilePath>
+              <FilePath>..\Arm\arm_ctrl.c</FilePath>
             </File>
             <File>
               <FileName>unitree_a1.c</FileName>
@@ -555,14 +555,19 @@
               <FilePath>..\Arm\unitree_a1.c</FilePath>
             </File>
             <File>
-              <FileName>Arm_Struct.h</FileName>
+              <FileName>arm_ctrl.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Arm\Arm_Struct.h</FilePath>
+              <FilePath>..\Arm\arm_ctrl.h</FilePath>
             </File>
             <File>
               <FileName>unitree_a1.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Arm\unitree_a1.h</FilePath>
+            </File>
+            <File>
+              <FileName>A1_motor_msg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\HAL_Project\My_A1_Motor\Arm\A1_motor_msg.h</FilePath>
             </File>
           </Files>
         </Group>

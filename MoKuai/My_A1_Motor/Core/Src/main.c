@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2024 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -26,8 +26,7 @@
 /* USER CODE BEGIN Includes */
 
 #include "unitreeA1_cmd.h"
-#include "Arm_Struct.h"
-
+#include "arm_ctrl.h"
 
 /* USER CODE END Includes */
 
@@ -50,16 +49,16 @@
 
 /* USER CODE BEGIN PV */
 
-//extern motor_send_t cmd_motor;  	// 电机发送数据体
-//extern motor_recv_t Date_motor;     // 电机接收数据体
+// extern motor_send_t cmd_motor;  	// 电机发送数据体
+// extern motor_recv_t Date_motor;     // 电机接收数据体
 uint8_t id = 0;
 float torque = 0.07;
-float kp = 0.0;		//0.2
-float kw = 0.0;		//3.0
+float kp = 0.002; // 0.2
+float kd = 1.0; // 3.0
 float pos = 0;
 
-extern unitree_Data_1 unitree_Data;
-
+extern motr_ctr_t unitree_Data;
+extern uint8_t motor_rx_temp;
 
 /* USER CODE END PV */
 
@@ -72,14 +71,12 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-
-
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -108,7 +105,7 @@ int main(void)
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
 
-	Unitree_Usart6_Init(Unitree_rx6_buf[0],Unitree_rx6_buf[1],Unitree_RX_BUF_NUM);//宇树初始化
+  Unitree_Usart6_Init(Unitree_rx6_buf[0], Unitree_rx6_buf[1], Unitree_RX_BUF_NUM); // 宇树初始化
 
   /* USER CODE END 2 */
 
@@ -116,17 +113,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  
-//	  modfiy_torque_cmd(&cmd_motor, id, torque);
-//	  unitreeA1_rxtx(&huart6);
-//	  HAL_Delay(100);
-	  
-	  
-		ModifyData(&unitree_Data.unitree_send,id,10,torque,0,pos,kp,kw);
-		UnitreeSend(&unitree_Data.unitree_send);
-		ExtractData(&unitree_Data.unitree_data_rx, &motor_data_rx6);
-		HAL_Delay(1000);
-	  
+
+    modfiy_position_cmd(&unitree_Data.unitree_send, id, pos, kp, kd);
+    //	  unitreeA1_rxtx(&huart6);
+    //	  HAL_Delay(100);
+
+//    ModifyData(&unitree_Data.unitree_send, id, torque, 0, pos, kp, kw);
+    UnitreeSend(&unitree_Data.unitree_send);
+    ExtractData(&unitree_Data.unitree_data_rx, &motor_rx_temp);
+    HAL_Delay(10);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -135,22 +131,22 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -165,9 +161,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
@@ -184,9 +179,9 @@ void SystemClock_Config(void)
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -198,14 +193,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

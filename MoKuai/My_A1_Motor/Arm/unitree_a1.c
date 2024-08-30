@@ -1,142 +1,18 @@
 #include "math.h"
 #include "string.h"
-#include "Arm_Struct.h"
+#include "arm_ctrl.h"
+#include "A1_motor_msg.h"
 
-extern unitree_Data_1 unitree_Data;
-uint8_t Unitree_rx6_buf[2][Unitree_RX_BUF_NUM];//?????????
-ServoComdDataV3 motor_data_rx6;//???????
+#define PI 3.1415926f
 
-void unitree_move(uint8_t flag,float pos,float w)
-{
-	if(flag == 1)//????
-	{
-		if((unitree_Data.unitree_data_rx.Pos - unitree_Data.pos0) > pos) return ;
-		while((unitree_Data.unitree_data_rx.Pos - unitree_Data.pos0)<(pos - 0.08))
-		{
-			ModifyData(&unitree_Data.unitree_send,0,10,0,1.2,0,0,3);
-			UnitreeSend(&unitree_Data.unitree_send);
-			ExtractData(&unitree_Data.unitree_data_rx,&motor_data_rx6);
-		}
-		ModifyData(&unitree_Data.unitree_send,0,10,0,0,(unitree_Data.pos0 + pos),0.02,3);
-		UnitreeSend(&unitree_Data.unitree_send);
-		ExtractData(&unitree_Data.unitree_data_rx,&motor_data_rx6);
-	}
-	if(flag == 2)//????
-	{
-		if((unitree_Data.unitree_data_rx.Pos - unitree_Data.pos0) < pos) return ;
-		while((unitree_Data.unitree_data_rx.Pos - unitree_Data.pos0)>(pos + 0.08))
-		{
-			ModifyData(&unitree_Data.unitree_send,0,10,0,-0.2,0,0,3);
-			UnitreeSend(&unitree_Data.unitree_send);
-			ExtractData(&unitree_Data.unitree_data_rx,&motor_data_rx6);
-		}
-		ModifyData(&unitree_Data.unitree_send,0,10,0,0,(unitree_Data.pos0 + pos),0.02,3);
-		UnitreeSend(&unitree_Data.unitree_send);
-		ExtractData(&unitree_Data.unitree_data_rx,&motor_data_rx6);
-	}
-}
-/**
-  * @brief  ?????????
-  * @param  ????????????
-  */
-void ModifyData(MOTOR_send* motor_s, uint8_t ID, uint8_t MODE, float Torque, float W, float POS, float KP, float KW)
-{
-    motor_s->id=ID;
-	motor_s->mode=MODE;
-	motor_s->T = Torque;
-	motor_s->W = W * 9.1f; //?????
-	motor_s->Pos = 2.0f * 3.1415926f / 360.0f * 9.1f * POS;  //???pos??λ?????????????? 9.1 * Pos
-	motor_s->K_P = KP;
-    motor_s->K_W = KW;
-    motor_s->motor_send_data.head.start[0] = 0xFE;
-    motor_s->motor_send_data.head.start[1] = 0xEE;
-    motor_s->motor_send_data.head.motorID = motor_s->id;
-    motor_s->motor_send_data.head.reserved = 0x00;
-    motor_s->motor_send_data.Mdata.mode = motor_s->mode;
-    motor_s->motor_send_data.Mdata.ModifyBit = 0xFF;
-    motor_s->motor_send_data.Mdata.ReadBit = 0x00;
-    motor_s->motor_send_data.Mdata.reserved = 0x00;
-    motor_s->motor_send_data.Mdata.Modify = 0;
-    motor_s->motor_send_data.Mdata.T = motor_s->T * 256;
-    motor_s->motor_send_data.Mdata.W = motor_s->W * 128;
-    motor_s->motor_send_data.Mdata.Pos = (int)((motor_s->Pos / 6.2832f) * 16384.0f);
-    motor_s->motor_send_data.Mdata.K_P = (int16_t)(motor_s->K_P * 2048);
+uint8_t Unitree_rx6_buf[2][Unitree_RX_BUF_NUM]; // dma接收缓冲
+// ServoComdDataV3 motor_rx_temp;                  // 接收的temp，从dma接收缓冲复制得来
+uint8_t motor_rx_temp[Unitree_RX_BUF_NUM];
 
-    motor_s->motor_send_data.Mdata.K_W = (int16_t)(motor_s->K_W * 1024);
+extern motr_ctr_t unitree_Data;
 
-    motor_s->motor_send_data.Mdata.LowHzMotorCmdIndex = 0;
-    motor_s->motor_send_data.Mdata.LowHzMotorCmdByte = 0;
-    motor_s->motor_send_data.CRCdata = crc32_core((uint32_t*)(&(motor_s->motor_send_data)), 7);
-}
-
-
-/**
-  * @brief  ??????????????
-  * @param  ?????????????
-  */
-void UnitreeSend(MOTOR_send* motor)
-{
-	HAL_GPIO_WritePin(A1Motor_DE_GPIO_Port, A1Motor_DE_Pin, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_SET);
-	HAL_Delay(1);
-	while(HAL_UART_Transmit_IT(&huart6, (uint8_t*) & (motor->motor_send_data), 34) != HAL_OK);
-	HAL_Delay(1);
-}
-
-
-/**
-  * @brief  ??????????????
-  * @param  ??????????????????????
-  */
-void ExtractData(MOTOR_recv* motor_r, ServoComdDataV3* data_rx)
-{
-    if(data_rx->head.motorID == 0)motor_r = motor_r + 0;
-
-    if(data_rx->head.motorID == 1)motor_r = motor_r + 1;
-
-    if(data_rx->head.motorID == 2)motor_r = motor_r + 2;
-
-    motor_r->motor_id = data_rx->head.motorID;
-    motor_r->mode = data_rx->Mdata.mode;
-    motor_r->Temp = data_rx->Mdata.Temp;
-    motor_r->MError = data_rx->Mdata.MError;
-    motor_r->T = ((float)data_rx->Mdata.T) / 256 * 9.1f;
-    motor_r->W = ((float)data_rx->Mdata.W) / 128 / 9.1f;
-    motor_r->LW = data_rx->Mdata.LW / 9.1f;
-//		motor_r->LW = (float)(data_rx->Mdata.LW>>31);
-
-    motor_r->Acc = ((float)data_rx->Mdata.Acc) / 128 / 9.1f;
-    motor_r->Pos = 6.2832f * ((float)data_rx->Mdata.Pos) / 16384 / 9.1f;
-
-    motor_r->gyro[0] = ((float)data_rx->Mdata.gyro[0]) * 0.00107993176f;
-    motor_r->gyro[1] = ((float)data_rx->Mdata.gyro[1]) * 0.00107993176f;
-    motor_r->gyro[2] = ((float)data_rx->Mdata.gyro[2]) * 0.00107993176f;
-
-    motor_r->acc[0] = ((float)data_rx->Mdata.acc[0]) * 0.0023911132f;
-    motor_r->acc[1] = ((float)data_rx->Mdata.acc[1]) * 0.0023911132f;
-    motor_r->acc[2] = ((float)data_rx->Mdata.acc[2]) * 0.0023911132f;
-}
-
-
-/**
-  * @brief  У????????????????????????
-  * @param  ??????????????
-  */
-void data_rx_copy(ServoComdDataV3*motor_data_rx, uint8_t* data)
-{
-    uint32_t CRC_data = *((uint32_t*)(data + 74));
-
-    if(CRC_data == crc32_core((uint32_t*)data, 18))
-    {
-        memcpy(motor_data_rx, data, Unitree_RX_BUF_NUM);
-    }
-}
-
-
-/**
-  * @brief  CRCУ??
-  */
-uint32_t crc32_core(uint32_t* ptr, uint32_t len)
+// CRC校验
+uint32_t crc32_core(uint32_t *ptr, uint32_t len)
 {
     uint32_t xbit = 0;
     uint32_t data = 0;
@@ -168,89 +44,293 @@ uint32_t crc32_core(uint32_t* ptr, uint32_t len)
     return CRC32;
 }
 
+// 校验数据并把接收buf复制到接收数据中
+void data_rx_copy(uint8_t *motor_data_rx, uint8_t *data)
+{
+    uint32_t CRC_data = *((uint32_t *)(data + 74));
 
-/**
-  * @brief  ???????????
-  */
+    if (CRC_data == crc32_core((uint32_t *)data, 18))
+    {
+        memcpy(motor_data_rx, data, Unitree_RX_BUF_NUM);
+    }
+}
+
+// 宇树A1电机串口初始化
 void Unitree_Usart6_Init(uint8_t *rx1_buf, uint8_t *rx2_buf, uint16_t dma_buf_num)
 {
-    //???DMA???????
+    // 使能DMA串口接收
     SET_BIT(huart6.Instance->CR3, USART_CR3_DMAR);
-    //???????ж?
+    // 使能空闲中断
     __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
-    //?ЧDMA
+    // 失效DMA
     __HAL_DMA_DISABLE(&hdma_usart6_rx);
 
-    while(hdma_usart6_rx.Instance->CR & DMA_SxCR_EN)
+    while (hdma_usart6_rx.Instance->CR & DMA_SxCR_EN)
     {
         __HAL_DMA_DISABLE(&hdma_usart6_rx);
     }
 
     hdma_usart6_rx.Instance->PAR = (uint32_t) & (USART6->DR);
-    //??滺????1
+    // 内存缓冲区1
     hdma_usart6_rx.Instance->M0AR = (uint32_t)(rx1_buf);
-    //??滺????2
+    // 内存缓冲区2
     hdma_usart6_rx.Instance->M1AR = (uint32_t)(rx2_buf);
-    //???????
+    // 数据长度
     hdma_usart6_rx.Instance->NDTR = 2 * dma_buf_num;
-    //??????????
+    // 使能双缓冲区
     SET_BIT(hdma_usart6_rx.Instance->CR, DMA_SxCR_DBM);
-    //???DMA
+    // 使能DMA
     __HAL_DMA_ENABLE(&hdma_usart6_rx);
 }
 
-//??????????????????????壩????????ж??????????ν???????
-void USER_UART6_IDLECallback(UART_HandleTypeDef* huart)
+// 空闲中断执行双缓冲交换（乒乓缓冲），弱定义在it.h
+void USER_UART6_IDLECallback(UART_HandleTypeDef *huart)
 {
-	if(huart == &huart6)
-	{
-		static uint16_t this_time_rx_len = 0;
-		
-		if ((hdma_usart6_rx.Instance->CR & DMA_SxCR_CT) == RESET)
-		{
-			//?ЧDMA
-			__HAL_DMA_DISABLE(&hdma_usart6_rx);
-			//??????????????,???? = ?趨???? - ?????
-			this_time_rx_len = 2 * Unitree_RX_BUF_NUM - hdma_usart6_rx.Instance->NDTR;
-			//?????趨???????
-			hdma_usart6_rx.Instance->NDTR = 2 * Unitree_RX_BUF_NUM;
-			//?趨??????1
-			DMA2_Stream1->CR |= DMA_SxCR_CT;
-			//???DMA
-			__HAL_DMA_ENABLE(&hdma_usart6_rx);
-			
-			if(this_time_rx_len == Unitree_RX_BUF_NUM)
-			{
-				data_rx_copy(&motor_data_rx6, Unitree_rx6_buf[0]);
-			}
-		}
-		else
-		{
-			//?ЧDMA
-			__HAL_DMA_DISABLE(&hdma_usart6_rx);
-			//??????????????,???? = ?趨???? - ?????
-			this_time_rx_len = 2 * Unitree_RX_BUF_NUM - hdma_usart6_rx.Instance->NDTR;
-			//?????趨???????
-			hdma_usart6_rx.Instance->NDTR = 2 * Unitree_RX_BUF_NUM;
-			//?趨??????0
-			DMA2_Stream1->CR &= ~(DMA_SxCR_CT);//////////////////
-			//???DMA
-			__HAL_DMA_ENABLE(&hdma_usart6_rx);
-			
-			if(this_time_rx_len == Unitree_RX_BUF_NUM)
-			{
-				data_rx_copy(&motor_data_rx6, Unitree_rx6_buf[1]);
-			}
-		}
-	}
+    if (huart == &huart6)
+    {
+        static uint16_t this_time_rx_len = 0;
+
+        if ((hdma_usart6_rx.Instance->CR & DMA_SxCR_CT) == RESET)
+        {
+            // 失能DMA
+            __HAL_DMA_DISABLE(&hdma_usart6_rx);
+            // 获取接收数据长度 长度 = 设定长度 - 剩余长度（NDTR）
+            this_time_rx_len = 2 * Unitree_RX_BUF_NUM - hdma_usart6_rx.Instance->NDTR;
+            // 重新设定剩余数据长度
+            hdma_usart6_rx.Instance->NDTR = 2 * Unitree_RX_BUF_NUM;
+            // 设定缓冲区1
+            DMA2_Stream1->CR |= DMA_SxCR_CT;
+            // 使能DMA
+            __HAL_DMA_ENABLE(&hdma_usart6_rx);
+            // 若实际接收长度与理论接受长度一致
+            if (this_time_rx_len == Unitree_RX_BUF_NUM)
+            {
+                data_rx_copy(motor_rx_temp, Unitree_rx6_buf[0]);
+            }
+        }
+        else
+        {
+            // 失能DMA
+            __HAL_DMA_DISABLE(&hdma_usart6_rx);
+            // 同上
+            this_time_rx_len = 2 * Unitree_RX_BUF_NUM - hdma_usart6_rx.Instance->NDTR;
+            // 重新设定数据长度
+            hdma_usart6_rx.Instance->NDTR = 2 * Unitree_RX_BUF_NUM;
+            // 设定缓冲区0
+            DMA2_Stream1->CR &= ~(DMA_SxCR_CT);
+            // 使能DMA
+            __HAL_DMA_ENABLE(&hdma_usart6_rx);
+
+            if (this_time_rx_len == Unitree_RX_BUF_NUM)
+            {
+                data_rx_copy(motor_rx_temp, Unitree_rx6_buf[1]);
+            }
+        }
+    }
 }
 
-/***********************************************?ж???*********************************************/
-int unitree_cnt = 0;
+// 发送中断函数，处理485转ttl模块状态
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-	HAL_GPIO_WritePin(A1Motor_DE_GPIO_Port, A1Motor_DE_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_RESET);
-	//ExtractData(&unitree_Data.unitree_data_rx,&motor_data_rx6);
-	unitree_cnt++;
+    static int unitree_cnt = 0;
+    // 发送完成进入tx中断回调，拉低RE电平，使能485转ttl模块接收状态
+    HAL_GPIO_WritePin(A1Motor_DE_GPIO_Port, A1Motor_DE_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_RESET);
+    unitree_cnt++;
+}
+
+// 发送电机指令
+void UnitreeSend(motor_send_t *motor)
+{
+    // 拉高DE电平，使能485转ttl模块的发送模式，失能接受模式；此模块不能同时处于两种模式中
+    HAL_GPIO_WritePin(A1Motor_DE_GPIO_Port, A1Motor_DE_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_SET);
+    HAL_Delay(1);
+    while (HAL_UART_Transmit_IT(&huart6, (uint8_t *)&(motor->motor_send_data), 34) != HAL_OK)
+        ;
+    HAL_Delay(1);
+}
+
+// 解包电机返回数据
+void ExtractData(motor_recv_t *recv, uint8_t *rx_temp)
+{
+    // if (rx_temp->head.motorID == 0)
+    //     recv = recv + 0;
+
+    // if (rx_temp->head.motorID == 1)
+    //     recv = recv + 1;
+
+    // if (rx_temp->head.motorID == 2)
+    //     recv = recv + 2;
+
+    // recv->motor_id = rx_temp->head.motorID;
+    // recv->mode = rx_temp->Mdata.mode;
+    // recv->Temp = rx_temp->Mdata.Temp;
+    // recv->MError = rx_temp->Mdata.MError;
+    // recv->T = ((float)rx_temp->Mdata.T) / 256 * 9.1f;
+    // recv->W = ((float)rx_temp->Mdata.W) / 128 / 9.1f;
+    // recv->LW = rx_temp->Mdata.LW / 9.1f;
+    // // recv->LW = (float)(rx_temp->Mdata.LW>>31);
+
+    // recv->Acc = ((float)rx_temp->Mdata.Acc) / 128 / 9.1f;
+    // recv->Pos = ((float)rx_temp->Mdata.Pos) / 9.1f / 16384 * 2 * PI;
+
+    // recv->gyro[0] = ((float)rx_temp->Mdata.gyro[0]) * 0.00107993176f;
+    // recv->gyro[1] = ((float)rx_temp->Mdata.gyro[1]) * 0.00107993176f;
+    // recv->gyro[2] = ((float)rx_temp->Mdata.gyro[2]) * 0.00107993176f;
+
+    // recv->acc[0] = ((float)rx_temp->Mdata.acc[0]) * 0.0023911132f;
+    // recv->acc[1] = ((float)rx_temp->Mdata.acc[1]) * 0.0023911132f;
+    // recv->acc[2] = ((float)rx_temp->Mdata.acc[2]) * 0.0023911132f;
+
+    recv->motor_recv_data.head.motorID = rx_temp[2];
+    recv->motor_recv_data.Mdata.mode = rx_temp[4];
+    recv->motor_recv_data.Mdata.Temp = rx_temp[6];
+    recv->motor_recv_data.Mdata.MError = rx_temp[7];
+    recv->motor_recv_data.Mdata.T = rx_temp[13] << 8 | rx_temp[12];
+    recv->motor_recv_data.Mdata.W = rx_temp[15] << 8 | rx_temp[14];
+    recv->motor_recv_data.Mdata.Acc = rx_temp[27] << 8 | rx_temp[26];
+    recv->motor_recv_data.Mdata.Pos = rx_temp[33] << 24 | rx_temp[32] << 16 | rx_temp[31] << 8 | rx_temp[30];
+		
+    recv->motor_id = recv->motor_recv_data.head.motorID;                        // ID
+    recv->mode = recv->motor_recv_data.Mdata.mode;                              // mode
+    recv->Temp = recv->motor_recv_data.Mdata.Temp;                              // Temp
+    recv->MError = recv->motor_recv_data.Mdata.MError;                          // MError
+    recv->T = (float)recv->motor_recv_data.Mdata.T / 256;                       // T
+    recv->Pos = (float)(recv->motor_recv_data.Mdata.Pos / (16384.0f / 360)) / 9.1; // Pos，角度制
+    recv->W = (float)recv->motor_recv_data.Mdata.W / 128;                       // W
+    recv->Acc = (float)recv->motor_recv_data.Mdata.Acc;                         // Acc
+}
+
+// 打包电机发送数据
+void WriteData(motor_send_t *write)
+{
+    write->motor_send_data.head.start[0] = 0xFE;
+    write->motor_send_data.head.start[1] = 0xEE;
+    write->motor_send_data.head.motorID = write->id;
+    write->motor_send_data.head.reserved = 0x00;
+
+    write->motor_send_data.Mdata.mode = write->mode;
+    write->motor_send_data.Mdata.ModifyBit = 0xFF;
+    write->motor_send_data.Mdata.ReadBit = 0x00;
+    write->motor_send_data.Mdata.reserved = 0x00;
+    write->motor_send_data.Mdata.Modify = 0;
+    write->motor_send_data.Mdata.T = write->T * 256;
+    write->motor_send_data.Mdata.W = write->W * 128;
+    write->motor_send_data.Mdata.Pos = (int)((write->Pos / 6.2832f) * 16384.0f);
+    write->motor_send_data.Mdata.K_P = (int16_t)(write->K_P * 2048);
+    write->motor_send_data.Mdata.K_W = (int16_t)(write->K_W * 1024);
+
+    write->motor_send_data.Mdata.LowHzMotorCmdIndex = 0;
+    write->motor_send_data.Mdata.LowHzMotorCmdByte = 0;
+    write->motor_send_data.Mdata.Res = write->Res;
+
+    write->motor_send_data.CRCdata = crc32_core((uint32_t *)(&(write->motor_send_data)), 7);
+}
+
+// 力矩控制模式，一般用力矩模式加上pid
+void modfiy_torque_cmd(motor_send_t *send, uint8_t id, float torque)
+{
+    // 用户设置的数据
+    send->id = id;
+    send->mode = 10;
+    send->Pos = 0.0;
+    send->W = 0.0;
+    send->T = torque;
+    send->K_P = 0.0;
+    send->K_W = 0.0;
+
+    WriteData(send);
+}
+
+// 位置控制模式，这个模式很鸡肋，偏差太大会咔咔，转个180就不行
+void modfiy_position_cmd(motor_send_t *send, uint8_t id, float Pos, float KP, float KW)
+{
+    send->id = id;
+    send->mode = 10;
+    send->Pos = 2.0f * PI / 360.0f * 9.1f * Pos; // 角度制
+    send->W = 0;
+    send->T = 0.0;
+    send->K_P = KP; // 官方推荐0.02，实测再小一点会好
+    send->K_W = KW; // 官方推荐3.0，实测1.0及一下会比较好
+
+    WriteData(send);
+}
+
+// 速度控制模式
+void modfiy_speed_cmd(motor_send_t *send, uint8_t id, float Omega)
+{
+
+    send->id = id;
+    send->mode = 10;
+    send->Pos = 0;
+    send->W = Omega;
+    send->T = 0.0;
+    send->K_P = 0.0;
+    send->K_W = 3.0;
+
+    WriteData(send);
+}
+
+// 设置电机指令
+void ModifyData(motor_send_t *send, uint8_t ID, float Torque, float W, float POS, float KP, float KW)
+{
+    send->id = ID;
+    send->mode = 10; // 默认混控模式
+    send->T = Torque;
+    send->W = W;
+    send->Pos = 2.0f * 3.1415926f / 360.0f * 9.1f * POS; // 角度制
+    send->K_P = KP;
+    send->K_W = KW;
+    send->motor_send_data.head.start[0] = 0xFE;
+    send->motor_send_data.head.start[1] = 0xEE;
+    send->motor_send_data.head.motorID = send->id;
+    send->motor_send_data.head.reserved = 0x00;
+    send->motor_send_data.Mdata.mode = send->mode;
+    send->motor_send_data.Mdata.ModifyBit = 0xFF;
+    send->motor_send_data.Mdata.ReadBit = 0x00;
+    send->motor_send_data.Mdata.reserved = 0x00;
+    send->motor_send_data.Mdata.Modify = 0;
+    send->motor_send_data.Mdata.T = send->T * 256;
+    send->motor_send_data.Mdata.W = send->W * 128;
+    send->motor_send_data.Mdata.Pos = (int)((send->Pos / 6.2832f) * 16384.0f);
+    send->motor_send_data.Mdata.K_P = (int16_t)(send->K_P * 2048);
+
+    send->motor_send_data.Mdata.K_W = (int16_t)(send->K_W * 1024);
+
+    send->motor_send_data.Mdata.LowHzMotorCmdIndex = 0;
+    send->motor_send_data.Mdata.LowHzMotorCmdByte = 0;
+    send->motor_send_data.CRCdata = crc32_core((uint32_t *)(&(send->motor_send_data)), 7);
+}
+
+void unitree_move(uint8_t flag, float pos, float w)
+{
+    if (flag == 1) // 向上
+    {
+        if ((unitree_Data.unitree_data_rx.Pos - unitree_Data.zero_pose) > pos)
+            return;
+        while ((unitree_Data.unitree_data_rx.Pos - unitree_Data.zero_pose) < (pos - 0.08))
+        {
+            ModifyData(&unitree_Data.unitree_send, 0, 0, 1.2, 0, 0, 3);
+            UnitreeSend(&unitree_Data.unitree_send);
+            ExtractData(&unitree_Data.unitree_data_rx, motor_rx_temp);
+        }
+        ModifyData(&unitree_Data.unitree_send, 0, 0, 0, (unitree_Data.zero_pose + pos), 0.02, 3);
+        UnitreeSend(&unitree_Data.unitree_send);
+        ExtractData(&unitree_Data.unitree_data_rx, motor_rx_temp);
+    }
+    if (flag == 2) // 向下
+    {
+        if ((unitree_Data.unitree_data_rx.Pos - unitree_Data.zero_pose) < pos)
+            return;
+        while ((unitree_Data.unitree_data_rx.Pos - unitree_Data.zero_pose) > (pos + 0.08))
+        {
+            ModifyData(&unitree_Data.unitree_send, 0, 0, -0.2, 0, 0, 3);
+            UnitreeSend(&unitree_Data.unitree_send);
+            ExtractData(&unitree_Data.unitree_data_rx, motor_rx_temp);
+        }
+        ModifyData(&unitree_Data.unitree_send, 0, 0, 0, (unitree_Data.zero_pose + pos), 0.02, 3);
+        UnitreeSend(&unitree_Data.unitree_send);
+        ExtractData(&unitree_Data.unitree_data_rx, motor_rx_temp);
+    }
 }

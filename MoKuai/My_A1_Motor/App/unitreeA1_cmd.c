@@ -9,18 +9,18 @@
 
 //extern UART_HandleTypeDef huart6;
 //extern DMA_HandleTypeDef hdma_usart6_rx;
-////uint8_t Unitree_rx6_buf[2][Unitree_RX_BUF_NUM];//双缓冲数组
+////uint8_t Unitree_rx6_buf[2][Unitree_RX_BUF_NUM];//双缓冲数�?
 
-//motor_send_t cmd_motor;        // 电机发送数据体
-//motor_recv_t Date_motor;       // 电机接收数据体
+//motor_send_t cmd_motor;        // 电机发送数�?�?
+//motor_recv_t Date_motor;       // 电机接收数据�?
 
 //// CRC校验位的代码
 ///*
-//可见crc32_core函数的第一个参数是uint32_t型的指针 ptr，uint32_t型即是 4 字
-//节长度的无符号整形数，ptr即表示需要进行 CRC 校验的数据指针。而另一个参数len则
-//表示需要进行 CRC 校验的数据长度，由于我们发送的命令去掉最后的 CRC 校验位之后
-//还有 30 个字节，也就是包含 7 个完整的uint32_t型，所以在计算发送命令的 CRC 时需
-//要令len=7。
+//�?见crc32_core函数的�??一�?参数是uint32_t型的指针 ptr，uint32_t型即�? 4 �?
+//节长度的无�?�号整形数，ptr即表示需要进�? CRC 校验的数�?指针。而另一�?参数len�?
+//表示需要进�? CRC 校验的数�?长度，由于我�?发送的命令去掉最后的 CRC 校验位之�?
+//还有 30 �?字节，也就是包含 7 �?完整的uint32_t型，所以在计算发送命令的 CRC 时需
+//要令len=7�?
 //*/
 //uint32_t crc32_core_Ver3(uint32_t *ptr, uint32_t len)
 //{
@@ -60,14 +60,14 @@
 //    send->mode = 10;
 //	send->id   = id;
 
-//    send->Pos  = 2.0f * PI / 360.0f * 9.1f * Pos;  //此时pos单位为角度制；弧度制为 9.1 * Pos
+//    send->Pos  = 2.0f * PI / 360.0f * 9.1f * Pos;  //此时pos单位为�?�度制；弧度制为 9.1 * Pos
 //    send->W    = 0;
 //    send->T    = 0.0;
 //    send->K_P  = KP;
 //    send->K_W  = KW;
 //}
 
-//// 电机速度修改
+//// 电机速度�?�?
 //void modfiy_speed_cmd(motor_send_t *send, uint8_t id, float Omega)
 //{
 
@@ -100,12 +100,12 @@
 //}
 //uint8_t Date[78];       // 接收数据
 
-//// 电机发送接收函数
+//// 电机发送接收函�?
 //void unitreeA1_rxtx(UART_HandleTypeDef *huart)
 //{
 //    if (huart == &huart6)
 //    {
-//        uint8_t Cmd[34]; 		// 发送数据
+//        uint8_t Cmd[34]; 		// 发送数�?
 ////        uint8_t Date[78];       // 接收数据
 
 //        cmd_motor.motor_send_data.head.start[0] = 0xFE;
@@ -132,7 +132,7 @@
 
 //        memcpy(Cmd, &cmd_motor.motor_send_data, 34);
 //        
-//        // HAL库 DMA 发送数据 + 接收数据
+//        // HAL�? DMA 发送数�? + 接收数据
 //		HAL_GPIO_WritePin(A1Motor_DE_GPIO_Port, A1Motor_DE_Pin, GPIO_PIN_SET);
 //		
 //        HAL_UART_Transmit_DMA(&huart6, Cmd, 34);
@@ -157,16 +157,16 @@
 //        Date_motor.T        = (float) Date_motor.motor_recv_data.Mdata.T / 256;                      // T      正确
 //        Date_motor.Pos      = (float) (Date_motor.motor_recv_data.Mdata.Pos / (16384.0f/2/PI));      // Pos    正确
 //        Date_motor.W        = (float) Date_motor.motor_recv_data.Mdata.W / 128;                      // W      正确 (小数)
-//        Date_motor.Acc      = (float) Date_motor.motor_recv_data.Mdata.Acc;                          // Acc    貌似正确 (需要VOFA打印测试看是否连续)
+//        Date_motor.Acc      = (float) Date_motor.motor_recv_data.Mdata.Acc;                          // Acc    貌似正确 (需要VOFA打印测试看是否连�?)
 //    }
 //}
 
-////宇树电机串口初始化，设置双缓冲内存地址
+////宇树电机串口初�?�化，�?�置双缓冲内存地址
 ////void Unitree_Usart6_Init()
 ////{
 ////	//使能DMA串口接收
 ////	SET_BIT(huart6.Instance->CR3, USART_CR3_DMAR);
-////	//使能空闲中断
+////	//使能空闲�?�?
 ////	__HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
 ////	//失效DMA
 ////	__HAL_DMA_DISABLE(&hdma_usart6_rx);
@@ -177,9 +177,9 @@
 ////	}
 ////	
 ////	hdma_usart6_rx.Instance->PAR = (uint32_t) & (USART6->DR);
-////	//内存缓冲区1
+////	//内存缓冲�?1
 ////	hdma_usart6_rx.Instance->M0AR = (uint32_t)(Unitree_rx6_buf[0]);
-////	//内存缓冲区2
+////	//内存缓冲�?2
 ////	hdma_usart6_rx.Instance->M1AR = (uint32_t)(Unitree_rx6_buf[1]);
 ////	//数据长度
 ////	hdma_usart6_rx.Instance->NDTR = 2 * Unitree_RX_BUF_NUM;
@@ -189,7 +189,7 @@
 ////	__HAL_DMA_ENABLE(&hdma_usart6_rx);
 ////}
 
-////双缓冲设置（乒乓缓冲），在空闲的时候转换下次接收的缓冲
+////双缓冲�?�置（乒乓缓冲），在空闲的时候转�?下�?�接收的缓冲
 ////void USER_UART6_IDLECallback(UART_HandleTypeDef* huart)
 ////{
 ////	if(huart == &huart6)
@@ -204,7 +204,7 @@
 ////			this_time_rx_len = 2 * Unitree_RX_BUF_NUM - hdma_usart6_rx.Instance->NDTR;
 ////			//重新设定数据长度
 ////			hdma_usart6_rx.Instance->NDTR = 2 * Unitree_RX_BUF_NUM;
-////			//设定缓冲区1
+////			//设定缓冲�?1
 ////			DMA2_Stream1->CR |= DMA_SxCR_CT;
 ////			//使能DMA
 ////			__HAL_DMA_ENABLE(&hdma_usart6_rx);
@@ -213,7 +213,7 @@
 ////			{
 ////				
 ////				
-////				//data_rx_copy(&motor_data_rx6, Unitree_rx6_buf[0]);
+////				//data_rx_copy(&motor_rx_temp, Unitree_rx6_buf[0]);
 ////			}
 ////		}
 ////		else
@@ -224,7 +224,7 @@
 ////			this_time_rx_len = 2 * Unitree_RX_BUF_NUM - hdma_usart6_rx.Instance->NDTR;
 ////			//重新设定数据长度
 ////			hdma_usart6_rx.Instance->NDTR = 2 * Unitree_RX_BUF_NUM;
-////			//设定缓冲区0
+////			//设定缓冲�?0
 ////			DMA2_Stream1->CR &= ~(DMA_SxCR_CT);//////////////////
 ////			//使能DMA
 ////			__HAL_DMA_ENABLE(&hdma_usart6_rx);
@@ -233,18 +233,18 @@
 ////			{
 ////				
 ////				
-////				//data_rx_copy(&motor_data_rx6, Unitree_rx6_buf[1]);
+////				//data_rx_copy(&motor_rx_temp, Unitree_rx6_buf[1]);
 ////			}
 ////		}
 ////	}
 ////}
 
-///***********************************************中断区*********************************************/
+///***********************************************�?�?�?*********************************************/
 ////int unitree_cnt = 0;
 ////void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 ////{
 ////	HAL_GPIO_WritePin(A1Motor_DE_GPIO_Port, A1Motor_DE_Pin, GPIO_PIN_RESET);
 ////	HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_RESET);
-////	//ExtractData(&unitree_Data.unitree_data_rx,&motor_data_rx6);
+////	//ExtractData(&unitree_Data.unitree_data_rx,&motor_rx_temp);
 ////	unitree_cnt++;
 ////}
