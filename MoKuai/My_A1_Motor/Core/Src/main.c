@@ -130,7 +130,7 @@ int main(void)
 	  unitree_pos_pid_ctrl(pos);
 	  
 	  real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
-	  printf("%f,%f\n", pos, real_pos);
+	  printf("%f,%f,%f,%f\n", pos, real_pos, unitree_Data.unitree_recv.W, unitree_Data.unitree_recv.Acc);
 	  
 	HAL_Delay(10);
 

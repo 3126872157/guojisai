@@ -1,7 +1,7 @@
 Dependencies for Project 'My_A1_Motor', Target 'My_A1_Motor': (DO NOT MODIFY !)
 CompilerVersion: 5060528::V5.06 update 5 (build 528)::ARMCC
 F (startup_stm32f407xx.s)(0x66D30903)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I.\RTE\_My_A1_Motor-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 540" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o my_a1_motor\startup_stm32f407xx.o --depend my_a1_motor\startup_stm32f407xx.d)
-F (../Core/Src/main.c)(0x66D31897)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../App -I ../Arm-I.\RTE\_My_A1_Motor-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="540" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o my_a1_motor\main.o --omf_browse my_a1_motor\main.crf --depend my_a1_motor\main.d)
+F (../Core/Src/main.c)(0x66D3356E)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../App -I ../Arm-I.\RTE\_My_A1_Motor-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="540" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o my_a1_motor\main.o --omf_browse my_a1_motor\main.crf --depend my_a1_motor\main.d)
 I (../Core/Inc/main.h)(0x66D30894)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66114428)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66CED68B)
@@ -34,7 +34,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66114428)
 I (../Core/Inc/dma.h)(0x66CED68B)
 I (../Core/Inc/usart.h)(0x66D30724)
 I (../Core/Inc/gpio.h)(0x66CED68A)
-I (../Arm/arm_ctrl.h)(0x66D28E8C)
+I (../Arm/arm_ctrl.h)(0x66D339B1)
 I (../Arm/uart_servo.h)(0x65191131)
 I (../Arm/unitree_a1.h)(0x66D27CAA)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
@@ -756,7 +756,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x66114428)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66114428)
 I (../Core/Inc/usart.h)(0x66D30724)
 F (..\App\vofa.h)(0x66D3186E)()
-F (..\Arm\arm_ctrl.c)(0x66D315A5)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../App -I ../Arm-I.\RTE\_My_A1_Motor-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="540" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o my_a1_motor\arm_ctrl.o --omf_browse my_a1_motor\arm_ctrl.crf --depend my_a1_motor\arm_ctrl.d)
+F (..\Arm\arm_ctrl.c)(0x66D3366A)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../App -I ../Arm-I.\RTE\_My_A1_Motor-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="540" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o my_a1_motor\arm_ctrl.o --omf_browse my_a1_motor\arm_ctrl.crf --depend my_a1_motor\arm_ctrl.d)
 I (../Core/Inc/main.h)(0x66D30894)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66114428)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66CED68B)
@@ -786,17 +786,17 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h)(0x66114428
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h)(0x66114428)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x66114428)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66114428)
-I (..\Arm\arm_ctrl.h)(0x66D28E8C)
+I (..\Arm\arm_ctrl.h)(0x66D339B1)
 I (..\Arm\uart_servo.h)(0x65191131)
 I (..\Arm\unitree_a1.h)(0x66D27CAA)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
 I (..\Arm\A1_motor_msg.h)(0x66D1669C)
 I (../App/pid.h)(0x66D12F9D)
 I (../App/struct_typedef.h)(0x66114ACE)
-F (..\Arm\unitree_a1.c)(0x66D310FB)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../App -I ../Arm-I.\RTE\_My_A1_Motor-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="540" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o my_a1_motor\unitree_a1.o --omf_browse my_a1_motor\unitree_a1.crf --depend my_a1_motor\unitree_a1.d)
+F (..\Arm\unitree_a1.c)(0x66D31AAD)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../App -I ../Arm-I.\RTE\_My_A1_Motor-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="540" -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o my_a1_motor\unitree_a1.o --omf_browse my_a1_motor\unitree_a1.crf --depend my_a1_motor\unitree_a1.d)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x588B8344)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B8344)
-I (..\Arm\arm_ctrl.h)(0x66D28E8C)
+I (..\Arm\arm_ctrl.h)(0x66D339B1)
 I (../Core/Inc/main.h)(0x66D30894)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x66114428)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x66CED68B)
@@ -829,6 +829,6 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x66114428)
 I (..\Arm\uart_servo.h)(0x65191131)
 I (..\Arm\unitree_a1.h)(0x66D27CAA)
 I (..\Arm\A1_motor_msg.h)(0x66D1669C)
-F (..\Arm\arm_ctrl.h)(0x66D28E8C)()
+F (..\Arm\arm_ctrl.h)(0x66D339B1)()
 F (..\Arm\unitree_a1.h)(0x66D27CAA)()
 F (..\..\..\..\HAL_Project\My_A1_Motor\Arm\A1_motor_msg.h)(0x66D1749C)()

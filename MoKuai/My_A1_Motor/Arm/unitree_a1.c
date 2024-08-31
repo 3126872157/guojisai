@@ -282,12 +282,14 @@ void modfiy_mix_cmd(motor_send_t *send, uint8_t ID, float Torque, float POS, flo
 //    {
 //        if ((unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose) > pos)
 //            return;
+			//大位移用速度模式
 //        while ((unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose) < (pos - 0.08))
 //        {
 ////            ModifyData(&unitree_Data.unitree_send, 0, 0, 1.2, 0, 0, 3);
 //            UnitreeSend(&unitree_Data.unitree_send);
 //            ExtractData(&unitree_Data.unitree_recv, motor_rx_temp);
 //        }
+			//小位移用 位置模式,kp = 0.02 , kw = 3
 ////        ModifyData(&unitree_Data.unitree_send, 0, 0, 0, (unitree_Data.zero_pose + pos), 0.02, 3);
 //        UnitreeSend(&unitree_Data.unitree_send);
 //        ExtractData(&unitree_Data.unitree_recv, motor_rx_temp);

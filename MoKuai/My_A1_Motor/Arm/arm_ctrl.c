@@ -9,8 +9,14 @@ extern uint8_t Unitree_rx6_buf[2][Unitree_RX_BUF_NUM];
 extern ServoComdDataV3 motor_rx_temp;
 
 unitree_ctrl_t unitree_Data;
-pid_type_def unitree_pid;
-const static fp32 unitree_pos_pid[3] = {UNITREE_POS_PID_KP, UNITREE_POS_PID_KI, UNITREE_POS_PID_KD};
+
+pid_type_def unitree_w_pid;
+pid_type_def unitree_pos_pid;
+const static fp32 unitree_w_pid_K[3] = {UNITREE_W_PID_KP, UNITREE_W_PID_KI, UNITREE_W_PID_KD};
+const static fp32 unitree_pos_pid_K[3] = {UNITREE_POS_PID_KP, UNITREE_POS_PID_KI, UNITREE_POS_PID_KD};
+
+float K_tff = 0.01;
+float Tf;
 
 //uart_servo_Data_1 uart_servo_Data;
 //servo_data_1 servo_data;
@@ -23,6 +29,9 @@ void unitree_torque_ctrl(unitree_ctrl_t *ctrl, float torque)
 	ExtractData(&ctrl->unitree_recv, &motor_rx_temp);
 }
 
+//封装混合模式控制
+//void unitree_mix_ctrl(unitree_ctrl_t *ctrl, float tff, )
+
 //宇树电机初始化检查零点
 void unitree_check_zero_pose(unitree_ctrl_t *ctrl)
 {
@@ -32,11 +41,27 @@ void unitree_check_zero_pose(unitree_ctrl_t *ctrl)
 	ctrl->zero_pose = ctrl->unitree_recv.Pos;
 }
 
+void unitree_w_pid_ctrl(float w)
+{
+	float real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
+	float tff;
+	
+	//往正方向转
+	if(w >= 0)
+	{
+		tff = Tf;
+		unitree_torque_ctrl(&unitree_Data, tff + PID_calc(&unitree_w_pid, unitree_Data.unitree_recv.W, w));
+	}
+	if(w < 0)
+	{
+		tff = -Tf;
+		unitree_torque_ctrl(&unitree_Data, tff + PID_calc(&unitree_w_pid, unitree_Data.unitree_recv.W, w));
+	}
+}
+
 void unitree_pos_pid_ctrl(float pos)
 {
-	//if()
-	
-	unitree_torque_ctrl(&unitree_Data, PID_calc(&unitree_pid, unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose, pos));
+	unitree_w_pid_ctrl(PID_calc(&unitree_pos_pid, unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose, pos));
 }
 
 void Arm_Init(void)
@@ -46,7 +71,8 @@ void Arm_Init(void)
 	
 	//宇树初始化
 	unitree_Usart6_Init(Unitree_rx6_buf[0],Unitree_rx6_buf[1],Unitree_RX_BUF_NUM);
-	PID_init(&unitree_pid, PID_POSITION, unitree_pos_pid, 2.0f, 0.2f);	//0.07, 0.0001, 0.1
+	PID_init(&unitree_w_pid, PID_POSITION, unitree_w_pid_K, 2.0f, 0.2f);	//0.07, 0.0001, 0.1
+	PID_init(&unitree_pos_pid, PID_POSITION, unitree_pos_pid_K, 2.0f, 0.2f);
 	unitree_check_zero_pose(&unitree_Data);
 
 //	//宇树初始角度
