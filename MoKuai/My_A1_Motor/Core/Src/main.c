@@ -25,7 +25,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "unitreeA1_cmd.h"
 #include "arm_ctrl.h"
 
 /* USER CODE END Includes */
@@ -52,13 +51,13 @@
 // extern motor_send_t cmd_motor;  	// 电机发送数据体
 // extern motor_recv_t Date_motor;     // 电机接收数据体
 uint8_t id = 0;
-float torque = 0.07;
-float kp = 0.002; // 0.2
-float kd = 1.0; // 3.0
+float torque = 0.0;
+float kp = 0.000; // 0.02
+float kd = 0.0; // 1.0
 float pos = 0;
 
-extern motr_ctr_t unitree_Data;
-extern uint8_t motor_rx_temp;
+extern unitree_ctrl_t unitree_Data;
+extern ServoComdDataV3 motor_rx_temp;
 
 /* USER CODE END PV */
 
@@ -105,7 +104,8 @@ int main(void)
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  Unitree_Usart6_Init(Unitree_rx6_buf[0], Unitree_rx6_buf[1], Unitree_RX_BUF_NUM); // 宇树初始化
+//  unitree_Usart6_Init(Unitree_rx6_buf[0], Unitree_rx6_buf[1], Unitree_RX_BUF_NUM); // 宇树初始化
+	Arm_Init();
 
   /* USER CODE END 2 */
 
@@ -113,15 +113,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-    modfiy_position_cmd(&unitree_Data.unitree_send, id, pos, kp, kd);
-    //	  unitreeA1_rxtx(&huart6);
-    //	  HAL_Delay(100);
-
-//    ModifyData(&unitree_Data.unitree_send, id, torque, 0, pos, kp, kw);
-    UnitreeSend(&unitree_Data.unitree_send);
-    ExtractData(&unitree_Data.unitree_data_rx, &motor_rx_temp);
-    HAL_Delay(10);
+kp = 0;
+//	unitree_torque_ctrl(&unitree_Data, torque);
+//	  modfiy_position_cmd(&unitree_Data.unitree_send, 0, pos, kp, kd);
+//	UnitreeSend(&unitree_Data.unitree_send);
+//	ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
+	  
+	  unitree_pos_pid_ctrl(pos);
+	HAL_Delay(10);
 
     /* USER CODE END WHILE */
 

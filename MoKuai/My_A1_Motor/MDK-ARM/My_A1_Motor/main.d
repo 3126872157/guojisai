@@ -32,7 +32,6 @@ my_a1_motor\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 my_a1_motor\main.o: ../Core/Inc/dma.h
 my_a1_motor\main.o: ../Core/Inc/usart.h
 my_a1_motor\main.o: ../Core/Inc/gpio.h
-my_a1_motor\main.o: ../App/unitreeA1_cmd.h
 my_a1_motor\main.o: ../Arm/arm_ctrl.h
 my_a1_motor\main.o: ../Arm/uart_servo.h
 my_a1_motor\main.o: ../Arm/unitree_a1.h

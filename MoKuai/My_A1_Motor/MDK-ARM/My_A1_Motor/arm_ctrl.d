@@ -34,3 +34,5 @@ my_a1_motor\arm_ctrl.o: ..\Arm\uart_servo.h
 my_a1_motor\arm_ctrl.o: ..\Arm\unitree_a1.h
 my_a1_motor\arm_ctrl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 my_a1_motor\arm_ctrl.o: ..\Arm\A1_motor_msg.h
+my_a1_motor\arm_ctrl.o: ../App/pid.h
+my_a1_motor\arm_ctrl.o: ../App/struct_typedef.h

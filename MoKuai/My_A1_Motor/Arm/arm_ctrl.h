@@ -5,14 +5,20 @@
 #include "uart_servo.h"
 #include "unitree_a1.h"
 
+#define UNITREE_POS_PID_KP 0.00
+#define UNITREE_POS_PID_KI 0.00
+#define UNITREE_POS_PID_KD 0.00
+
 // 宇树电机数据
 typedef struct
 {
 	float zero_pose; // 初始角度
 
 	motor_send_t unitree_send;
-	motor_recv_t unitree_data_rx;
-} motr_ctr_t;
+	motor_recv_t unitree_recv;
+} unitree_ctrl_t;
+
+
 
 //// 幻尔电机数据
 //typedef struct
@@ -31,7 +37,11 @@ typedef struct
 //	uint16_t pos2;
 //} servo_data_1;
 
-/***********************************************************************/
+
 // 机械臂初始化
 void Arm_Init(void);
+//宇树电机封装力矩控制的函数
+void unitree_torque_ctrl(unitree_ctrl_t *ctrl, float torque);
+//宇树电机位置PID控制
+void unitree_pos_pid_ctrl(float pos);
 #endif

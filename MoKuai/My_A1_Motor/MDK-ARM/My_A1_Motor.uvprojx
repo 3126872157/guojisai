@@ -525,19 +525,19 @@
           <GroupName>App</GroupName>
           <Files>
             <File>
-              <FileName>motor_msg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\App\motor_msg.h</FilePath>
-            </File>
-            <File>
-              <FileName>unitreeA1_cmd.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\App\unitreeA1_cmd.h</FilePath>
-            </File>
-            <File>
-              <FileName>unitreeA1_cmd.c</FileName>
+              <FileName>pid.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\App\unitreeA1_cmd.c</FilePath>
+              <FilePath>..\App\pid.c</FilePath>
+            </File>
+            <File>
+              <FileName>pid.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\App\pid.h</FilePath>
+            </File>
+            <File>
+              <FileName>struct_typedef.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\App\struct_typedef.h</FilePath>
             </File>
           </Files>
         </Group>

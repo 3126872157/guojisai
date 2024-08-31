@@ -165,32 +165,22 @@
         <Ww>
           <count>0</count>
           <WinNumber>2</WinNumber>
-          <ItemText>id</ItemText>
+          <ItemText>torque</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>2</WinNumber>
-          <ItemText>torque</ItemText>
+          <ItemText>pos</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>2</WinNumber>
-          <ItemText>pos</ItemText>
+          <ItemText>kp</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>2</WinNumber>
-          <ItemText>kp</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>kw</ItemText>
-        </Ww>
-        <Ww>
-          <count>5</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>motor_rx_temp</ItemText>
+          <ItemText>unitree_pid</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>
@@ -574,12 +564,12 @@
     <File>
       <GroupNumber>5</GroupNumber>
       <FileNumber>25</FileNumber>
-      <FileType>5</FileType>
+      <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\App\motor_msg.h</PathWithFileName>
-      <FilenameWithoutPath>motor_msg.h</FilenameWithoutPath>
+      <PathWithFileName>..\App\pid.c</PathWithFileName>
+      <FilenameWithoutPath>pid.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -590,20 +580,20 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\App\unitreeA1_cmd.h</PathWithFileName>
-      <FilenameWithoutPath>unitreeA1_cmd.h</FilenameWithoutPath>
+      <PathWithFileName>..\App\pid.h</PathWithFileName>
+      <FilenameWithoutPath>pid.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
       <FileNumber>27</FileNumber>
-      <FileType>1</FileType>
+      <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\App\unitreeA1_cmd.c</PathWithFileName>
-      <FilenameWithoutPath>unitreeA1_cmd.c</FilenameWithoutPath>
+      <PathWithFileName>..\App\struct_typedef.h</PathWithFileName>
+      <FilenameWithoutPath>struct_typedef.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
