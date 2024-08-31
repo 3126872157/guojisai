@@ -9,6 +9,9 @@
 uint8_t Unitree_rx6_buf[2][Unitree_RX_BUF_NUM]; // dma接收缓冲
 ServoComdDataV3 motor_rx_temp;
 extern unitree_ctrl_t unitree_Data;
+extern volatile uint8_t usart_dma_tx_over;
+/* USER CODE END 0 */
+
 
 // CRC校验
 uint32_t crc32_core(uint32_t *ptr, uint32_t len)
@@ -131,11 +134,19 @@ void USER_UART6_IDLECallback(UART_HandleTypeDef *huart)
 // 发送中断函数，处理485转ttl模块状态
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-    static int unitree_cnt = 0;
-    // 发送完成进入tx中断回调，拉低RE电平，使能485转ttl模块接收状态
-    HAL_GPIO_WritePin(A1Motor_DE_GPIO_Port, A1Motor_DE_Pin, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_RESET);
-    unitree_cnt++;
+	if(huart->Instance==USART6)
+	{
+		static int unitree_cnt = 0;
+		// 发送完成进入tx中断回调，拉低RE电平，使能485转ttl模块接收状态
+		HAL_GPIO_WritePin(A1Motor_DE_GPIO_Port, A1Motor_DE_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_RESET);
+		unitree_cnt++;
+	}
+	
+	if(huart->Instance==USART1)
+	{
+  		 usart_dma_tx_over = 1;
+	}
 }
 
 // 发送电机指令

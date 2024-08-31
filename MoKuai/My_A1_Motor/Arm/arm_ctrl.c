@@ -34,6 +34,8 @@ void unitree_check_zero_pose(unitree_ctrl_t *ctrl)
 
 void unitree_pos_pid_ctrl(float pos)
 {
+	//if()
+	
 	unitree_torque_ctrl(&unitree_Data, PID_calc(&unitree_pid, unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose, pos));
 }
 
