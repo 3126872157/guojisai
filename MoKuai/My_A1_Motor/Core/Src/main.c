@@ -25,12 +25,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include <string.h>
-#include <stdio.h>
+
 #include "arm_ctrl.h"
-#include "stdarg.h"
-//#define printf myprintf
-int myprintf(const char *format,...);
+#include "vofa.h"
+#define printf myprintf
 
 /* USER CODE END Includes */
 
@@ -53,7 +51,7 @@ int myprintf(const char *format,...);
 
 /* USER CODE BEGIN PV */
 
-volatile uint8_t  usart_dma_tx_over = 1;
+
 
 // extern motor_send_t cmd_motor;  	// 电机发送数据体
 // extern motor_recv_t Date_motor;     // 电机接收数据体
@@ -190,28 +188,7 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-int fputc(int ch,FILE *f){
-  //HAL_UART_Transmit_DMA(&huart1,(uint8_t *)&ch,1);  //使用UART2，重定向
-  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 10);
-  return ch;
-}
 
-//int myprintf(const char *format,...)
-//{
-//  va_list arg;
-//  static char SendBuff[200] = {0};
-//  int rv;
-//  while(!usart_dma_tx_over);//等待前一次DMA发送完成
-// 
-//  va_start(arg,format);
-//  rv = vsnprintf((char*)SendBuff,sizeof(SendBuff)+1,(char*)format,arg);
-//  va_end(arg);
-// 
-//  HAL_UART_Transmit_DMA(&huart1,(uint8_t *)SendBuff,rv);
-//  usart_dma_tx_over = 0;//清0全局标志，发送完成后重新置1
-// 
-//  return rv;
-//}
 
 /* USER CODE END 4 */
 

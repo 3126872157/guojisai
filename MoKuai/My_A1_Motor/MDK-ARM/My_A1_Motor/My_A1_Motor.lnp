@@ -24,6 +24,7 @@
 "my_a1_motor\stm32f4xx_hal_exti.o"
 "my_a1_motor\system_stm32f4xx.o"
 "my_a1_motor\pid.o"
+"my_a1_motor\vofa.o"
 "my_a1_motor\arm_ctrl.o"
 "my_a1_motor\unitree_a1.o"
 --strict --scatter "My_A1_Motor\My_A1_Motor.sct"
