@@ -50,4 +50,6 @@ void unitree_torque_ctrl(unitree_ctrl_t *ctrl, float torque);
 void unitree_w_pid_ctrl(float w);
 //宇树电机位置PID控制
 void unitree_pos_pid_ctrl(float pos);
+//特化的宇树A1位置控制
+void unitree_move(uint8_t flag, float pos, float w);
 #endif

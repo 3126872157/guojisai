@@ -62,6 +62,9 @@ float kd = 0.0; // 1.0
 float pos = 0;
 float real_pos = 0;
 
+uint8_t direction = 0; //1ио2об
+extern float set_w;
+
 extern unitree_ctrl_t unitree_Data;
 extern ServoComdDataV3 motor_rx_temp;
 
@@ -127,10 +130,12 @@ int main(void)
 	  
 	  //HAL_UART_Transmit_DMA(&huart1, &id, 1);
 	  
-	  unitree_pos_pid_ctrl(pos);
+	  //unitree_pos_pid_ctrl(pos);
+	  //unitree_w_pid_ctrl(set_w);
+	  unitree_move(direction, pos, set_w);
 	  
 	  real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
-	  printf("%f,%f,%f,%f\n", pos, real_pos, unitree_Data.unitree_recv.W, unitree_Data.unitree_recv.Acc);
+	  printf("%f,%f,%f,%f,%f\n", pos, real_pos, unitree_Data.unitree_recv.LW, set_w, unitree_Data.unitree_recv.W);
 	  
 	HAL_Delay(10);
 

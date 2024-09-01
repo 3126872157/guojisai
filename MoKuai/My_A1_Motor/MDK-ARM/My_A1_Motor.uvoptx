@@ -170,32 +170,37 @@
         <Ww>
           <count>1</count>
           <WinNumber>2</WinNumber>
-          <ItemText>kp</ItemText>
+          <ItemText>real_pos</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>2</WinNumber>
-          <ItemText>unitree_pid</ItemText>
+          <ItemText>pos</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>2</WinNumber>
-          <ItemText>real_pos</ItemText>
+          <ItemText>Tf</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>2</WinNumber>
-          <ItemText>pos</ItemText>
+          <ItemText>unitree_Data.unitree_recv.W</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>2</WinNumber>
-          <ItemText>W</ItemText>
+          <ItemText>unitree_Data.unitree_recv.LW</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>2</WinNumber>
-          <ItemText>Tf</ItemText>
+          <ItemText>\\My_A1_Motor\../Arm/arm_ctrl.c\set_w</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>direction</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>

@@ -7,11 +7,11 @@
 #define MAX_TORQUE 2.0f
 
 uint8_t Unitree_rx6_buf[2][Unitree_RX_BUF_NUM]; // dma接收缓冲
-ServoComdDataV3 motor_rx_temp;
+ServoComdDataV3 motor_rx_temp;					// 解包缓冲，从dma缓冲中复制出来，再导入接收的结构体中
 extern unitree_ctrl_t unitree_Data;
-extern volatile uint8_t usart_dma_tx_over;
-/* USER CODE END 0 */
 
+//与本文件无关，串口1dma发送标志位
+extern volatile uint8_t usart_dma_tx_over;
 
 // CRC校验
 uint32_t crc32_core(uint32_t *ptr, uint32_t len)
@@ -275,37 +275,3 @@ void modfiy_mix_cmd(motor_send_t *send, uint8_t ID, float Torque, float POS, flo
    
 	WriteData(send);
 }
-
-//void unitree_move(uint8_t flag, float pos, float w)
-//{
-//    if (flag == 1) // 向上
-//    {
-//        if ((unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose) > pos)
-//            return;
-			//大位移用速度模式
-//        while ((unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose) < (pos - 0.08))
-//        {
-////            ModifyData(&unitree_Data.unitree_send, 0, 0, 1.2, 0, 0, 3);
-//            UnitreeSend(&unitree_Data.unitree_send);
-//            ExtractData(&unitree_Data.unitree_recv, motor_rx_temp);
-//        }
-			//小位移用 位置模式,kp = 0.02 , kw = 3
-////        ModifyData(&unitree_Data.unitree_send, 0, 0, 0, (unitree_Data.zero_pose + pos), 0.02, 3);
-//        UnitreeSend(&unitree_Data.unitree_send);
-//        ExtractData(&unitree_Data.unitree_recv, motor_rx_temp);
-//    }
-//    if (flag == 2) // 向下
-//    {
-//        if ((unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose) < pos)
-//            return;
-//        while ((unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose) > (pos + 0.08))
-//        {
-////            ModifyData(&unitree_Data.unitree_send, 0, 0, -0.2, 0, 0, 3);
-//            UnitreeSend(&unitree_Data.unitree_send);
-//            ExtractData(&unitree_Data.unitree_recv, motor_rx_temp);
-//        }
-////        ModifyData(&unitree_Data.unitree_send, 0, 0, 0, (unitree_Data.zero_pose + pos), 0.02, 3);
-//        UnitreeSend(&unitree_Data.unitree_send);
-//        ExtractData(&unitree_Data.unitree_recv, motor_rx_temp);
-//    }
-//}
