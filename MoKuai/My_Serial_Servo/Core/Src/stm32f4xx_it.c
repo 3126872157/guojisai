@@ -22,9 +22,10 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-/* USER CODE END Includes */
 
 #include "serial_servo.h"
+
+/* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
@@ -307,13 +308,13 @@ void USER_SERIAL_SERVO_UART_IRQHandler(void)
 		// 调用中断处理函数
 		USER_SERIAL_SERVO_UART_IDLECallback(&SERIAL_SERVO_HUART);
 	}
-	if(USART6->SR & UART_FLAG_IDLE)
-	{
-		// 清除空闲中断标志（否则会一直不断进入中断）
-		__HAL_UART_CLEAR_IDLEFLAG(&SERIAL_SERVO_HUART);
-		// 调用中断处理函数
-		USER_SERIAL_SERVO_UART_IDLECallback(&SERIAL_SERVO_HUART);
-	}
+//	if(USART6->SR & UART_FLAG_IDLE)
+//	{
+//		// 清除空闲中断标志（否则会一直不断进入中断）
+//		__HAL_UART_CLEAR_IDLEFLAG(&SERIAL_SERVO_HUART);
+//		// 调用中断处理函数
+//		USER_SERIAL_SERVO_UART_IDLECallback(&SERIAL_SERVO_HUART);
+//	}
 }
 
 /* USER CODE END 1 */
