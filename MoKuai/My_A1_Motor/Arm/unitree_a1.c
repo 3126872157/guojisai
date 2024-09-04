@@ -8,7 +8,6 @@
 
 uint8_t Unitree_rx6_buf[2][Unitree_RX_BUF_NUM]; // dma接收缓冲
 ServoComdDataV3 motor_rx_temp;					// 解包缓冲，从dma缓冲中复制出来，再导入接收的结构体中
-extern unitree_ctrl_t unitree_Data;
 
 //与本文件无关，串口1dma发送标志位
 extern volatile uint8_t usart_dma_tx_over;
@@ -131,7 +130,7 @@ void USER_UART6_IDLECallback(UART_HandleTypeDef *huart)
     }
 }
 
-// 发送中断函数，处理485转ttl模块状态
+// 发送中断函数，处理485转ttl模块状态，放在it.c文件里吧
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance==USART6)
@@ -248,7 +247,7 @@ void modfiy_position_cmd(motor_send_t *send, uint8_t id, float Pos, float KP, fl
 }
 
 // 速度控制模式
-void modfiy_speed_cmd(motor_send_t *send, uint8_t id, float Omega)
+void modfiy_speed_cmd(motor_send_t *send, uint8_t id, float Omega, float kw)
 {
 
     send->id = id;
@@ -257,7 +256,7 @@ void modfiy_speed_cmd(motor_send_t *send, uint8_t id, float Omega)
     send->W = Omega;
     send->T = 0.0;
     send->K_P = 0.0;
-    send->K_W = 3.0;
+    send->K_W = kw;	// 推荐值3.0
 
     WriteData(send);
 }
@@ -268,10 +267,49 @@ void modfiy_mix_cmd(motor_send_t *send, uint8_t ID, float Torque, float POS, flo
     send->id = ID;
     send->mode = 10; // 默认混控模式
     send->T = Torque;
-    send->W = W;
+    send->W = W * 9.1f;
     send->Pos = 9.1f * POS; // 弧度制
     send->K_P = KP;
     send->K_W = KW;
    
 	WriteData(send);
 }
+
+//it.c里的内容
+//void USART6_IRQHandler(void)
+//{
+//  /* USER CODE BEGIN USART6_IRQn 0 */
+
+//  /* USER CODE END USART6_IRQn 0 */
+//  HAL_UART_IRQHandler(&huart6);
+//  /* USER CODE BEGIN USART6_IRQn 1 */
+
+//	//此为空闲中断，此处须在.h文件里声明
+//	USER_USART6_IRQHandler();
+//	
+//  /* USER CODE END USART6_IRQn 1 */
+//}
+
+///* USER CODE BEGIN 1 */
+
+//__weak void USER_UART6_IDLECallback(UART_HandleTypeDef* huart)
+//{
+//	return;
+//}
+
+//void USER_USART6_IRQHandler(void)
+//{
+//	if(huart6.Instance->SR & UART_FLAG_RXNE)//接收到数据：状态寄存器里的接受寄存器非空为1（非空了）
+//	{
+//		__HAL_UART_CLEAR_PEFLAG(&huart6);	//此函数用来清除IDLE标志位
+//	}
+//	else if(USART6->SR & UART_FLAG_IDLE)	//查询状态寄存器，此时串口空闲
+//	{
+//		// 清除空闲中断标志（否则会一直重复进入中断）
+//		__HAL_UART_CLEAR_IDLEFLAG(&huart6);                    
+//		// 调用中断处理函数，此函数在宇树电机文件里
+//		USER_UART6_IDLECallback(&huart6); 
+//	}
+//}
+
+///* USER CODE END 1 */

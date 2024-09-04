@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -88,8 +89,12 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART6_UART_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  
+  serial_servo_UART_Init();
   
 //	HAL_Delay(1000);
 //	moveServo(1, 000, 1000); //1秒移动1号舵机至2000位置
@@ -107,10 +112,14 @@ int main(void)
   while (1)
   {
 	  
-	moveServo(2, 500, 500); //1秒移动1号舵机至2000位置
-	HAL_Delay(1000);
-	moveServo(2, 800, 500); //1秒移动1号舵机至2000位置
-	HAL_Delay(1000);
+//	moveServos(2, 500, 1, 500, 2, 500);
+//	  HAL_Delay(1);
+	  getServosAngle(2, 1, 2);
+	HAL_Delay(2000);
+//	moveServos(2, 500, 1, 600, 2, 600);
+//	  HAL_Delay(1);
+	  getServosAngle(2, 1, 2);
+	HAL_Delay(2000);
 	  
     /* USER CODE END WHILE */
 

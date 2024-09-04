@@ -11,14 +11,12 @@ extern UART_HandleTypeDef huart6;
 extern DMA_HandleTypeDef hdma_usart6_rx;
 extern DMA_HandleTypeDef hdma_usart6_tx;
 
-extern ServoComdDataV3 motor_data_rx6;
-
 // 电机串口初始化
 void unitree_Usart6_Init(uint8_t *rx1_buf, uint8_t *rx2_buf, uint16_t dma_buf_num);
 //力矩控制模式
 void modfiy_torque_cmd(motor_send_t *send, uint8_t id, float torque);
 // 速度控制模式
-void modfiy_speed_cmd(motor_send_t *send, uint8_t id, float Omega);
+void modfiy_speed_cmd(motor_send_t *send, uint8_t id, float Omega, float kw);
 //位置控制模式
 void modfiy_position_cmd(motor_send_t *send, uint8_t id, float Pos, float KP, float KW);
 //混合模式

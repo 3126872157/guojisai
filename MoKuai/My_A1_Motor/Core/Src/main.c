@@ -124,16 +124,17 @@ int main(void)
   while (1)
   {
 //	unitree_torque_ctrl(&unitree_Data, torque);
-//	  modfiy_position_cmd(&unitree_Data.unitree_send, 0, pos, kp, kd);
+//	modfiy_position_cmd(&unitree_Data.unitree_send, 0, pos, kp, kd);
 //	UnitreeSend(&unitree_Data.unitree_send);
 //	ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
 	  
-	  //HAL_UART_Transmit_DMA(&huart1, &id, 1);
 	  
-	  //unitree_pos_pid_ctrl(pos);
+	  unitree_pos_pid_ctrl(pos);
 	  //unitree_w_pid_ctrl(set_w);
-	  unitree_move(direction, pos, set_w);
 	  
+	  //unitree_move(direction, pos, set_w);
+	  
+	  unitree_save_check();
 	  real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
 	  printf("%f,%f,%f,%f,%f\n", pos, real_pos, unitree_Data.unitree_recv.LW, set_w, unitree_Data.unitree_recv.W);
 	  
