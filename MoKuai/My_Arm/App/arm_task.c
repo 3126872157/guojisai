@@ -12,9 +12,16 @@ extern unitree_ctrl_t unitree_Data;
 
 void arm_task(void const * argument)
 {
-	unitree_pos_pid_ctrl(targ_pos);
-	unitree_save_check();
-	
-	real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
-	printf("%f,%f,%f,%f,%f\n", targ_pos, real_pos, unitree_Data.unitree_recv.LW, set_w, unitree_Data.unitree_recv.W);
+	osDelay(10);
+	Arm_Init();
+	osDelay(10);
+	while(1)
+	{
+		unitree_pos_pid_ctrl(targ_pos);
+		unitree_save_check();
+		
+		real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
+		//printf("%f,%f,%f,%f,%f\n", targ_pos, real_pos, unitree_Data.unitree_recv.LW, set_w, unitree_Data.unitree_recv.W);
+		osDelay(1);
+	}
 }

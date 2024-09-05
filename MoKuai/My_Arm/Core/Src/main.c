@@ -96,7 +96,7 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   
-  Arm_Init();
+//  Arm_Init();
 
   /* USER CODE END 2 */
 
