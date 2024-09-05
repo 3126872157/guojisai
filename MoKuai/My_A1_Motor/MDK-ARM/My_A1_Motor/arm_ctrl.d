@@ -30,7 +30,6 @@ my_a1_motor\arm_ctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 my_a1_motor\arm_ctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 my_a1_motor\arm_ctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 my_a1_motor\arm_ctrl.o: ..\Arm\arm_ctrl.h
-my_a1_motor\arm_ctrl.o: ..\Arm\uart_servo.h
 my_a1_motor\arm_ctrl.o: ..\Arm\unitree_a1.h
 my_a1_motor\arm_ctrl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 my_a1_motor\arm_ctrl.o: ..\Arm\A1_motor_msg.h

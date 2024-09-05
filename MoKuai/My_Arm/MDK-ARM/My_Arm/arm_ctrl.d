@@ -38,3 +38,17 @@ my_arm\arm_ctrl.o: ..\Arm\A1_motor_msg.h
 my_arm\arm_ctrl.o: ..\Arm\serial_servo.h
 my_arm\arm_ctrl.o: ..\App\pid.h
 my_arm\arm_ctrl.o: ..\App\struct_typedef.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+my_arm\arm_ctrl.o: ../Core/Inc/FreeRTOSConfig.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
+my_arm\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h

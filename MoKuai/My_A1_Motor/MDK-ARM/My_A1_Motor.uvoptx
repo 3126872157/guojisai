@@ -222,6 +222,11 @@
           <WinNumber>2</WinNumber>
           <ItemText>unitree_pos_pid</ItemText>
         </Ww>
+        <Ww>
+          <count>10</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>\\My_A1_Motor\../Core/Src/main.c\pos</ItemText>
+        </Ww>
       </WatchWindow2>
       <Tracepoint>
         <THDelay>0</THDelay>

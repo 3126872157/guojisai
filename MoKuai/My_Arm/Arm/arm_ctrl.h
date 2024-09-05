@@ -16,7 +16,7 @@
 
 //安全
 #define UNITREE_MAX_TORQUE 2.0f
-#define UNITREE_MAX_POS	   1.25f
+#define UNITREE_MAX_POS	   1.05f
 
 // 宇树电机结构体
 typedef struct

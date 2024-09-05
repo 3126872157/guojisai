@@ -94,9 +94,7 @@ void unitree_w_pid_ctrl(float w)
 // 位置pid控制
 void unitree_pos_pid_ctrl(float pos)
 {
-	if(pos < 0)
-		return;
-	if(pos > UNITREE_MAX_POS)
+	if(pos > UNITREE_MAX_POS || pos < -UNITREE_MAX_POS)
 		return;
 	
 	set_w = PID_calc(&unitree_pos_pid, unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose, pos);
@@ -152,6 +150,6 @@ void Arm_Init(void)
 	// 宇树初始化
 	unitree_Usart6_Init(Unitree_rx6_buf[0], Unitree_rx6_buf[1], Unitree_RX_BUF_NUM);
 	PID_init(&unitree_w_pid, PID_POSITION, unitree_w_pid_K, 2.0f, 0.2f); 	// 0.07, 0.0001, 0.1
-	PID_init(&unitree_pos_pid, PID_POSITION, unitree_pos_pid_K, 2.0f, 0.2f);
+	PID_init(&unitree_pos_pid, PID_POSITION, unitree_pos_pid_K, 2.0f, 0.5f);
 	unitree_check_zero_pose(&unitree_Data);
 }

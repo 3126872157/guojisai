@@ -48,3 +48,7 @@ my_arm\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
 my_arm\main.o: ../Core/Inc/dma.h
 my_arm\main.o: ../Core/Inc/usart.h
 my_arm\main.o: ../Core/Inc/gpio.h
+my_arm\main.o: ..\Arm\arm_ctrl.h
+my_arm\main.o: ..\Arm\unitree_a1.h
+my_arm\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+my_arm\main.o: ..\Arm\A1_motor_msg.h

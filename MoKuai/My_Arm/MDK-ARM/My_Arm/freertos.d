@@ -45,3 +45,7 @@ my_arm\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 my_arm\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 my_arm\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 my_arm\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+my_arm\freertos.o: ..\Arm\arm_ctrl.h
+my_arm\freertos.o: ..\Arm\unitree_a1.h
+my_arm\freertos.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+my_arm\freertos.o: ..\Arm\A1_motor_msg.h

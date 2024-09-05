@@ -32,6 +32,5 @@ my_a1_motor\unitree_a1.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flas
 my_a1_motor\unitree_a1.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 my_a1_motor\unitree_a1.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 my_a1_motor\unitree_a1.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-my_a1_motor\unitree_a1.o: ..\Arm\uart_servo.h
 my_a1_motor\unitree_a1.o: ..\Arm\unitree_a1.h
 my_a1_motor\unitree_a1.o: ..\Arm\A1_motor_msg.h

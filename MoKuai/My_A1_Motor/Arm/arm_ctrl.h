@@ -2,7 +2,6 @@
 #define __ARM_CTRL_H__
 
 #include "main.h"
-#include "uart_servo.h"
 #include "unitree_a1.h"
 
 //-------------------------------ÓîÊ÷-------------------------------
@@ -12,8 +11,8 @@
 #define UNITREE_W_PID_KD 0.003
 
 #define UNITREE_POS_PID_KP 0.75	//1.5
-#define UNITREE_POS_PID_KI 0.00 //0.05
-#define UNITREE_POS_PID_KD 10.0 //75
+#define UNITREE_POS_PID_KI 0.01 //0.05
+#define UNITREE_POS_PID_KD 20.0 //75
 
 //°²È«
 #define UNITREE_MAX_TORQUE 2.0f

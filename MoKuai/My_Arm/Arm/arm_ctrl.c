@@ -3,6 +3,7 @@
 #include "serial_servo.h"
 #include "unitree_a1.h"
 #include "pid.h"
+#include "cmsis_os.h"
 
 //--------------------------------宇树电机变量--------------------------------
 // 串口缓冲
@@ -69,7 +70,7 @@ void unitree_save_check(void)
 void unitree_check_zero_pose(unitree_ctrl_t *ctrl)
 {
 	unitree_torque_ctrl(ctrl, 0);
-	HAL_Delay(10);
+	osDelay(10);
 	unitree_torque_ctrl(ctrl, 0);
 	ctrl->zero_pose = ctrl->unitree_recv.Pos;
 }
@@ -99,9 +100,7 @@ void unitree_w_pid_ctrl(float w)
 // 位置pid控制
 void unitree_pos_pid_ctrl(float pos)
 {
-	if(pos < 0)
-		return;
-	if(pos > UNITREE_MAX_POS)
+	if(pos > UNITREE_MAX_POS || pos < -UNITREE_MAX_POS)
 		return;
 	
 	set_w = PID_calc(&unitree_pos_pid, unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose, pos);
@@ -123,13 +122,13 @@ void unitree_move(uint8_t flag, float pos, float w)
 			modfiy_mix_cmd(&unitree_Data.unitree_send, 0, +Tf, 0, up_w, 0, 3);
 			UnitreeSend(&unitree_Data.unitree_send);
 			ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
-			HAL_Delay(1);
+			osDelay(1);
 		}
 		// 小位移用位置模式，kp = 0.02 , kw = 3
 		modfiy_mix_cmd(&unitree_Data.unitree_send, 0, +Tf, (unitree_Data.zero_pose + pos), 0, 0.006, 3);
 		UnitreeSend(&unitree_Data.unitree_send);
 		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
-		HAL_Delay(1);
+		osDelay(1);
 	}
 	if (flag == 2) // 向下
 	{
@@ -140,12 +139,12 @@ void unitree_move(uint8_t flag, float pos, float w)
 			modfiy_mix_cmd(&unitree_Data.unitree_send, 0, -Tf, 0, down_w, 0, 3);
 			UnitreeSend(&unitree_Data.unitree_send);
 			ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
-			HAL_Delay(1);
+			osDelay(1);
 		}
 		modfiy_mix_cmd(&unitree_Data.unitree_send, 0, -Tf, (unitree_Data.zero_pose + pos), 0, 0.006, 3);
 		UnitreeSend(&unitree_Data.unitree_send);
 		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
-		HAL_Delay(1);
+		osDelay(1);
 	}
 }
 

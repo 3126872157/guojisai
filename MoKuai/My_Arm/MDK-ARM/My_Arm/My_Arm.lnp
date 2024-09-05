@@ -37,6 +37,7 @@
 "my_arm\port.o"
 "my_arm\vofa.o"
 "my_arm\pid.o"
+"my_arm\arm_task.o"
 "my_arm\serial_servo.o"
 "my_arm\unitree_a1.o"
 "my_arm\arm_ctrl.o"

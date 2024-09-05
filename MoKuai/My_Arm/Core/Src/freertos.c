@@ -26,6 +26,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "arm_ctrl.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,11 +48,15 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 
+osThreadId armTaskHandle;
+
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
+
+void arm_task(void const * argument);
 
 /* USER CODE END FunctionPrototypes */
 
@@ -106,7 +112,10 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
+  
+  osThreadDef(armTask, arm_task, osPriorityNormal, 0, 128);
+  defaultTaskHandle = osThreadCreate(osThread(armTask), NULL);
+  
   /* USER CODE END RTOS_THREADS */
 
 }
@@ -131,5 +140,13 @@ void StartDefaultTask(void const * argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
+
+__weak void arm_task(void const * argument)
+{
+	while(1)
+	{
+		osDelay(1);
+	}
+}
 
 /* USER CODE END Application */
