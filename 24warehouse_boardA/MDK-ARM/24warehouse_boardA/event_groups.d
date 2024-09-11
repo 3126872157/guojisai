@@ -1,8 +1,8 @@
 24warehouse_boarda\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/event_groups.c
-24warehouse_boarda\event_groups.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+24warehouse_boarda\event_groups.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
 24warehouse_boarda\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-24warehouse_boarda\event_groups.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
-24warehouse_boarda\event_groups.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+24warehouse_boarda\event_groups.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
+24warehouse_boarda\event_groups.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
 24warehouse_boarda\event_groups.o: ../Core/Inc/FreeRTOSConfig.h
 24warehouse_boarda\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 24warehouse_boarda\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

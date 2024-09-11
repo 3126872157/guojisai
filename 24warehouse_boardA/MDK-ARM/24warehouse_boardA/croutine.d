@@ -1,7 +1,7 @@
 24warehouse_boarda\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/croutine.c
 24warehouse_boarda\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-24warehouse_boarda\croutine.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
-24warehouse_boarda\croutine.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+24warehouse_boarda\croutine.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
+24warehouse_boarda\croutine.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
 24warehouse_boarda\croutine.o: ../Core/Inc/FreeRTOSConfig.h
 24warehouse_boarda\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 24warehouse_boarda\croutine.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

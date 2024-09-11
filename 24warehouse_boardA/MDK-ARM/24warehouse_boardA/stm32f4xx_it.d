@@ -7,7 +7,7 @@
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f427xx.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/CMSIS/Include/core_cm4.h
-24warehouse_boarda\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+24warehouse_boarda\stm32f4xx_it.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/CMSIS/Include/cmsis_version.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -15,7 +15,7 @@
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-24warehouse_boarda\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+24warehouse_boarda\stm32f4xx_it.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
@@ -37,6 +37,6 @@
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 24warehouse_boarda\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h
 24warehouse_boarda\stm32f4xx_it.o: ../Arm/unitree_a1.h
-24warehouse_boarda\stm32f4xx_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+24warehouse_boarda\stm32f4xx_it.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
 24warehouse_boarda\stm32f4xx_it.o: ../Arm/A1_motor_msg.h
 24warehouse_boarda\stm32f4xx_it.o: ../Arm/serial_servo.h

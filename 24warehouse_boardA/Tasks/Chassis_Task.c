@@ -115,7 +115,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     for (uint8_t i = 0; i < 4; i++)
     {
         chassis_move_init->motor_chassis[i].chassis_motor_measure = get_chassis_motor_measure_point(i);
-        PID_init(&chassis_move_init->motor_speed_pid[i], PID_POSITION, motor_speed_pid, M2006_MOTOR_SPEED_PID_MAX_OUT, M2006_MOTOR_SPEED_PID_MAX_IOUT);
+        PID_init(&chassis_move_init->motor_speed_pid[i], PID_DELTA, motor_speed_pid, M2006_MOTOR_SPEED_PID_MAX_OUT, M2006_MOTOR_SPEED_PID_MAX_IOUT);
     }
 	
 	//平动环（里程环）
@@ -274,53 +274,53 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 		chassis_move_control->wz_set = wz_set;
 		
 		//缓起功能,为什么这里不能用abs？？？
-		if(chassis_move_control->vx - chassis_move_control->vx_set > SLOWSTART_MINDIS_V || chassis_move_control->vx - chassis_move_control->vx_set < -SLOWSTART_MINDIS_V)
-		{
-			limit_xspeed_set += (chassis_move_control->vx_set * SLOWSTART_V_K);
-			chassis_move_control->vx_set = limit_xspeed_set;
-			cntx = 0; 
-		}		 
-		else
-		{
-			cntx ++;
-		}
-		if(cntx > 10)		//退出缓起
-		{
-			cntx = 0;
-			limit_xspeed_set = 0;
-		}
-		
-		if(chassis_move_control->vy - chassis_move_control->vy_set > SLOWSTART_MINDIS_V || chassis_move_control->vy - chassis_move_control->vy_set < -SLOWSTART_MINDIS_V)
-		{
-			limit_yspeed_set += (chassis_move_control->vy_set * SLOWSTART_V_K);
-			chassis_move_control->vy_set = limit_yspeed_set;
-			cnty=0;	 
-		}		 
-		else
-		{
-			cnty ++;
-		}				 
-		if(cnty > 10)
-		{
-			limit_yspeed_set = 0;
-			cnty = 0;
-		}		 
-		
-		if(chassis_move_control->wz - chassis_move_control->wz_set > SLOWSTART_MINDIS_W || chassis_move_control->wz - chassis_move_control->wz_set < -SLOWSTART_MINDIS_W)
-		{
-			limit_wspeed_set += (chassis_move_control->wz_set * SLOWSTART_WZ_K);
-			chassis_move_control->wz_set = limit_wspeed_set;
-			cnty = 0;	 
-		}
-		else
-		{
-			cntw ++;
-		}				 
-		if(cntw>10)
-		{
-			limit_wspeed_set = 0;
-			cntw = 0;
-		}
+//		if(chassis_move_control->vx - chassis_move_control->vx_set > SLOWSTART_MINDIS_V || chassis_move_control->vx - chassis_move_control->vx_set < -SLOWSTART_MINDIS_V)
+//		{
+//			limit_xspeed_set += (chassis_move_control->vx_set * SLOWSTART_V_K);
+//			chassis_move_control->vx_set = limit_xspeed_set;
+//			cntx = 0; 
+//		}		 
+//		else
+//		{
+//			cntx ++;
+//		}
+//		if(cntx > 10)		//退出缓起
+//		{
+//			cntx = 0;
+//			limit_xspeed_set = 0;
+//		}
+//		
+//		if(chassis_move_control->vy - chassis_move_control->vy_set > SLOWSTART_MINDIS_V || chassis_move_control->vy - chassis_move_control->vy_set < -SLOWSTART_MINDIS_V)
+//		{
+//			limit_yspeed_set += (chassis_move_control->vy_set * SLOWSTART_V_K);
+//			chassis_move_control->vy_set = limit_yspeed_set;
+//			cnty=0;	 
+//		}		 
+//		else
+//		{
+//			cnty ++;
+//		}				 
+//		if(cnty > 10)
+//		{
+//			limit_yspeed_set = 0;
+//			cnty = 0;
+//		}		 
+//		
+//		if(chassis_move_control->wz - chassis_move_control->wz_set > SLOWSTART_MINDIS_W || chassis_move_control->wz - chassis_move_control->wz_set < -SLOWSTART_MINDIS_W)
+//		{
+//			limit_wspeed_set += (chassis_move_control->wz_set * SLOWSTART_WZ_K);
+//			chassis_move_control->wz_set = limit_wspeed_set;
+//			cnty = 0;	 
+//		}
+//		else
+//		{
+//			cntw ++;
+//		}				 
+//		if(cntw>10)
+//		{
+//			limit_wspeed_set = 0;
+//			cntw = 0;
+//		}
 		
 		chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
 		chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed, chassis_move_control->vy_max_speed);
