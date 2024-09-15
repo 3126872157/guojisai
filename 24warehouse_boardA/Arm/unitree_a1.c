@@ -143,7 +143,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 	}
 	
 	//vofa·¢ËÍÊý¾Ý
-	if(huart->Instance==USART1)
+	if(huart->Instance == UART8)
 	{
   		 usart_dma_tx_over = 1;
 	}

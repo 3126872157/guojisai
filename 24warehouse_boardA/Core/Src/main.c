@@ -105,6 +105,7 @@ int main(void)
   MX_TIM10_Init();
   MX_USART6_UART_Init();
   MX_UART7_Init();
+  MX_UART8_Init();
   /* USER CODE BEGIN 2 */
 	can_filter_init();
 	delay_init();

@@ -1,5 +1,5 @@
 24warehouse_boarda\vofa.o: ..\Application\vofa.c
-24warehouse_boarda\vofa.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+24warehouse_boarda\vofa.o: ..\Application\VOFA.h
 24warehouse_boarda\vofa.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
 24warehouse_boarda\vofa.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
 24warehouse_boarda\vofa.o: ../Core/Inc/main.h

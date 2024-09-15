@@ -3,19 +3,23 @@
 
 #include "main.h"
 #include "unitree_a1.h"
+#include "serial_servo.h"
+#include "unitree_a1.h"
+#include "pid.h"
+#include "cmsis_os.h"
 
 //-------------------------------宇树-------------------------------
-//PID数据
-#define UNITREE_W_PID_KP 0.02
-#define UNITREE_W_PID_KI 0.003
-#define UNITREE_W_PID_KD 0.003
-#define UNITREE_W_PID_MAX_OUT 2.0
+
+#define UNITREE_W_PID_KP 0.02f
+#define UNITREE_W_PID_KI 0.003f
+#define UNITREE_W_PID_KD 0.0f
+#define UNITREE_W_PID_MAX_OUT 2.0f
 #define UNITREE_W_PID_MAX_IOUT 0.2f
 
-#define UNITREE_POS_PID_KP 0.75	//1.5
-#define UNITREE_POS_PID_KI 0.01 //0.05
-#define UNITREE_POS_PID_KD 20.0 //75
-#define UNITREE_POS_PID_MAX_OUT 2.0
+#define UNITREE_POS_PID_KP 16.0f
+#define UNITREE_POS_PID_KI 0.0f
+#define UNITREE_POS_PID_KD 20.0f
+#define UNITREE_POS_PID_MAX_OUT 2.0f
 #define UNITREE_POS_PID_MAX_IOUT 0.5f	//赞成IOUT来静差调整
 
 //安全

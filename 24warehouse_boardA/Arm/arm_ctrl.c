@@ -1,9 +1,4 @@
-#include "main.h"
 #include "arm_ctrl.h"
-#include "serial_servo.h"
-#include "unitree_a1.h"
-#include "pid.h"
-#include "cmsis_os.h"
 
 //--------------------------------宇树电机变量--------------------------------
 // 串口缓冲
@@ -16,11 +11,13 @@ pid_type_def unitree_w_pid;
 pid_type_def unitree_pos_pid;
 const static fp32 unitree_w_pid_K[3] = {UNITREE_W_PID_KP, UNITREE_W_PID_KI, UNITREE_W_PID_KD};
 const static fp32 unitree_pos_pid_K[3] = {UNITREE_POS_PID_KP, UNITREE_POS_PID_KI, UNITREE_POS_PID_KD};
+
+
 // 控制相关
 float K_tff = 0.01; // 前馈力矩因子，想着是前馈力矩跟角速度有关
 float K_set_w = 5;
-float Tf = 0.08;	//分情况讨论前馈力矩
-float Tf_up = 0.1;
+float Tf = 0.08;	//分情况讨论前馈力矩0.08,0.145
+float Tf_up = 1000.0;//0.1
 float Tf_down = 0;
 float set_w = 0;
 float kw = 5.0;
@@ -86,7 +83,7 @@ void unitree_w_pid_ctrl(float w)
 	if (unitree_pos_pid.error[0] > 0.01f)	//在0.01误差外
 	{
 //		unitree_torque_ctrl(&unitree_Data, tff + PID_calc(&unitree_w_pid, unitree_Data.unitree_recv.LW, w));
-		modfiy_mix_cmd(&unitree_Data.unitree_send, 0, +Tf_up, 0, w, 0, kw);
+		modfiy_mix_cmd(&unitree_Data.unitree_send, 0, Tf_up, 0, w, 0, kw);
 		UnitreeSend(&unitree_Data.unitree_send);
 		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
 	}

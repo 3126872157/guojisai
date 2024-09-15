@@ -18,7 +18,7 @@ uint8_t Servo_Rx_Data[20];
 // 初始化总线舵机
 void serial_servo_UART_Init(void)
 {
-	__HAL_UART_ENABLE_IT(&SERIAL_SERVO_HUART, UART_IT_IDLE);	// 使能串口空闲中断
+//	__HAL_UART_ENABLE_IT(&SERIAL_SERVO_HUART, UART_IT_IDLE);	// 使能串口空闲中断
 	HAL_UART_Receive_DMA(&SERIAL_SERVO_HUART, ServoRxBuf, 255); // 设置DMA传输，将串口1的数据搬运到recvive_buff中，每次255个字节
 }
 
@@ -26,10 +26,11 @@ void serial_servo_UART_Init(void)
 void moveServo(uint8_t servoID, uint16_t Position, uint16_t Time)
 {
 	if (servoID > 31 || !(Time > 0))
-	{ // 舵机ID不能打于31,可根据对应控制板修改
+	{ // 舵机ID不能大于31,可根据对应控制板修改
 		return;
 	}
-	ServoTxBuf[0] = ServoTxBuf[1] = FRAME_HEADER; // 填充帧头
+	ServoTxBuf[0] = FRAME_HEADER; // 填充帧头
+	ServoTxBuf[1] = FRAME_HEADER; // 填充帧头
 	ServoTxBuf[2] = 8;							  // 数据长度：控制舵机的个数 * 3 + 5
 	ServoTxBuf[3] = CMD_SERVO_MOVE;				  // 数据长度=要控制舵机数*3+5，此处=1*3+5//填充舵机移动指令
 	ServoTxBuf[4] = 1;							  // 要控制的舵机个数

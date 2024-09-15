@@ -1,4 +1,5 @@
 24warehouse_boarda\arm_ctrl.o: ..\Arm\arm_ctrl.c
+24warehouse_boarda\arm_ctrl.o: ..\Arm\arm_ctrl.h
 24warehouse_boarda\arm_ctrl.o: ../Core/Inc/main.h
 24warehouse_boarda\arm_ctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 24warehouse_boarda\arm_ctrl.o: ../Core/Inc/stm32f4xx_hal_conf.h
@@ -35,7 +36,6 @@
 24warehouse_boarda\arm_ctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 24warehouse_boarda\arm_ctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 24warehouse_boarda\arm_ctrl.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-24warehouse_boarda\arm_ctrl.o: ..\Arm\arm_ctrl.h
 24warehouse_boarda\arm_ctrl.o: ..\Arm\unitree_a1.h
 24warehouse_boarda\arm_ctrl.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
 24warehouse_boarda\arm_ctrl.o: ..\Arm\A1_motor_msg.h
