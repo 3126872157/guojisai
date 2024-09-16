@@ -60,3 +60,8 @@
 24warehouse_boarda\bodanpan_task.o: ..\Tasks\Chassis_Task.h
 24warehouse_boarda\bodanpan_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\bodanpan_task.o: ..\Tasks\Bodanpan_Task.h
+24warehouse_boarda\bodanpan_task.o: ../Application/VOFA.h
+24warehouse_boarda\bodanpan_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+24warehouse_boarda\bodanpan_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+24warehouse_boarda\bodanpan_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+24warehouse_boarda\bodanpan_task.o: ../Core/Inc/usart.h

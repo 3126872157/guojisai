@@ -4,6 +4,7 @@
 extern float set_w;
 float targ_pos = 0;
 float real_pos = 0;
+
 uint8_t direction = 0; //1ио2об
 extern unitree_ctrl_t unitree_Data;
 
@@ -21,8 +22,6 @@ void arm_task(void const * argument)
 		unitree_save_check();
 		
 		real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
-		
-//		my_vofa_printf((const char *)&targ_pos,&real_pos,&real_pos);
 		//printf("%f,%f,%f,%f,%f\n", targ_pos, real_pos, unitree_Data.unitree_recv.LW, set_w, unitree_Data.unitree_recv.W);
 //		moveServo(3, ceshi_angle, 300);
 		osDelay(10);

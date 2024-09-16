@@ -30,18 +30,19 @@
 #include "user_lib.h"
 #include "Bodanpan_Task.h"
 #include "bodanpan.h"
+#include "VOFA.h"
 
 //速度环PID
-#define M2006_MOTOR_SPEED_PID_KP 400.0f
-#define M2006_MOTOR_SPEED_PID_KI 0.1f
+#define M2006_MOTOR_SPEED_PID_KP 600.0f
+#define M2006_MOTOR_SPEED_PID_KI 0.01f
 #define M2006_MOTOR_SPEED_PID_KD 0.0f
 #define M2006_MOTOR_SPEED_PID_MAX_OUT MAX_MOTOR_CAN_CURRENT
 #define M2006_MOTOR_SPEED_PID_MAX_IOUT 4000.0f
 
 //位置环PID（平动/距离）
-#define M2006_MOTOR_DISTANCE_PID_KP 4.6f
-#define M2006_MOTOR_DISTANCE_PID_KI 0.0000028f
-#define M2006_MOTOR_DISTANCE_PID_KD 0.0000006f
+#define M2006_MOTOR_DISTANCE_PID_KP 10.0f
+#define M2006_MOTOR_DISTANCE_PID_KI 0.0f
+#define M2006_MOTOR_DISTANCE_PID_KD 0.0f
 #define M2006_MOTOR_DISTANCE_PID_MAX_OUT MAX_MOTOR_CAN_CURRENT
 #define M2006_MOTOR_DISTANCE_PID_MAX_IOUT 4000.0f
 
@@ -167,6 +168,6 @@ typedef struct
 
 //函数声明区
 void chassis_task(void const * argument);
-
+void ramp_function(float *data_in,float data_out,float k);//斜坡函数
 
 #endif

@@ -141,12 +141,6 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 		HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_RESET);
 		unitree_cnt++;
 	}
-	
-	//vofa发送数据
-	if(huart->Instance == UART8)
-	{
-  		 usart_dma_tx_over = 1;
-	}
 }
 
 // 发送电机指令

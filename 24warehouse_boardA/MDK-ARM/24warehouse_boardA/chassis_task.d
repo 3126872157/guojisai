@@ -60,8 +60,12 @@
 24warehouse_boarda\chassis_task.o: ../Core/Inc/tim.h
 24warehouse_boarda\chassis_task.o: ../Application/bodanpan.h
 24warehouse_boarda\chassis_task.o: ..\Tasks\Chassis_Task.h
+24warehouse_boarda\chassis_task.o: ../Application/VOFA.h
+24warehouse_boarda\chassis_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+24warehouse_boarda\chassis_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+24warehouse_boarda\chassis_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
+24warehouse_boarda\chassis_task.o: ../Core/Inc/usart.h
 24warehouse_boarda\chassis_task.o: ../Compoents/algorithm/Include/arm_math.h
 24warehouse_boarda\chassis_task.o: ../Drivers/CMSIS/Include/core_cm4.h
-24warehouse_boarda\chassis_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
 24warehouse_boarda\chassis_task.o: ..\Tasks\INS_task.h
 24warehouse_boarda\chassis_task.o: ../Application/chassis_behaviour.h

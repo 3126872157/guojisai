@@ -29,13 +29,18 @@
 //调试保护标志位，1为开启安全模式；因为无线dap退出调试的时候有概率会疯掉
 uint8_t safe_flag = 1;
 
-//缓起函数用的变量
-fp32 limit_xspeed_set=0;
-fp32 limit_yspeed_set=0;
-fp32 limit_wspeed_set=0;
-uint8_t cntx=0;
-uint8_t cnty=0;
-uint8_t cntw=0;
+//缓起函数用的变量，启动斜率
+float slow_start_k = 0.01f;
+
+extern float send_data[10];
+
+//fp32 limit_xspeed_set=0;
+//fp32 limit_yspeed_set=0;
+//fp32 limit_wspeed_set=0;
+//uint8_t cntx=0;
+//uint8_t cnty=0;
+//uint8_t cntw=0;
+
 
 //陀螺仪数据
 extern fp32 my_angle[3];
@@ -85,7 +90,7 @@ void chassis_task(void const * argument)
 			//拨蛋盘电机控制
 			bodanpan_motor_control();
 			
-			//发送控制电流
+			//发送底盘控制电流
 			CAN_cmd_chassis(chassis_move.motor_chassis[0].give_current,
 							chassis_move.motor_chassis[1].give_current,
 							chassis_move.motor_chassis[2].give_current,
@@ -115,7 +120,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     for (uint8_t i = 0; i < 4; i++)
     {
         chassis_move_init->motor_chassis[i].chassis_motor_measure = get_chassis_motor_measure_point(i);
-        PID_init(&chassis_move_init->motor_speed_pid[i], PID_DELTA, motor_speed_pid, M2006_MOTOR_SPEED_PID_MAX_OUT, M2006_MOTOR_SPEED_PID_MAX_IOUT);
+        PID_init(&chassis_move_init->motor_speed_pid[i], PID_POSITION, motor_speed_pid, M2006_MOTOR_SPEED_PID_MAX_OUT, M2006_MOTOR_SPEED_PID_MAX_IOUT);
     }
 	
 	//平动环（里程环）
@@ -269,58 +274,21 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 	{
 		safe_flag = 0;
 		
-		chassis_move_control->vx_set = vx_set;
-		chassis_move_control->vy_set = vy_set;
-		chassis_move_control->wz_set = wz_set;
+//		chassis_move_control->vx_set = vx_set;
+//		chassis_move_control->vy_set = vy_set;
+//		chassis_move_control->wz_set = wz_set;
 		
-		//缓起功能,为什么这里不能用abs？？？
-//		if(chassis_move_control->vx - chassis_move_control->vx_set > SLOWSTART_MINDIS_V || chassis_move_control->vx - chassis_move_control->vx_set < -SLOWSTART_MINDIS_V)
-//		{
-//			limit_xspeed_set += (chassis_move_control->vx_set * SLOWSTART_V_K);
-//			chassis_move_control->vx_set = limit_xspeed_set;
-//			cntx = 0; 
-//		}		 
-//		else
-//		{
-//			cntx ++;
-//		}
-//		if(cntx > 10)		//退出缓起
-//		{
-//			cntx = 0;
-//			limit_xspeed_set = 0;
-//		}
-//		
-//		if(chassis_move_control->vy - chassis_move_control->vy_set > SLOWSTART_MINDIS_V || chassis_move_control->vy - chassis_move_control->vy_set < -SLOWSTART_MINDIS_V)
-//		{
-//			limit_yspeed_set += (chassis_move_control->vy_set * SLOWSTART_V_K);
-//			chassis_move_control->vy_set = limit_yspeed_set;
-//			cnty=0;	 
-//		}		 
-//		else
-//		{
-//			cnty ++;
-//		}				 
-//		if(cnty > 10)
-//		{
-//			limit_yspeed_set = 0;
-//			cnty = 0;
-//		}		 
-//		
-//		if(chassis_move_control->wz - chassis_move_control->wz_set > SLOWSTART_MINDIS_W || chassis_move_control->wz - chassis_move_control->wz_set < -SLOWSTART_MINDIS_W)
-//		{
-//			limit_wspeed_set += (chassis_move_control->wz_set * SLOWSTART_WZ_K);
-//			chassis_move_control->wz_set = limit_wspeed_set;
-//			cnty = 0;	 
-//		}
-//		else
-//		{
-//			cntw ++;
-//		}				 
-//		if(cntw>10)
-//		{
-//			limit_wspeed_set = 0;
-//			cntw = 0;
-//		}
+
+		//缓起功能
+		ramp_function(&chassis_move_control->vx_set, vx_set, slow_start_k);
+		ramp_function(&chassis_move_control->vy_set, vy_set, slow_start_k);
+		ramp_function(&chassis_move_control->wz_set, wz_set, slow_start_k);
+		
+		send_data[0] = vx_set;
+		send_data[1] = chassis_move_control->vx;
+		my_vofa_printf(2);
+
+		
 		
 		chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
 		chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed, chassis_move_control->vy_max_speed);
@@ -397,3 +365,17 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
         chassis_move_control_loop->motor_chassis[i].give_current = (int16_t)(chassis_move_control_loop->motor_speed_pid[i].out);
     }
 }
+
+
+void ramp_function(float *data_in,float data_out,float k)//斜坡函数
+{
+	if(data_out != *data_in)
+	{
+		if(fabs(data_out - *data_in) < k/10.0f)
+			*data_in = data_out;
+		else
+			*data_in += k * (data_out - *data_in > 0 ? 1.0f : -1.0f);
+	}
+}
+
+

@@ -1,38 +1,43 @@
 #include "VOFA.h"
 
 
-volatile uint8_t  usart_dma_tx_over = 1;
+float send_data[10]={0.0f};
 
+uint8_t send_buff[80];
 
-//参数：发送的数据指针，可填多个int my_vofa_printf(const char *format,...)
-int my_vofa_printf(const char *format,...)
+void float_to_u8_v(float* datain,uint8_t* dataout)
 {
-  va_list arg;
-  static char send_buff[200] = {0};
-  int rx_len;//发送数据字节长度
-  
-  while(!usart_dma_tx_over);//等待前一次DMA发送完成
- 
-  va_start(arg, format);
-  rx_len = vsnprintf((char*)send_buff,sizeof(send_buff)+1,(char*)format,arg);
-  va_end(arg);
-  
-  send_buff[rx_len++] = 0x00;send_buff[rx_len++] = 0x00;send_buff[rx_len++] = 0x80;send_buff[rx_len++] = 0x7F; //VOFA中JustFloat模式的帧尾
-  
-  HAL_UART_Transmit_DMA(&huart8,(uint8_t *)send_buff, rx_len);
-  usart_dma_tx_over = 0;//清0全局标志，发送完成后重新置1
- 
-  return rx_len;
+    uint8_t farray[4];
+    *(float*)farray=*datain;
+    dataout[3]=farray[3];
+    dataout[2]=farray[2];
+    dataout[1]=farray[1];
+    dataout[0]=farray[0];
 }
 
 
-//在串口发送中断回调里写
-//void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-//{
-//	if(huart->Instance==UART8)
-//	{
-//  		 usart_dma_tx_over = 1;
-//	}
-// 
-//}
+//参数：发送的数据指针，可填多个int my_vofa_printf(const char *format,...)
+void my_vofa_printf(uint8_t len)
+{
+	
+	uint8_t tail[4]={0x00,0x00,0x80,0x7f};//vofa中justfloat帧尾
+	
+	for(uint8_t i=0;i<len;i++)
+	{
+		uint8_t f_t_u[4];
+		float_to_u8_v(&send_data[i], f_t_u);
+		for(int j = 4*i;j < 4*(i+1);j++)
+			send_buff[j]=f_t_u[j%4];
+	}
+	
+	send_buff[len*4] = tail[0];
+	send_buff[len*4+1] = tail[1];
+	send_buff[len*4+2] = tail[2];
+	send_buff[len*4+3] = tail[3];
+
+	HAL_UART_Transmit_DMA(&huart8,send_buff,len*4+4);
+	
+//	HAL_UART_Transmit(&huart6,temps,length*4+4,0xFF);
+}
+
 
