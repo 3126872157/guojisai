@@ -57,3 +57,5 @@
 24warehouse_boarda\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 24warehouse_boarda\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 24warehouse_boarda\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+24warehouse_boarda\arm_ctrl.o: ..\Arm\arm_solver.h
+24warehouse_boarda\arm_ctrl.o: D:\keil5\ARM\ARMCC\Bin\..\include\math.h

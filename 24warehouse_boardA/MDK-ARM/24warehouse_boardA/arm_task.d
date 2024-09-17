@@ -63,3 +63,5 @@
 24warehouse_boarda\arm_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
 24warehouse_boarda\arm_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
 24warehouse_boarda\arm_task.o: ../Core/Inc/usart.h
+24warehouse_boarda\arm_task.o: ../Arm/arm_solver.h
+24warehouse_boarda\arm_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\math.h

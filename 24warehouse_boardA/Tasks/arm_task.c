@@ -1,4 +1,6 @@
 #include "arm_task.h"
+#include "arm_solver.h"
+
 //#define printf myprintf
 
 extern float set_w;

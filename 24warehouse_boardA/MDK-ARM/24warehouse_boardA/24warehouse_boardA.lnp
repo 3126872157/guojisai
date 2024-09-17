@@ -70,6 +70,7 @@
 "24warehouse_boarda\arm_ctrl.o"
 "24warehouse_boarda\serial_servo.o"
 "24warehouse_boarda\unitree_a1.o"
+"24warehouse_boarda\arm_solver.o"
 --strict --scatter "24warehouse_boardA\24warehouse_boardA.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

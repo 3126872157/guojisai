@@ -1,5 +1,5 @@
 #include "arm_ctrl.h"
-
+#include "arm_solver.h"
 //--------------------------------宇树电机变量--------------------------------
 // 串口缓冲
 extern uint8_t unitree_rx_buf[2][Unitree_RX_BUF_NUM];

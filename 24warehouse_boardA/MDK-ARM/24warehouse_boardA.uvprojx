@@ -1107,6 +1107,16 @@
               <FileType>5</FileType>
               <FilePath>..\Arm\A1_motor_msg.h</FilePath>
             </File>
+            <File>
+              <FileName>arm_solver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arm\arm_solver.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_solver.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\arm_solver.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
