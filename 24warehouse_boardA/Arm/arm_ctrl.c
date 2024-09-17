@@ -11,8 +11,6 @@ pid_type_def unitree_w_pid;
 pid_type_def unitree_pos_pid;
 const static fp32 unitree_w_pid_K[3] = {UNITREE_W_PID_KP, UNITREE_W_PID_KI, UNITREE_W_PID_KD};
 const static fp32 unitree_pos_pid_K[3] = {UNITREE_POS_PID_KP, UNITREE_POS_PID_KI, UNITREE_POS_PID_KD};
-
-
 // 控制相关
 float K_tff = 0.01; // 前馈力矩因子，想着是前馈力矩跟角速度有关
 float K_set_w = 5;
@@ -35,6 +33,11 @@ extern uint8_t Servo_Rx_Data[20];	//生的数据
 //		4号舵机为拨蛋板，增大为归位
 uint16_t claw_catch_pos = 423;
 uint16_t claw_loose_pos = 600;
+
+//--------------------------------机械臂与解算变量----------------------------
+// 逆运动学解算结构体
+struct arm_solver solver;
+uint8_t error;
 
 
 //--------------------------------宇树电机函数--------------------------------
@@ -158,7 +161,13 @@ void unitree_move(uint8_t flag, float pos, float w)
 //移动关节上的总线舵机
 void servo_arm_move(float angle1, float angle2)
 {
-	moveServos(2, servo_Data.serial_servo_Time, 1, angle1, 2, angle2);
+	float input1;
+	float input2;
+	
+	input1 = 500.0f - angle1 / 0.24f;
+	input2 = 500.0f + angle2 / 0.24f;
+	
+	moveServos(2, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2);
 }
 
 //机械爪夹取
@@ -173,11 +182,33 @@ void claw_loose(void)
 	moveServo(3, claw_loose_pos, 300);
 }
 
+//--------------------------------总机械臂函数--------------------------------
+void arm_ctrl(float end_angle, float x, float y)
+{
+	error = arm_solver_analyze(&solver, end_angle, x, y);
+	if(!error)
+	{
+		// 输入a0为弧度制
+//		unitree_pos_pid_ctrl(-arm_solver.a0);
+		
+		servo_arm_move(solver.a1, solver.a2);
+	}
+	else
+	{
+		
+	}
+}
+
+// 机械臂初始化函数
 void Arm_Init(void)
 {
+	// 逆运动学解算初始化
+	arm_solver_init(&solver, 140.0f, 24.38f, 358.13f, 150.0f, 188.17f);
+	
 	// 幻尔初始化
 	serial_servo_UART_Init();
-
+	servo_Data.serial_servo_Time = 0;
+	
 	// 宇树初始化
 	unitree_Uart_Init(unitree_rx_buf[0], unitree_rx_buf[1], Unitree_RX_BUF_NUM);
 	PID_init(&unitree_w_pid,   PID_POSITION, unitree_w_pid_K,   UNITREE_W_PID_MAX_OUT,   UNITREE_W_PID_MAX_IOUT);

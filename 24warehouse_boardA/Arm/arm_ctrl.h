@@ -42,7 +42,7 @@ typedef struct
 //总线舵机结构体
 typedef struct
 {
-	uint8_t serial_servo_Time;
+	uint16_t serial_servo_Time;
 	uint16_t serial_servo_angle1;
 	uint16_t serial_servo_angle2;
 
@@ -62,4 +62,12 @@ void unitree_w_pid_ctrl(float w);
 void unitree_pos_pid_ctrl(float pos);
 //特化的宇树A1位置控制
 void unitree_move(uint8_t flag, float pos, float w);
+//移动关节上的总线舵机
+void servo_arm_move(float angle1, float angle2);
+//机械爪夹取
+void claw_catch(void);
+//机械爪松开
+void claw_loose(void);
+// 机械臂解算方法控制
+void arm_ctrl(float end_angle, float x, float y);
 #endif

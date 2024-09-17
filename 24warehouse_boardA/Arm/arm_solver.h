@@ -43,6 +43,6 @@ struct arm_solver
 } ;
 
 void arm_solver_init(struct arm_solver *solver, float b0, float b1, float l0, float l1, float l2);
-unsigned char  arm_solver_analyze(struct arm_solver *solver, float a_total, float x, float y);
+uint8_t arm_solver_analyze(struct arm_solver *solver, float a_total, float x, float y);
 
 #endif //ARM_SOLVER_H

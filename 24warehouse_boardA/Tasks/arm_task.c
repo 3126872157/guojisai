@@ -9,25 +9,36 @@ float real_pos = 0;
 
 uint8_t direction = 0; //1ио2об
 extern unitree_ctrl_t unitree_Data;
+extern struct arm_solver solver;
 
-uint16_t ceshi_angle = 423;
+float a = 90;
+float b = 300;
+float c = 300;
+uint8_t servo_flag = 99;
+
 
 void arm_task(void const * argument)
 {
 	osDelay(10);
 	Arm_Init();
 	osDelay(10);
+	osDelay(2000);
 	while(1)
 	{
-		unitree_pos_pid_ctrl(targ_pos);
-		
-		unitree_save_check();
+		servo_flag++;
+		if(servo_flag == 100)
+		{
+			arm_ctrl(a, b, c);
+			servo_flag = 0;
+		}
+
+		unitree_pos_pid_ctrl(-solver.a0);
 		
 		real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
 		//printf("%f,%f,%f,%f,%f\n", targ_pos, real_pos, unitree_Data.unitree_recv.LW, set_w, unitree_Data.unitree_recv.W);
-//		moveServo(3, ceshi_angle, 300);
+		unitree_save_check();
 		osDelay(10);
-//		getServosAngle(1,3);
-//		osDelay(1000);
+//		getServosAngle(3,1,2,3);
+		
 	}
 }

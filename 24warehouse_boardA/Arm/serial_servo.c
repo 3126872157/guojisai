@@ -14,6 +14,7 @@ uint8_t ServoRxBuf[20];	 // 总线舵机接收缓存
 uint16_t batteryVolt;
 
 uint8_t Servo_Rx_Data[20];
+//读取角度时数据：Servo_Rx_Data[4]是被读取舵机个数，[5]ID,[6]该ID舵机角度低8位,[7]该ID舵机角度高8位，(8,9,10)(11,12,13)以此类推...
 
 // 初始化总线舵机
 void serial_servo_UART_Init(void)
@@ -134,39 +135,12 @@ void USER_SERIAL_SERVO_UART_IDLECallback(UART_HandleTypeDef *huart)
 
 		// 重启开始DMA传输 每次255字节数据
 		HAL_UART_Receive_DMA(&SERIAL_SERVO_HUART, (uint8_t *)ServoRxBuf, 255);
+		
+		
 	}
 }
 
-//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-//{
-//	if (huart == &SERIAL_SERVO_HUART)
-//	{
-//		// 停止本次DMA传输
-//		HAL_UART_DMAStop(&SERIAL_SERVO_HUART);
-
-//		// 计算接收到的数据长度
-//		uint8_t data_length = SERIAL_SERVO_BUFFER_SIZE - __HAL_DMA_GET_COUNTER(&SERIAL_SERVO_HDMA_RX);
-
-//		if (ServoRxBuf[0] != 0x55 || ServoRxBuf[1] != 0x55)
-//		{
-//			// 清零接收缓冲区
-//			memset(ServoRxBuf, 0, data_length);
-
-//			// 重启开始DMA传输 每次255字节数据
-//			HAL_UART_Receive_DMA(&SERIAL_SERVO_HUART, (uint8_t *)ServoRxBuf, 255);
-//			return;
-//		}
-//		// 转移数据
-//		//memcpy(uart_servo_Data.LobotRxData,ServoRxBuf,data_length);
-
-//		// 清零接收缓冲区
-//		memset(ServoRxBuf, 0, data_length);
-
-//		// 重启开始DMA传输 每次255字节数据
-//		HAL_UART_Receive_DMA(&SERIAL_SERVO_HUART, (uint8_t *)ServoRxBuf, 255);
-//	}
-//}
-
+// 放在it.c里的函数
 //void UART5_IRQHandler(void)
 //{
 //	/* USER CODE BEGIN UART5_IRQn 0 */
