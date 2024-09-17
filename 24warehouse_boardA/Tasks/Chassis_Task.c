@@ -30,7 +30,7 @@
 uint8_t safe_flag = 1;
 
 //缓起函数用的变量，启动斜率
-float slow_start_k = 0.01f;
+float slow_start_k = 0.07f;
 
 extern float send_data[10];
 
@@ -283,11 +283,6 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 		ramp_function(&chassis_move_control->vx_set, vx_set, slow_start_k);
 		ramp_function(&chassis_move_control->vy_set, vy_set, slow_start_k);
 		ramp_function(&chassis_move_control->wz_set, wz_set, slow_start_k);
-		
-		send_data[0] = vx_set;
-		send_data[1] = chassis_move_control->vx;
-		my_vofa_printf(2);
-
 		
 		
 		chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);

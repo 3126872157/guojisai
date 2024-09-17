@@ -55,6 +55,7 @@
 bool_t chassis_code_reset_flag; //底盘4个电机里程计清零标志位
 extern bool_t can_reset_flag[5];//单个电机里程计归零的标志(加上拨蛋盘电机一共5个)
 
+float slow_start_distance_k = 1.0f;
 
 //设置底盘4个电机的里程计清零标志位
 void chassis_code_reset(void)
@@ -291,19 +292,24 @@ static void chassis_move_and_rotate_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz
 		chassis_move_vector->y_set=0.0f;
 		chassis_code_reset_flag=0;
 	}
+//	float x_set = 0.0f,y_set = 0.0f;
 	//运动时，使用角度环保持偏航角不变
 	if(chassis_move_vector->x_set||chassis_move_vector->y_set)
 	{
+	
 		*vx_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->x,chassis_move_vector->x_set);
 		*vy_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->y,chassis_move_vector->y_set);
-//		*wz_set = PID_calc(&chassis_move_vector->motor_move_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);	
+		*wz_set = PID_calc(&chassis_move_vector->motor_move_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
+		
 	}
 	//静止时，使用转向环旋转底盘
 	else
 	{
+		
 		*vx_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->x,chassis_move_vector->x_set);
 		*vy_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->y,chassis_move_vector->y_set);
-//		*wz_set = PID_calc(&chassis_move_vector->motor_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
+		*wz_set = PID_calc(&chassis_move_vector->motor_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
+		
 	}
 }
 
