@@ -18,7 +18,7 @@ float Tf = 0.08;	//分情况讨论前馈力矩0.08,0.145
 float Tf_up = 1000.0;//0.1
 float Tf_down = 0;
 float set_w = 0;
-float kw = 5.0;
+float kw = 4.0;
 float up_w = 1.2;
 float down_w = -0.2;
 uint8_t dangerous_count = 0;	//超出最大力矩次数
@@ -188,9 +188,7 @@ void arm_ctrl(float end_angle, float x, float y)
 	error = arm_solver_analyze(&solver, end_angle, x, y);
 	if(!error)
 	{
-		// 输入a0为弧度制
-//		unitree_pos_pid_ctrl(-arm_solver.a0);
-		
+		// 输入a0为弧度制		
 		servo_arm_move(solver.a1, solver.a2);
 	}
 	else
@@ -207,7 +205,7 @@ void Arm_Init(void)
 	
 	// 幻尔初始化
 	serial_servo_UART_Init();
-	servo_Data.serial_servo_Time = 0;
+	servo_Data.serial_servo_Time = 100;
 	
 	// 宇树初始化
 	unitree_Uart_Init(unitree_rx_buf[0], unitree_rx_buf[1], Unitree_RX_BUF_NUM);

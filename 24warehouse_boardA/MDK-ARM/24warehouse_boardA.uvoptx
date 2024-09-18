@@ -188,22 +188,27 @@
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>input1</ItemText>
+          <ItemText>(uint16_t)input1,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
-          <ItemText>input2</ItemText>
+          <ItemText>(uint16_t)input2,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>1</WinNumber>
-          <ItemText>(uint16_t)input1,0x0A</ItemText>
+          <ItemText>a0*57.295f</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
           <WinNumber>1</WinNumber>
-          <ItemText>(uint16_t)input2,0x0A</ItemText>
+          <ItemText>a1</ItemText>
+        </Ww>
+        <Ww>
+          <count>10</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>a2</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -230,22 +235,32 @@
         <Ww>
           <count>4</count>
           <WinNumber>2</WinNumber>
-          <ItemText>b</ItemText>
+          <ItemText>error</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>2</WinNumber>
-          <ItemText>c</ItemText>
+          <ItemText>kw</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>2</WinNumber>
-          <ItemText>a</ItemText>
+          <ItemText>arm_safe</ItemText>
         </Ww>
         <Ww>
           <count>7</count>
           <WinNumber>2</WinNumber>
-          <ItemText>error</ItemText>
+          <ItemText>total_angle</ItemText>
+        </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>x</ItemText>
+        </Ww>
+        <Ww>
+          <count>9</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>y</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>

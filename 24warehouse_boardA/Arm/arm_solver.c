@@ -12,6 +12,7 @@ void arm_solver_init(struct arm_solver *solver, float b0, float b1, float l0, fl
     solver->l2 = l2;
 }
 
+//输入参数：解算结构体、总角度(角度制)、x、y坐标值(单位：毫米)
 uint8_t arm_solver_analyze(struct arm_solver *solver, float a_total, float x, float y)
 {
 	if(a_total < 30 || a_total >181)
@@ -20,14 +21,11 @@ uint8_t arm_solver_analyze(struct arm_solver *solver, float a_total, float x, fl
     solver->a_total = a_total * D2R;
     solver->x = x;
     solver->y = y;
-
-    float x0 = 0;
-    float x1 = 0;
-    float x2 = 0;
-    float y0 = 0;
-    float y1 = 0;
-    float y2 = 0;
 	
+	//角度解算过程量
+    float x0 = 0,x1 = 0,x2 = 0,y0 = 0,y1 = 0,y2 = 0;
+	
+	//解算结果
 	float a0;
 	float a1;
 	float a2;
@@ -40,7 +38,10 @@ uint8_t arm_solver_analyze(struct arm_solver *solver, float a_total, float x, fl
 
     // 余弦定理解法
     x2 = solver->l2 * sinf(solver->a_total);
-    y2 = sqrtf(solver->l2 * solver->l2 - x2 * x2);
+	if(solver->a_total <= PI_2)
+		y2 = sqrtf(solver->l2 * solver->l2 - x2 * x2);
+	else
+		y2 = -sqrtf(solver->l2 * solver->l2 - x2 * x2);
     x1 = x - x2;
     y1 = y - y2;
     float l = sqrtf(x1 * x1 + y1 * y1);
@@ -61,11 +62,11 @@ uint8_t arm_solver_analyze(struct arm_solver *solver, float a_total, float x, fl
     a2 = a2 * R2D;
 
     // 角度限位保护
+	if (a0 > 45.0f * D2R || a0 < -80.0 * D2R)
+        return 1;
     if(fabs(a1) > A1_MAX_ANGLE)
         return 2;
-    if (a0 > A0_MAX_ANGLE || a0 < -80.0)
-        return 1;
-	
+    
 	solver->a0 = a0;
 	solver->a1 = a1;
 	solver->a2 = a2;
