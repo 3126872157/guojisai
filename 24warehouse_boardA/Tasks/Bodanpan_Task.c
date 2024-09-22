@@ -8,7 +8,7 @@ pid_type_def bodanpan_angle_pid,
 uint8_t ball_num=0;//储蛋机构内已有球的个数
 bool_t a_new_ball_in_flag = 0;
 //extern uint8_t IC_byte;
-uint8_t IC_data_RX; //Uart_Task中接收到的，当前位置扭蛋球的IC卡数据
+extern uint8_t IC_data_RX; //Uart_Task中接收到的，当前位置扭蛋球的IC卡数据
 
 extern Pan_t bodanpan;
 extern motor_measure_t motor_chassis[5];

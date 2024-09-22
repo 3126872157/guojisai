@@ -173,42 +173,17 @@
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>slow_start_k</ItemText>
+          <ItemText>solver</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>arm_solver</ItemText>
+          <ItemText>RX_shijue_buff</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>solver</ItemText>
-        </Ww>
-        <Ww>
-          <count>6</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>(uint16_t)input1,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>7</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>(uint16_t)input2,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>8</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>a0*57.295f</ItemText>
-        </Ww>
-        <Ww>
-          <count>9</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>a1</ItemText>
-        </Ww>
-        <Ww>
-          <count>10</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>a2</ItemText>
+          <ItemText>RX_INS_buff</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -266,6 +241,16 @@
           <count>10</count>
           <WinNumber>2</WinNumber>
           <ItemText>unitree_init</ItemText>
+        </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>claw,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>\\24warehouse_boardA\../Tasks/arm_task.c\x</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>

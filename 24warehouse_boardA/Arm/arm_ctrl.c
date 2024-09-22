@@ -173,13 +173,13 @@ void servo_arm_move(float angle1, float angle2)
 //机械爪夹取
 void claw_catch(void)
 {
-	moveServo(3, claw_catch_pos, 300);
+	moveServo(3, claw_catch_pos, 2000);
 }
 
 //机械爪松开
 void claw_loose(void)
 {
-	moveServo(3, claw_loose_pos, 300);
+	moveServo(3, claw_loose_pos, 2000);
 }
 
 //--------------------------------总机械臂函数--------------------------------

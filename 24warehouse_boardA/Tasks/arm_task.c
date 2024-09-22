@@ -6,7 +6,7 @@
 extern float set_w;
 float targ_pos = 0;
 float real_pos = 0;
-float my_zero_pose = 1.148;
+float my_zero_pose = 0.476;
 
 uint8_t direction = 0; //1上2下
 extern unitree_ctrl_t unitree_Data;
@@ -19,7 +19,9 @@ bool_t unitree_init = 0;//大臂上电初始化标志位
 float total_angle = 90;
 float x = 300;
 float y = 300;
-uint8_t servo_start_flag = 99;//每数到100，总线舵机发送信号执行一次(即1s执行一次)
+uint16_t claw = 600;
+
+uint16_t servo_start_flag = 299;//每数到300，总线舵机发送信号执行一次(即1s执行一次)
 
 
 void arm_task(void const * argument)
@@ -46,13 +48,16 @@ void arm_task(void const * argument)
 		{
 			
 /*		*********机械臂解算调试用程序***********/
-//		servo_start_flag++;
-//		if(servo_start_flag == 100)
-//		{
-//			arm_ctrl(total_angle, x, y);
-//			servo_start_flag = 0;
-//		}
-//		targ_pos = -solver.a0;
+			servo_start_flag++;
+			if(servo_start_flag == 300)
+			{
+				arm_ctrl(total_angle, x, y);
+				
+				servo_start_flag = 0;
+			}
+			if(servo_start_flag == 100)
+				moveServo(3, claw, 1);
+			targ_pos = -solver.a0;
 /***********************************************/	
 		}
 		

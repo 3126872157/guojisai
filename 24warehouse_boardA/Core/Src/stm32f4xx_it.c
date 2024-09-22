@@ -46,6 +46,15 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 
+uint8_t RX_shijue_buff[SHIJUE_BUFF_SIZE];//视觉数据包接收缓冲区
+uint8_t RX_IC_buff[IC_BUFF_SIZE];//IC卡数据包接收缓冲区
+
+uint8_t RX_INS_buff[INS_BUFF_SIZE];//C板INS数据
+
+uint8_t IC_data_RX;//IC卡内的数据(几行几列)
+
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -70,6 +79,8 @@ extern DMA_HandleTypeDef hdma_usart6_rx;
 extern DMA_HandleTypeDef hdma_usart6_tx;
 extern UART_HandleTypeDef huart7;
 extern UART_HandleTypeDef huart8;
+extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
 extern TIM_HandleTypeDef htim6;
 
@@ -260,6 +271,34 @@ void EXTI9_5_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles USART2 global interrupt.
+  */
+void USART2_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART2_IRQn 0 */
+
+  /* USER CODE END USART2_IRQn 0 */
+  HAL_UART_IRQHandler(&huart2);
+  /* USER CODE BEGIN USART2_IRQn 1 */
+
+  /* USER CODE END USART2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USART3 global interrupt.
+  */
+void USART3_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART3_IRQn 0 */
+
+  /* USER CODE END USART3_IRQn 0 */
+  HAL_UART_IRQHandler(&huart3);
+  /* USER CODE BEGIN USART3_IRQn 1 */
+
+  /* USER CODE END USART3_IRQn 1 */
+}
+
+/**
   * @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
   */
 void TIM6_DAC_IRQHandler(void)
@@ -413,6 +452,41 @@ void USER_SERIAL_SERVO_UART_IRQHandler(void)
 		// 调用中断处理函数
 		USER_SERIAL_SERVO_UART_IDLECallback(&SERIAL_SERVO_HUART);
 	}
+}
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+	
+	if(huart==&huart8)//视觉数据DMA空闲中断接收
+	{
+		HAL_UARTEx_ReceiveToIdle_DMA(&huart8, RX_shijue_buff, SHIJUE_BUFF_SIZE);
+		if(RX_shijue_buff[0] == 0xFF)
+		{
+//			解包过程可放在此处，若过程复杂，怕中断影响进程，可单开一个freertos任务，此处放置接收标志位
+		}
+	}
+	
+	if(huart==&huart3)//IC卡数据接收中断
+	{
+		HAL_UARTEx_ReceiveToIdle_IT(&huart3, RX_IC_buff, IC_BUFF_SIZE);
+		if(RX_IC_buff[0] == 0x04)
+		{
+			uint8_t X = 0;
+			for(uint8_t i = 0;i < 21 ; i++) X^=RX_IC_buff[i];//数据校验
+			X=~X;//数据校验
+			if(X == RX_IC_buff[21]) IC_data_RX = RX_IC_buff[15];//校验成功
+		}
+	}
+	
+	if(huart==&huart2)//C板INS数据空闲中断接收
+	{
+		HAL_UARTEx_ReceiveToIdle_IT(&huart2, RX_INS_buff, INS_BUFF_SIZE);
+		if(RX_INS_buff[0] == 0xFE)
+		{
+//			解包过程可放在此处，若过程复杂，怕中断影响进程，可单开一个freertos任务，此处放置接收标志位
+		}
+	}
+	
 }
 
 /* USER CODE END 1 */

@@ -33,6 +33,8 @@
 #include "INS_task.h"
 #include "calibrate_task.h"
 #include "bsp_delay.h"
+#include "stm32f4xx_it.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,6 +55,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+extern uint8_t RX_shijue_buff[SHIJUE_BUFF_SIZE];
+extern uint8_t RX_IC_buff[IC_BUFF_SIZE];
+extern uint8_t RX_INS_buff[INS_BUFF_SIZE];
+
 
 /* USER CODE END PV */
 
@@ -106,10 +112,16 @@ int main(void)
   MX_USART6_UART_Init();
   MX_UART7_Init();
   MX_UART8_Init();
+  MX_USART3_UART_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 	can_filter_init();
 	delay_init();
     cali_param_init();
+	HAL_UARTEx_ReceiveToIdle_DMA(&huart8, RX_shijue_buff, SHIJUE_BUFF_SIZE);
+	HAL_UARTEx_ReceiveToIdle_DMA(&huart3, RX_IC_buff, IC_BUFF_SIZE);
+	HAL_UARTEx_ReceiveToIdle_IT(&huart2, RX_INS_buff, INS_BUFF_SIZE);
+	
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

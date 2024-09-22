@@ -61,3 +61,4 @@
 24warehouse_boarda\main.o: ../Application/INS_task.h
 24warehouse_boarda\main.o: ../Application/calibrate_task.h
 24warehouse_boarda\main.o: ../Boards/bsp_delay.h
+24warehouse_boarda\main.o: ../Core/Inc/stm32f4xx_it.h

@@ -57,8 +57,20 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define shijue_TX_Pin GPIO_PIN_1
+#define shijue_TX_GPIO_Port GPIOE
+#define shijue_RX_Pin GPIO_PIN_0
+#define shijue_RX_GPIO_Port GPIOE
+#define unitree_TX_Pin GPIO_PIN_14
+#define unitree_TX_GPIO_Port GPIOG
+#define IC_RX_Pin GPIO_PIN_11
+#define IC_RX_GPIO_Port GPIOC
+#define IC_TX_Pin GPIO_PIN_10
+#define IC_TX_GPIO_Port GPIOC
 #define A1Motor_RE_Pin GPIO_PIN_7
 #define A1Motor_RE_GPIO_Port GPIOI
+#define unitree_RX_Pin GPIO_PIN_9
+#define unitree_RX_GPIO_Port GPIOG
 #define RSTN_IST8310_Pin GPIO_PIN_6
 #define RSTN_IST8310_GPIO_Port GPIOG
 #define DRDY_IST8310_Pin GPIO_PIN_3
@@ -67,11 +79,19 @@ void Error_Handler(void);
 #define CS1_ACCEL_GPIO_Port GPIOA
 #define INT1_ACCEL_Pin GPIO_PIN_4
 #define INT1_ACCEL_GPIO_Port GPIOC
+#define fuyong_TX_Pin GPIO_PIN_2
+#define fuyong_TX_GPIO_Port GPIOA
 #define INT1_GYRO_Pin GPIO_PIN_5
 #define INT1_GYRO_GPIO_Port GPIOC
 #define INT1_GYRO_EXTI_IRQn EXTI9_5_IRQn
+#define servo_TX_Pin GPIO_PIN_8
+#define servo_TX_GPIO_Port GPIOE
+#define fuyong_RX_Pin GPIO_PIN_3
+#define fuyong_RX_GPIO_Port GPIOA
 #define CS1_GYRO_Pin GPIO_PIN_0
 #define CS1_GYRO_GPIO_Port GPIOB
+#define servo_RX_Pin GPIO_PIN_7
+#define servo_RX_GPIO_Port GPIOE
 
 /* USER CODE BEGIN Private defines */
 
