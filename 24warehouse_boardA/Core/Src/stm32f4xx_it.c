@@ -49,7 +49,11 @@
 uint8_t RX_shijue_buff[SHIJUE_BUFF_SIZE];//视觉数据包接收缓冲区
 uint8_t RX_IC_buff[IC_BUFF_SIZE];//IC卡数据包接收缓冲区
 
-uint8_t RX_INS_buff[INS_BUFF_SIZE];//C板INS数据
+
+uint8_t RX_INS_buff[INS_BUFF_SIZE];//C板INS接收缓冲区
+uint8_t RX_INS_data[4];//C板INS接收数据(uint8_t类型)
+float rx_gyro;//C板INS接收数据(float类型)
+
 
 uint8_t IC_data_RX;//IC卡内的数据(几行几列)
 
@@ -483,7 +487,11 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 		HAL_UARTEx_ReceiveToIdle_IT(&huart2, RX_INS_buff, INS_BUFF_SIZE);
 		if(RX_INS_buff[0] == 0xFE)
 		{
-//			解包过程可放在此处，若过程复杂，怕中断影响进程，可单开一个freertos任务，此处放置接收标志位
+			RX_INS_data[0] = RX_INS_buff[4];
+			RX_INS_data[1] = RX_INS_buff[3];
+			RX_INS_data[2] = RX_INS_buff[2];
+			RX_INS_data[3] = RX_INS_buff[1];
+			memcpy(&rx_gyro, RX_INS_data, 4);
 		}
 	}
 	

@@ -32,7 +32,7 @@ void arm_task(void const * argument)
 	
 	while(1)
 	{
-		while(arm_safe);
+//		while(arm_safe);//调试保护位
 		if(!unitree_init)
 		{
 			targ_pos = my_zero_pose - unitree_Data.zero_pose;

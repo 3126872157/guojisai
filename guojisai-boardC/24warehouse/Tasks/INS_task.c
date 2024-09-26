@@ -161,8 +161,8 @@ static fp32 INS_quat[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 fp32 INS_angle[3] = {0.0f, 0.0f, 0.0f};      //euler angle, unit rad.欧拉角 单位 rad
 fp32 my_angle[3] = {0.0f, 0.0f, 0.0f};		//转换成角度制
 
-extern  uint8_t my_cali_flag;
-uint8_t TX_INS_buff[6] = {0xFE,0,0,0,0,0xEF};
+extern  uint8_t my_cali_flag;//校验完成标志位
+uint8_t TX_INS_buff[5] = {0xFE,0,0,0,0};
 
 /**
   * @brief          imu task, init bmi088, ist8310, calculate the euler angle
@@ -174,7 +174,8 @@ uint8_t TX_INS_buff[6] = {0xFE,0,0,0,0,0xEF};
   * @param[in]      pvParameters: NULL
   * @retval         none
   */
-
+uint8_t RX_data[4];
+float rx_angle;
 void INS_task(void const *pvParameters)
 {
     //wait a time
@@ -273,17 +274,17 @@ void INS_task(void const *pvParameters)
 		my_angle[2] = INS_angle[2] * RAD;
 		
 		
-		if(my_cali_flag == 1)
-		{
-			uint8_t farray[4];
-			*(float *)farray = my_angle[0];
-			TX_INS_buff[4] = farray[0];
-			TX_INS_buff[3] = farray[1];
-			TX_INS_buff[2] = farray[2];
-			TX_INS_buff[1] = farray[3];
-			HAL_UART_Transmit_IT(&huart1, TX_INS_buff, 6);
-			
-		}
+//		if(my_cali_flag == 1)
+//		{
+//			uint8_t farray[4];
+//			*(float *)farray = my_angle[0];
+//			TX_INS_buff[4] = farray[0];
+//			TX_INS_buff[3] = farray[1];
+//			TX_INS_buff[2] = farray[2];
+//			TX_INS_buff[1] = farray[3];
+//			HAL_UART_Transmit_IT(&huart1, TX_INS_buff, 5);
+//			osDelay(10);
+//		}
 		
         //because no use ist8310 and save time, no use
         if(mag_update_flag &= 1 << IMU_DR_SHFITS)

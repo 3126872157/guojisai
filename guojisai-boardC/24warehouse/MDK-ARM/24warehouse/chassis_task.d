@@ -60,3 +60,4 @@
 24warehouse\chassis_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\math.h
 24warehouse\chassis_task.o: ..\Tasks\INS_task.h
 24warehouse\chassis_task.o: ../Application/chassis_behaviour.h
+24warehouse\chassis_task.o: ../Core/Inc/usart.h

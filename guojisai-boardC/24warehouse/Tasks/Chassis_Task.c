@@ -23,6 +23,8 @@
 #include "arm_math.h"
 #include "INS_task.h"
 #include "chassis_behaviour.h"
+#include "usart.h"
+
 
 #define abs(x)	( (x>0) ? (x) : (-x) )
 
@@ -53,41 +55,33 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update);
 static void chassis_set_contorl(chassis_move_t *chassis_move_control);
 static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 
+
+
+extern uint8_t my_cali_flag;
+extern uint8_t TX_INS_buff[5];
+
+
+
 void chassis_task(void const * argument)
 {
 	//空闲一段时间
     vTaskDelay(CHASSIS_TASK_INIT_TIME);
 	
-	//底盘初始化
-    chassis_init(&chassis_move);
-	
-	//判断底盘电机是否都在线
-	//这个就不实现了
-	
 	while(1)
 	{
-		if(safe_flag == 1 )
-		{
-			CAN_cmd_chassis(0, 0, 0, 0);
-		}
-		else
-		{
-			//底盘数据更新
-			chassis_feedback_update(&chassis_move);
 		
-			//底盘控制量设置
-			chassis_set_contorl(&chassis_move);
-				
-			//底盘控制PID计算
-			chassis_control_loop(&chassis_move);
-		
-			//发送控制电流
-			CAN_cmd_chassis(chassis_move.motor_chassis[0].give_current,
-							chassis_move.motor_chassis[1].give_current,
-							chassis_move.motor_chassis[2].give_current,
-							chassis_move.motor_chassis[3].give_current);
-		}
 		//系统延时
+		if(my_cali_flag == 1)
+		{
+			uint8_t farray[4];
+			*(float *)farray = my_angle[0];
+			TX_INS_buff[4] = farray[0];
+			TX_INS_buff[3] = farray[1];
+			TX_INS_buff[2] = farray[2];
+			TX_INS_buff[1] = farray[3];
+			HAL_UART_Transmit_IT(&huart1, TX_INS_buff, 5);
+			osDelay(10);
+		}
         vTaskDelay(CHASSIS_CONTROL_TIME_MS);
 	}
 }

@@ -48,30 +48,31 @@ void bodanpan_position_set(uint8_t direction, uint8_t num)//向direction方向转动n
 
 void bodanpan_takeout_a_ball(uint8_t x,uint8_t y)//根据行(x)列(y)号旋转拨蛋盘到对应球的位置，便于后续取出该球
 {                                                
-	int8_t Num,Direction=0;
-	for(uint8_t i=0;i<BOX_NUM;i++)
+	int8_t Num,Direction = 1;
+	for(uint8_t i = 0;i < BOX_NUM;i++)
 	{
-		if(bodanpan.IC_date[i] == x*16+y )//该部分还未完成,是用10个储球机构还是9个？？？
+		if(bodanpan.IC_date[i] == x * 16 + y )//该部分还未完成,是用10个储球机构还是9个？？？
 		{
-			Num=bodanpan.position-i;
-			if(Num<-4)
+			Num = bodanpan.position-i;
+			
+			if(Num < -5)
 			{
-				Direction=0;
-				Num+=9;
+				Direction = 0;
+				Num += 10;
 			}
-			else if(Num>4)
+			else if(Num > 5)
+			{
+				Direction = 0;
+				Num = 10 - Num;
+			}
+			else if(Num > 0 && Num <= 5)
 			{
 				Direction=1;
-				Num=9-Num;
 			}
-			else if(Num>0 && Num<=4)
+			else if(Num < 0 && Num >= -5)
 			{
-				Direction=0;
-			}
-			else if(Num<0 && Num>=-4)
-			{
-				Direction=1;
-				Num=-Num;
+				Direction = 1;
+				Num = -Num;
 			}
 			bodanpan_position_set(Direction, Num);
 		}

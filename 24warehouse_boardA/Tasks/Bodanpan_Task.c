@@ -13,7 +13,7 @@ extern uint8_t IC_data_RX; //Uart_Task中接收到的，当前位置扭蛋球的IC卡数据
 extern Pan_t bodanpan;
 extern motor_measure_t motor_chassis[5];
 
-void RFID_STORY(void);
+void IC_story(void);
 
 void Bodanpan_Task(void const * argument)
 {
@@ -27,11 +27,11 @@ void Bodanpan_Task(void const * argument)
 		{
 			bodanpan_position_set(1,1);
 			osDelay(50);
-			if(IC_data_RX==bodanpan.IC_date[ball_num-1]||IC_data_RX==0)
-				osDelay(1000);
-			if(IC_data_RX==bodanpan.IC_date[ball_num-1]||IC_data_RX==0)
-				osDelay(1000);
-			RFID_STORY();
+			if(IC_data_RX == bodanpan.IC_date[ball_num-1]||IC_data_RX == 0)//如果检测到的还是上一个球的数据或者没有检测到
+				osDelay(500);
+			if(IC_data_RX == bodanpan.IC_date[ball_num-1]||IC_data_RX == 0)
+				osDelay(500);
+			IC_story();
 			a_new_ball_in_flag = 0;
 		}
 		osDelay(5);
@@ -74,12 +74,12 @@ void bodanpan_motor_control(void)
 		
 }
 
-void RFID_STORY(void)
+void IC_story(void)
 {
 	if(ball_num==0||IC_data_RX!=bodanpan.IC_date[ball_num-1])
 	{
-			bodanpan.IC_date[ball_num]=IC_data_RX;
-			bodanpan.box_state[ball_num]=1;
+			bodanpan.IC_date[ball_num] = IC_data_RX;
+			bodanpan.box_state[ball_num] = 1;
 			ball_num++;
 	}
 }

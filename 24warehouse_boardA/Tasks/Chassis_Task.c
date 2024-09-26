@@ -33,7 +33,8 @@ uint8_t safe_flag = 1;
 float slow_start_k = 0.07f;
 
 extern float send_data[10];
-
+extern float rx_gyro;
+	
 //fp32 limit_xspeed_set=0;
 //fp32 limit_yspeed_set=0;
 //fp32 limit_wspeed_set=0;
@@ -243,7 +244,7 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 	//稍后完善，用指针的方法？？get_angle函数到底是啥
 	//更新陀螺仪数据
 	chassis_move_update->last_gyro = chassis_move_update->gyro;
-	chassis_move_update->gyro = my_angle[0];
+	chassis_move_update->gyro = rx_gyro;
 	
 	//转子角度计，pid更新和重置稍后完善
 }
@@ -276,13 +277,13 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 		
 //		chassis_move_control->vx_set = vx_set;
 //		chassis_move_control->vy_set = vy_set;
-//		chassis_move_control->wz_set = wz_set;
+		chassis_move_control->wz_set = wz_set;
 		
 
 		//缓起功能
 		ramp_function(&chassis_move_control->vx_set, vx_set, slow_start_k);
 		ramp_function(&chassis_move_control->vy_set, vy_set, slow_start_k);
-		ramp_function(&chassis_move_control->wz_set, wz_set, slow_start_k);
+//		ramp_function(&chassis_move_control->wz_set, wz_set, slow_start_k);
 		
 		
 		chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);

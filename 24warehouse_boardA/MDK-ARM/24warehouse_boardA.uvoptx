@@ -168,22 +168,27 @@
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>motor_chassis[0]</ItemText>
+          <ItemText>solver</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>solver</ItemText>
+          <ItemText>rx_gyro</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>RX_shijue_buff</ItemText>
+          <ItemText>a_new_ball_in_flag</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>RX_INS_buff</ItemText>
+          <ItemText>bodanpan</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>RX_shijue_buff</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
