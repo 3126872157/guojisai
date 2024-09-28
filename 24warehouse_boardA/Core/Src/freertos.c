@@ -26,9 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "calibrate_task.h"
 #include "Chassis_Task.h"
-#include "INS_task.h"
 #include "Bodanpan_Task.h"
 #include "arm_task.h"
 
@@ -52,9 +50,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 
-osThreadId calibrate_tast_handle;
 osThreadId chassisTaskHandle;
-osThreadId imuTaskHandle;
 osThreadId BodanpanTaskHandle;
 osThreadId armTaskHandle;
 
@@ -136,16 +132,10 @@ void MX_FREERTOS_Init(void) {
   Prepare_Task_Handle = osThreadCreate(osThread(Prepare_Task_), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  
-	osThreadDef(cali, calibrate_task, osPriorityNormal, 0, 512);
-    calibrate_tast_handle = osThreadCreate(osThread(cali), NULL);
-	
+  	
 	osThreadDef(ChassisTask, chassis_task, osPriorityAboveNormal, 0, 512);
     chassisTaskHandle = osThreadCreate(osThread(ChassisTask), NULL);
-	
-	osThreadDef(imuTask, INS_task, osPriorityRealtime, 0, 1024);
-    imuTaskHandle = osThreadCreate(osThread(imuTask), NULL);
-	
+		
 	osThreadDef(Bodanpan_Task_,Bodanpan_Task,osPriorityBelowNormal, 0, 512);
     BodanpanTaskHandle = osThreadCreate(osThread(Bodanpan_Task_), NULL);
 	

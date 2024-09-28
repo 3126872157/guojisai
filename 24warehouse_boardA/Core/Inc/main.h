@@ -63,10 +63,6 @@ void Error_Handler(void);
 #define shijue_RX_GPIO_Port GPIOE
 #define unitree_TX_Pin GPIO_PIN_14
 #define unitree_TX_GPIO_Port GPIOG
-#define IC_RX_Pin GPIO_PIN_11
-#define IC_RX_GPIO_Port GPIOC
-#define IC_TX_Pin GPIO_PIN_10
-#define IC_TX_GPIO_Port GPIOC
 #define A1Motor_RE_Pin GPIO_PIN_7
 #define A1Motor_RE_GPIO_Port GPIOI
 #define unitree_RX_Pin GPIO_PIN_9
@@ -86,6 +82,10 @@ void Error_Handler(void);
 #define INT1_GYRO_EXTI_IRQn EXTI9_5_IRQn
 #define servo_TX_Pin GPIO_PIN_8
 #define servo_TX_GPIO_Port GPIOE
+#define IC_RX_Pin GPIO_PIN_9
+#define IC_RX_GPIO_Port GPIOD
+#define IC_TX_Pin GPIO_PIN_8
+#define IC_TX_GPIO_Port GPIOD
 #define fuyong_RX_Pin GPIO_PIN_3
 #define fuyong_RX_GPIO_Port GPIOA
 #define CS1_GYRO_Pin GPIO_PIN_0

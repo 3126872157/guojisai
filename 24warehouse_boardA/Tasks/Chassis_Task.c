@@ -145,7 +145,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     chassis_move_init->chassis_mode = CHASSIS_STOP;
     
     //获取陀螺仪姿态角指针
-    chassis_move_init->chassis_INS_angle = get_INS_angle_point();
+//    chassis_move_init->chassis_INS_angle = get_INS_angle_point();
    
     //各方向的最大 最小速度
     chassis_move_init->vx_max_speed =  NORMAL_MAX_CHASSIS_SPEED_X;
@@ -241,7 +241,6 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 							   * OMNI_WHEEL_SPEED_COMPOSITION / 4.0f
 							   * M2006_MOTOR_ECD_TO_DISTANCE;
 	
-	//稍后完善，用指针的方法？？get_angle函数到底是啥
 	//更新陀螺仪数据
 	chassis_move_update->last_gyro = chassis_move_update->gyro;
 	chassis_move_update->gyro = rx_gyro;

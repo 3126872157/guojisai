@@ -7,7 +7,7 @@
 #include "unitree_a1.h"
 #include "pid.h"
 #include "cmsis_os.h"
-
+#include "tim.h"
 //-------------------------------宇树-------------------------------
 
 #define UNITREE_W_PID_KP 0.02f
@@ -70,4 +70,10 @@ void claw_catch(void);
 void claw_loose(void);
 // 机械臂解算方法控制
 void arm_ctrl(float end_angle, float x, float y);
+//滑道pwm控制
+void huadao_control(uint16_t pwm);
+//凸轮pwm控制
+void tulun_control(uint16_t pwm);
+
+
 #endif

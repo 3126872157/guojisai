@@ -29,11 +29,8 @@
 24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
-24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
-24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
 24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
-24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 24warehouse_boarda\arm_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
@@ -58,6 +55,7 @@
 24warehouse_boarda\arm_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 24warehouse_boarda\arm_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 24warehouse_boarda\arm_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
+24warehouse_boarda\arm_task.o: ../Core/Inc/tim.h
 24warehouse_boarda\arm_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\arm_task.o: ../Application/vofa.h
 24warehouse_boarda\arm_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h

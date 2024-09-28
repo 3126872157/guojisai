@@ -33,6 +33,14 @@ extern uint8_t Servo_Rx_Data[20];	//生的数据
 //		4号舵机为拨蛋板，增大为归位
 uint16_t claw_catch_pos = 423;
 uint16_t claw_loose_pos = 600;
+uint16_t claw_pos = 423;
+
+//--------------------------------滑道、凸轮舵机变量----------------------------
+uint16_t huadao_vertical_pwm = 900;//900垂直600放球(范围250-1250)
+uint16_t huadao_slope_pwm = 600;
+
+uint16_t tulun_up_pwm = 1250;//1250升起250落下(范围250-1250)
+uint16_t tulun_down_pwm = 250;
 
 //--------------------------------机械臂与解算变量----------------------------
 // 逆运动学解算结构体
@@ -167,7 +175,7 @@ void servo_arm_move(float angle1, float angle2)
 	input1 = 500.0f - angle1 / 0.24f;
 	input2 = 500.0f + angle2 / 0.24f;
 	
-	moveServos(2, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2);
+	moveServos(3, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2, 3, claw_pos);
 }
 
 //机械爪夹取
@@ -181,6 +189,19 @@ void claw_loose(void)
 {
 	moveServo(3, claw_loose_pos, 2000);
 }
+
+//--------------------------------滑道、凸轮舵机函数--------------------------------
+void huadao_control(uint16_t pwm)
+{
+	__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, pwm);//900垂直600放球(范围250-1250)
+}	
+
+void tulun_control(uint16_t pwm)
+{
+	__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_3, pwm);//1250升起250落下
+}
+
+
 
 //--------------------------------总机械臂函数--------------------------------
 void arm_ctrl(float end_angle, float x, float y)
@@ -203,11 +224,11 @@ void Arm_Init(void)
 	// 逆运动学解算初始化
 	arm_solver_init(&solver, 140.0f, 24.38f, 358.13f, 150.0f, 188.17f);
 	
-	// 幻尔初始化
+	// 幻尔舵机初始化
 	serial_servo_UART_Init();
 	servo_Data.serial_servo_Time = 100;
 	
-	// 宇树初始化
+	// 宇树关节电机初始化
 	unitree_Uart_Init(unitree_rx_buf[0], unitree_rx_buf[1], Unitree_RX_BUF_NUM);
 	PID_init(&unitree_w_pid,   PID_POSITION, unitree_w_pid_K,   UNITREE_W_PID_MAX_OUT,   UNITREE_W_PID_MAX_IOUT);
 	PID_init(&unitree_pos_pid, PID_POSITION, unitree_pos_pid_K, UNITREE_POS_PID_MAX_OUT, UNITREE_POS_PID_MAX_IOUT);

@@ -37,7 +37,6 @@ void Bodanpan_Task(void const * argument)
 		osDelay(5);
 	}
 }
-
 void bodanpan_motor_init(void)
 {
 	bodanpan_init();
@@ -46,7 +45,7 @@ void bodanpan_motor_init(void)
 	PID_init(&bodanpan_angle_pid, PID_POSITION, motor_angle_pan_pid, M2006_MOTOR_ANGLE_PAN_PID_MAX_OUT, M2006_MOTOR_ANGLE_PAN_PID_MAX_IOUT);
 		
 	fp32 motor_speed_pan_pid[3] = {BODANPAN_SPEED_KP, BODANPAN_SPEED_KI, BODANPAN_SPEED_KD};
-	PID_init(&bodanpan_speed_pid, PID_DELTA, motor_speed_pan_pid, M2006_MOTOR_SPEED_PAN_PID_MAX_OUT, M2006_MOTOR_SPEED_PAN_PID_MAX_IOUT);
+	PID_init(&bodanpan_speed_pid, PID_POSITION, motor_speed_pan_pid, M2006_MOTOR_SPEED_PAN_PID_MAX_OUT, M2006_MOTOR_SPEED_PAN_PID_MAX_IOUT);
 }
 
 void bodanpan_motor_control(void)
@@ -61,15 +60,15 @@ void bodanpan_motor_control(void)
 	PID_calc(&bodanpan_speed_pid,bodanpan.speed,bodanpan.speed_set);
 	
 	motor_chassis[4].given_current=bodanpan_speed_pid.out;
-	
-	if(fabs(bodanpan.code_set-bodanpan.code_now)>2000)
-		CAN_cmd_pan(motor_chassis[4].given_current);
-	else
-	{
-		bodanpan.speed_set = 0;
-		CAN_cmd_pan(0);
-		bodanpan_angle_pid.Iout = 0;
-	}
+	CAN_cmd_pan(motor_chassis[4].given_current);
+//	if(fabs(bodanpan.code_set-bodanpan.code_now)>2000)
+//		CAN_cmd_pan(motor_chassis[4].given_current);
+//	else
+//	{
+//		bodanpan.speed_set = 0;
+//		CAN_cmd_pan(0);
+////		bodanpan_angle_pid.Iout = 0;
+//	}
 		
 		
 }

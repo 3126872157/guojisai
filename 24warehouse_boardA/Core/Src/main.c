@@ -21,8 +21,6 @@
 #include "cmsis_os.h"
 #include "can.h"
 #include "dma.h"
-#include "i2c.h"
-#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -30,8 +28,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "bsp_can.h"
-#include "INS_task.h"
-#include "calibrate_task.h"
 #include "bsp_delay.h"
 #include "stm32f4xx_it.h"
 
@@ -105,23 +101,22 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_CAN1_Init();
-  MX_I2C3_Init();
-  MX_SPI1_Init();
   MX_TIM4_Init();
-  MX_TIM10_Init();
   MX_USART6_UART_Init();
   MX_UART7_Init();
   MX_UART8_Init();
   MX_USART3_UART_Init();
   MX_USART2_UART_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 	can_filter_init();
 	delay_init();
-    cali_param_init();
 	HAL_UARTEx_ReceiveToIdle_DMA(&huart8, RX_shijue_buff, SHIJUE_BUFF_SIZE);
-	HAL_UARTEx_ReceiveToIdle_DMA(&huart3, RX_IC_buff, IC_BUFF_SIZE);
-	HAL_UARTEx_ReceiveToIdle_IT(&huart2, RX_INS_buff, INS_BUFF_SIZE);
-	
+	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, RX_INS_buff, INS_BUFF_SIZE);
+	HAL_UARTEx_ReceiveToIdle_IT(&huart3, RX_IC_buff, IC_BUFF_SIZE);
+	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
+	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_4);
+
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

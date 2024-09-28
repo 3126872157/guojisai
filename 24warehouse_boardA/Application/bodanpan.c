@@ -40,13 +40,13 @@ void bodanpan_position_set(uint8_t direction, uint8_t num)//向direction方向转动n
 		bodanpan.angle_set -= num * ANGLE_PER_BOX;
 		bodanpan.position -= num;
 	}
-	bodanpan.code_set = bodanpan.angle_set*819.2;//360度对应8192*36，所以一度对应819.2转子机械角度
+	bodanpan.code_set = bodanpan.angle_set * 819.2;//360度对应8192*36，所以一度对应819.2转子机械角度
 	if(bodanpan.position < 0) bodanpan.position += 10;
 	if(bodanpan.position >= 10) bodanpan.position %= 10;
 }
 
 
-void bodanpan_takeout_a_ball(uint8_t x,uint8_t y)//根据行(x)列(y)号旋转拨蛋盘到对应球的位置，便于后续取出该球
+void bodanpan_find_ball(uint8_t x,uint8_t y)//根据行(x)列(y)号旋转拨蛋盘到对应球的位置，便于后续取出该球
 {                                                
 	int8_t Num,Direction = 1;
 	for(uint8_t i = 0;i < BOX_NUM;i++)
