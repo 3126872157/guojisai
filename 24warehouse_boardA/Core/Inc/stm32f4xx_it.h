@@ -41,7 +41,7 @@
 
 #define SHIJUE_BUFF_SIZE 9//视觉数据包大小
 #define IC_BUFF_SIZE 22//IC卡数据包大小
-#define INS_BUFF_SIZE 20//C板陀螺仪数据包大小
+#define INS_BUFF_SIZE 5//C板陀螺仪数据包大小
 	 
 
 /* USER CODE END EC */
@@ -67,6 +67,7 @@ void CAN1_RX0_IRQHandler(void);
 void EXTI9_5_IRQHandler(void);
 void USART2_IRQHandler(void);
 void USART3_IRQHandler(void);
+void UART4_IRQHandler(void);
 void TIM6_DAC_IRQHandler(void);
 void DMA2_Stream1_IRQHandler(void);
 void DMA2_Stream6_IRQHandler(void);

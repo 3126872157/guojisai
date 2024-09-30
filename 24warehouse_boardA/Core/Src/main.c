@@ -108,12 +108,14 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USART2_UART_Init();
   MX_TIM5_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
 	can_filter_init();
 	delay_init();
 	HAL_UARTEx_ReceiveToIdle_DMA(&huart8, RX_shijue_buff, SHIJUE_BUFF_SIZE);
 	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, RX_INS_buff, INS_BUFF_SIZE);
 	HAL_UARTEx_ReceiveToIdle_IT(&huart3, RX_IC_buff, IC_BUFF_SIZE);
+//	HAL_UARTEx_ReceiveToIdle_IT(&huart4, buff, SIZE);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_4);
 

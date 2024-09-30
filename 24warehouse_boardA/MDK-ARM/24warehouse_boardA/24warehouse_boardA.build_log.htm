@@ -22,24 +22,23 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 E:\MyBoardCode\STM32\guojisai\guojisai\24warehouse_boardA\MDK-ARM\24warehouse_boardA.uvprojx
-Project File Date:  09/28/2024
+Project File Date:  09/30/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\keil5\ARM\ARMCC\Bin'
 Build target '24warehouse_boardA'
-compiling bodanpan.c...
-compiling stm32f4xx_it.c...
-compiling Bodanpan_Task.c...
-compiling chassis_behaviour.c...
-compiling Chassis_Task.c...
-..\Tasks\Chassis_Task.c(170): warning:  #177-D: function "chassis_set_mode"  was declared but never referenced
-  static void chassis_set_mode(chassis_move_t *chassis_move_mode, chassis_mode_e chassis_mode)
-..\Tasks\Chassis_Task.c: 1 warning, 0 errors
-compiling freertos.c...
+compiling flow_task.c...
+..\Tasks\flow_task.h(18): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\Tasks\flow_task.c(35): warning:  #188-D: enumerated type mixed with another type
+  				chassis_move.chassis_mode = target.chassis_mode;
+..\Tasks\flow_task.c(54): warning:  #1-D: last line of file ends without a newline
+  }
+..\Tasks\flow_task.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=40836 RO-data=784 RW-data=320 ZI-data=22544  
+Program Size: Code=41348 RO-data=784 RW-data=332 ZI-data=22596  
 FromELF: creating hex file...
-"24warehouse_boardA\24warehouse_boardA.axf" - 0 Error(s), 1 Warning(s).
+"24warehouse_boardA\24warehouse_boardA.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 

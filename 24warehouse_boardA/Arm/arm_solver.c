@@ -38,10 +38,7 @@ uint8_t arm_solver_analyze(struct arm_solver *solver, float a_total, float x, fl
 
     // 余弦定理解法
     x2 = solver->l2 * sinf(solver->a_total);
-	if(solver->a_total <= PI_2)
-		y2 = sqrtf(solver->l2 * solver->l2 - x2 * x2);
-	else
-		y2 = -sqrtf(solver->l2 * solver->l2 - x2 * x2);
+	y2 = solver->l2 * cosf(solver->a_total);
     x1 = x - x2;
     y1 = y - y2;
     float l = sqrtf(x1 * x1 + y1 * y1);

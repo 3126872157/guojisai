@@ -54,6 +54,7 @@
 "24warehouse_boarda\chassis_task.o"
 "24warehouse_boarda\bodanpan_task.o"
 "24warehouse_boarda\arm_task.o"
+"24warehouse_boarda\flow_task.o"
 "24warehouse_boarda\arm_ctrl.o"
 "24warehouse_boarda\serial_servo.o"
 "24warehouse_boarda\unitree_a1.o"
