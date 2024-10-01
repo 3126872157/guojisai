@@ -237,6 +237,16 @@
           <WinNumber>2</WinNumber>
           <ItemText>slow_start_distance_k</ItemText>
         </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>rx_gyro</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>arm_safe</ItemText>
+        </Ww>
       </WatchWindow2>
       <Tracepoint>
         <THDelay>0</THDelay>

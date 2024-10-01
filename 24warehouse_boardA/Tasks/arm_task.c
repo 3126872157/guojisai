@@ -6,7 +6,8 @@
 extern float set_w;
 float targ_pos = 0;
 float real_pos = 0;
-float my_zero_pose = -0.23;
+float arm_zero_pose = 1.14955831f;
+
 
 uint8_t direction = 0; //1上2下
 extern unitree_ctrl_t unitree_Data;
@@ -43,19 +44,19 @@ void arm_task(void const * argument)
 		while(arm_safe);//调试保护位
 		if(!unitree_init_flag)
 		{
-			targ_pos = my_zero_pose - unitree_Data.zero_pose;
-			if(fabs(real_pos-targ_pos) <= 0.005f)
+			targ_pos = arm_zero_pose;
+			if(fabs(unitree_Data.unitree_recv.Pos-targ_pos) <= 0.005f)
 			{
 				targ_pos = 0;
 				real_pos = 0;
-				unitree_Data.zero_pose = my_zero_pose;
+				unitree_Data.zero_pose = arm_zero_pose;
 				unitree_init_flag = 1;
 			}
 		}
 		else
 		{
 			
-/*		*********机械臂解算调试用程序***********/
+/**********机械臂解算调试用程序***********/
 			servo_start_flag++;
 			if(servo_start_flag == 100)//1s发送一次舵机控制信号
 			{
@@ -77,6 +78,7 @@ void arm_task(void const * argument)
 		}
 		
 		unitree_pos_pid_ctrl(targ_pos);
+		
 		real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
 		unitree_save_check();
 		huadao_control(huadao_pwm);

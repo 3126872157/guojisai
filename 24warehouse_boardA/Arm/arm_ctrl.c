@@ -23,7 +23,6 @@ float up_w = 1.2;
 float down_w = -0.2;
 uint8_t dangerous_count = 0;	//超出最大力矩次数
 
-
 //--------------------------------总线舵机变量--------------------------------
 serial_servo_t servo_Data;
 extern uint8_t Servo_Rx_Data[20];	//生的数据
