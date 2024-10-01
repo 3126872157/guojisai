@@ -19,6 +19,8 @@
 #include "struct_typedef.h"
 #include "user_lib.h"
 
+void ramp_function(float *data_in,float data_out,float k);
+
 enum PID_MODE
 {
     PID_POSITION = 0,

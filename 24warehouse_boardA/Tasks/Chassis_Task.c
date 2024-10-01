@@ -29,9 +29,6 @@
 //调试保护标志位，1为开启安全模式；因为无线dap退出调试的时候有概率会疯掉
 uint8_t safe_flag = 1;
 
-//缓起函数用的变量，启动斜率
-float slow_start_k = 0.07f;
-
 extern float send_data[10];
 extern float rx_gyro;
 	
@@ -48,8 +45,12 @@ extern fp32 my_angle[3];
 
 //调试用！！！！！！！！！！！！
 //fp32 vx_set = 0.0f,
-//	 vy_set = 0.0f,
-//	 angle_set = 0.0f;
+//vy_set = 0.0f,
+//angle_set = 0.0f;
+#include "vofa.h"
+extern float vofa_send_data[10];
+float test_speed_set = 0;
+
 
 //底盘运动数据
 chassis_move_t chassis_move;
@@ -96,6 +97,15 @@ void chassis_task(void const * argument)
 							chassis_move.motor_chassis[1].give_current,
 							chassis_move.motor_chassis[2].give_current,
 							chassis_move.motor_chassis[3].give_current);
+			
+			//底盘pid调试
+//			vofa_send_data[0] = chassis_move.motor_chassis[0].speed_set;
+//			vofa_send_data[1] = chassis_move.motor_chassis[0].speed;
+//			vofa_send_data[2] = chassis_move.motor_chassis[1].speed;
+//			vofa_send_data[3] = chassis_move.motor_chassis[2].speed;
+//			vofa_send_data[4] = chassis_move.motor_chassis[3].speed;
+//			
+//			my_vofa_printf(5);
 		}
 		//系统延时
         vTaskDelay(CHASSIS_CONTROL_TIME_MS);
@@ -115,13 +125,16 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     }
 	
 	//速度环
-    const static fp32 motor_speed_pid[3] = {M2006_MOTOR_SPEED_PID_KP, M2006_MOTOR_SPEED_PID_KI, M2006_MOTOR_SPEED_PID_KD};
+    const static fp32 motor_speed_pid[4][3] = {{M2006_MOTOR1_SPEED_PID_KP, M2006_MOTOR1_SPEED_PID_KI, M2006_MOTOR1_SPEED_PID_KD},
+											   {M2006_MOTOR2_SPEED_PID_KP, M2006_MOTOR2_SPEED_PID_KI, M2006_MOTOR2_SPEED_PID_KD},
+											   {M2006_MOTOR3_SPEED_PID_KP, M2006_MOTOR3_SPEED_PID_KI, M2006_MOTOR3_SPEED_PID_KD},
+											   {M2006_MOTOR4_SPEED_PID_KP, M2006_MOTOR4_SPEED_PID_KI, M2006_MOTOR4_SPEED_PID_KD}};
 
 	//获取底盘电机数据指针，初始化PID 
     for (uint8_t i = 0; i < 4; i++)
     {
         chassis_move_init->motor_chassis[i].chassis_motor_measure = get_chassis_motor_measure_point(i);
-        PID_init(&chassis_move_init->motor_speed_pid[i], PID_POSITION, motor_speed_pid, M2006_MOTOR_SPEED_PID_MAX_OUT, M2006_MOTOR_SPEED_PID_MAX_IOUT);
+        PID_init(&chassis_move_init->motor_speed_pid[i], PID_POSITION, motor_speed_pid[i], M2006_MOTOR1_SPEED_PID_MAX_OUT, M2006_MOTOR1_SPEED_PID_MAX_IOUT);
     }
 	
 	//平动环（里程环）
@@ -274,16 +287,9 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 	{
 		safe_flag = 0;
 		
-//		chassis_move_control->vx_set = vx_set;
-//		chassis_move_control->vy_set = vy_set;
+		chassis_move_control->vx_set = vx_set;
+		chassis_move_control->vy_set = vy_set;
 		chassis_move_control->wz_set = wz_set;
-		
-
-		//缓起功能
-		ramp_function(&chassis_move_control->vx_set, vx_set, slow_start_k);
-		ramp_function(&chassis_move_control->vy_set, vy_set, slow_start_k);
-//		ramp_function(&chassis_move_control->wz_set, wz_set, slow_start_k);
-		
 		
 		chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
 		chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed, chassis_move_control->vy_max_speed);
@@ -347,6 +353,13 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
             chassis_move_control_loop->motor_chassis[i].speed_set *= vector_rate;
         }
     }
+	
+	//test底盘pid调试
+//	for (i = 0; i < 4; i++)
+//    {
+//		chassis_move_control_loop->motor_chassis[i].speed_set = test_speed_set;
+//    }
+	
 
     //计算pid
     for (i = 0; i < 4; i++)
@@ -360,17 +373,3 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
         chassis_move_control_loop->motor_chassis[i].give_current = (int16_t)(chassis_move_control_loop->motor_speed_pid[i].out);
     }
 }
-
-
-void ramp_function(float *data_in,float data_out,float k)//斜坡函数
-{
-	if(data_out != *data_in)
-	{
-		if(fabs(data_out - *data_in) < k/10.0f)
-			*data_in = data_out;
-		else
-			*data_in += k * (data_out - *data_in > 0 ? 1.0f : -1.0f);
-	}
-}
-
-

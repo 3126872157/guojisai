@@ -17,6 +17,7 @@
 
 #include "pid.h"
 #include "main.h"
+#include "math.h"
 
 #define abs(x)	( (x>0) ? (x) : (-x) )
 #define LimitMax(input, max)   \
@@ -30,6 +31,22 @@
             input = -max;      \
         }                      \
     }
+
+//缓起函数用的变量，启动斜率
+float slow_start_k = 0.07f;
+
+//斜坡函数
+void ramp_function(float *data_in,float data_out,float k)
+{
+	if(data_out != *data_in)
+	{
+		if(fabs(data_out - *data_in) < k/10.0f)
+			*data_in = data_out;
+		else
+			*data_in += k * (data_out - *data_in > 0 ? 1.0f : -1.0f);
+	}
+}
+
 
 /**
   * @brief          pid struct data init

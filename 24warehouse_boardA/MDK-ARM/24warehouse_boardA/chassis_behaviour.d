@@ -1,6 +1,8 @@
 24warehouse_boarda\chassis_behaviour.o: ..\Application\chassis_behaviour.c
-24warehouse_boarda\chassis_behaviour.o: ..\Application\chassis_behaviour.h
+24warehouse_boarda\chassis_behaviour.o: ..\Application\pid.h
 24warehouse_boarda\chassis_behaviour.o: ..\Application\struct_typedef.h
+24warehouse_boarda\chassis_behaviour.o: ../Compoents/algorithm/user_lib.h
+24warehouse_boarda\chassis_behaviour.o: ..\Application\chassis_behaviour.h
 24warehouse_boarda\chassis_behaviour.o: ../Tasks/chassis_task.h
 24warehouse_boarda\chassis_behaviour.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 24warehouse_boarda\chassis_behaviour.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
@@ -50,8 +52,6 @@
 24warehouse_boarda\chassis_behaviour.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 24warehouse_boarda\chassis_behaviour.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 24warehouse_boarda\chassis_behaviour.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-24warehouse_boarda\chassis_behaviour.o: ../Application/pid.h
-24warehouse_boarda\chassis_behaviour.o: ../Compoents/algorithm/user_lib.h
 24warehouse_boarda\chassis_behaviour.o: ../Tasks/Bodanpan_Task.h
 24warehouse_boarda\chassis_behaviour.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\chassis_behaviour.o: D:\keil5\ARM\ARMCC\Bin\..\include\math.h

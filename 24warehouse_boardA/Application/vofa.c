@@ -1,7 +1,7 @@
 #include "VOFA.h"
 
 
-float send_data[10]={0.0f};
+float vofa_send_data[10]={0.0f};
 
 uint8_t send_buff[80];
 
@@ -25,7 +25,7 @@ void my_vofa_printf(uint8_t len)
 	for(uint8_t i=0;i<len;i++)
 	{
 		uint8_t f_t_u[4];
-		float_to_u8_v(&send_data[i], f_t_u);
+		float_to_u8_v(&vofa_send_data[i], f_t_u);
 		for(int j = 4*i;j < 4*(i+1);j++)
 			send_buff[j]=f_t_u[j%4];
 	}

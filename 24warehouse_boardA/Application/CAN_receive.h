@@ -44,7 +44,7 @@ typedef enum
 typedef struct
 {
     uint16_t ecd;			//机械角度，范围是0-8191，对应0-360度
-    int16_t speed_rpm;      //电机转速(r per minute)
+    volatile int16_t speed_rpm;      //电机转速(r per minute)
     int16_t given_current;  //转矩电流
     uint8_t temperate;      //电机温度
     int16_t last_ecd;
