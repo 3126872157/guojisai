@@ -185,6 +185,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>error</ItemText>
         </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>arm_slow_start_k</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>

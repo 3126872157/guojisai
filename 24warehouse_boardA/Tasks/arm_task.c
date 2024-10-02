@@ -1,10 +1,12 @@
 #include "arm_task.h"
 #include "arm_solver.h"
+#include "pid.h"
 
 //#define printf myprintf
 
-extern float set_w;
 float targ_pos = 0;
+float ramp_targ_pos = 0;
+float arm_slow_start_k = 0.0008;
 float real_pos = 0;
 float arm_zero_pose = 1.14955831f;	//特定零点区间内转到竖直位置的“绝对角度”
 
@@ -12,9 +14,6 @@ float arm_zero_pose = 1.14955831f;	//特定零点区间内转到竖直位置的“绝对角度”
 uint8_t direction = 0; //1上2下
 extern unitree_ctrl_t unitree_Data;
 extern struct arm_solver solver;
-extern uint16_t claw_pos;
-uint16_t huadao_pwm = 600;
-uint16_t tulun_pwm = 250;
 
 bool_t arm_safe = 1;//机械臂调试保护位
 bool_t unitree_init_flag = 0;//大臂上电初始化标志位
@@ -65,7 +64,7 @@ void arm_task(void const * argument)
 		else
 		{
 			servo_start_flag++;
-			if(servo_start_flag == 100)//1s发送一次舵机控制信号
+			if(servo_start_flag == 1000)//1s发送一次舵机控制信号
 			{
 				//夹爪控制已包含在内，通过给claw_pos赋值实现
 				
@@ -74,23 +73,20 @@ void arm_task(void const * argument)
 				else if(task_flag==3) Task_3();
 				else if(task_flag==4) Task_4();
 				
-				if(claw_flag==1) claw_pos = 410;
-				else if(claw_flag==0) claw_pos = 500;
-				
 				arm_ctrl(total_angle, x, y);
 				servo_start_flag = 0;
 			}
 			targ_pos = -solver.a0;
 /***********************************************/	
 		}
-		//大臂电机位置环
-		unitree_pos_pid_ctrl(targ_pos);
+		//大臂电机位置控制
+		ramp_function(&ramp_targ_pos, targ_pos, arm_slow_start_k); 
+		unitree_pos_pid_ctrl(ramp_targ_pos);
 		unitree_save_check();
 		real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
 		
-		huadao_control(huadao_pwm);
-		tulun_control(tulun_pwm);
-		osDelay(10);
+		
+		osDelay(1);
 //		getServosAngle(3,1,2,3);
 		
 	}

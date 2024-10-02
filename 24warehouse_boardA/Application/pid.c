@@ -40,7 +40,8 @@ void ramp_function(float *data_in,float data_out,float k)
 {
 	if(data_out != *data_in)
 	{
-		if(fabs(data_out - *data_in) < k/10.0f)
+		//k/10.0f
+		if(fabs(data_out - *data_in) < k)
 			*data_in = data_out;
 		else
 			*data_in += k * (data_out - *data_in > 0 ? 1.0f : -1.0f);

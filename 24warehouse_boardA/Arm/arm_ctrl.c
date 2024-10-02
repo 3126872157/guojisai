@@ -36,7 +36,6 @@ uint16_t claw_loose_pos = 600;
 //--------------------------------滑道、凸轮舵机变量----------------------------
 uint16_t huadao_vertical_pwm = 900;//900垂直600放球(范围250-1250)
 uint16_t huadao_slope_pwm = 600;
-
 uint16_t tulun_up_pwm = 1250;//1250升起250落下(范围250-1250)
 uint16_t tulun_down_pwm = 250;
 
@@ -44,7 +43,6 @@ uint16_t tulun_down_pwm = 250;
 // 逆运动学解算结构体
 struct arm_solver solver;
 uint8_t error;
-
 
 //--------------------------------宇树电机函数--------------------------------
 // 封装力矩控制的函数
@@ -182,7 +180,7 @@ void claw_control(bool_t is_catch)
 }
 
 
-////1为放球，0为垂直
+//滑道斜率调整，1为放球，0为垂直
 void huadao_control(bool_t is_put_ball)
 {
 	if(is_put_ball)
@@ -194,7 +192,7 @@ void huadao_control(bool_t is_put_ball)
 		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_vertical_pwm);//900垂直
 	}
 }	
-
+//顶球，凸轮调整
 void tulun_control(bool_t is_up)
 {
 	if(is_up)

@@ -298,6 +298,7 @@ static void chassis_move_and_rotate_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz
 		chassis_code_reset_flag=0;
 	}
 	
+	//»ºÆð
 	ramp_function(&ramp_x, chassis_move_vector->x_set, slow_start_distance_k);
 	ramp_function(&ramp_y, chassis_move_vector->y_set, slow_start_distance_k);
 	ramp_function(&ramp_z, chassis_move_vector->gyro_set, slow_start_distance_k);
