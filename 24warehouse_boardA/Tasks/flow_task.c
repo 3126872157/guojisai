@@ -18,37 +18,37 @@ uint8_t currentTargIndex = 0;
 //完成任务标志
 uint8_t isFinished = 0;
 
-void vFlowTask(void* pvParameters)
-{
-	while(1)
-	{
-		//判断所有步骤是否走完
-		if(currentTargIndex < sizeof(targ_point) / sizeof(TargetPoints))
-		{
-			//读出当前目标
-			TargetPoints target = targ_point[currentTargIndex];
-			
-			//目前动底盘
-			if(target.mode == 1)
-			{
-				//设置底盘运动目标
-				chassis_move.chassis_mode = target.chassis_mode;
-				chassis_move.x_set = target.x;
-				chassis_move.y_set = target.y;
-				
-				//判断误差
-				float distance = sqrt(pow(target.x - chassis_move.x, 2) + pow(target.y - chassis_move.y, 2));
-				if(distance < target.tolerance)
-				{
-					currentTargIndex ++;
-				}
-			}
-		}
-		else
-		{
-			isFinished ++;
-			//删除当前任务
-			vTaskDelete(NULL);
-		}
-	}
-}
+//void vFlowTask(void* pvParameters)
+//{
+//	while(1)
+//	{
+//		//判断所有步骤是否走完
+//		if(currentTargIndex < sizeof(targ_point) / sizeof(TargetPoints))
+//		{
+//			//读出当前目标
+//			TargetPoints target = targ_point[currentTargIndex];
+//			
+//			//目前动底盘
+//			if(target.mode == 1)
+//			{
+//				//设置底盘运动目标
+//				chassis_move.chassis_mode = target.chassis_mode;
+//				chassis_move.x_set = target.x;
+//				chassis_move.y_set = target.y;
+//				
+//				//判断误差
+//				float distance = sqrt(pow(target.x - chassis_move.x, 2) + pow(target.y - chassis_move.y, 2));
+//				if(distance < target.tolerance)
+//				{
+//					currentTargIndex ++;
+//				}
+//			}
+//		}
+//		else
+//		{
+//			isFinished ++;
+//			//删除当前任务
+//			vTaskDelete(NULL);
+//		}
+//	}
+//}

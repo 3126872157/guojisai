@@ -56,7 +56,7 @@ bool_t chassis_code_reset_flag; //底盘4个电机里程计清零标志位
 extern bool_t can_reset_flag[5];//单个电机里程计归零的标志(加上拨蛋盘电机一共5个)
 
 //缓起相关
-float slow_start_distance_k = 1.0f;
+float slow_start_distance_k = 0.04f;
 float ramp_x = 0;
 float ramp_y = 0;
 float ramp_z = 0;
@@ -301,7 +301,7 @@ static void chassis_move_and_rotate_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz
 	//缓起
 	ramp_function(&ramp_x, chassis_move_vector->x_set, slow_start_distance_k);
 	ramp_function(&ramp_y, chassis_move_vector->y_set, slow_start_distance_k);
-	ramp_function(&ramp_z, chassis_move_vector->gyro_set, slow_start_distance_k);
+//	ramp_function(&ramp_z, chassis_move_vector->gyro_set, slow_start_distance_k);
 	
 	//运动时，使用角度环保持偏航角不变
 	if(chassis_move_vector->x_set||chassis_move_vector->y_set)
