@@ -63,3 +63,4 @@
 24warehouse_boarda\flow_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
 24warehouse_boarda\flow_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
 24warehouse_boarda\flow_task.o: ../Core/Inc/usart.h
+24warehouse_boarda\flow_task.o: ../Application/chassis_behaviour.h

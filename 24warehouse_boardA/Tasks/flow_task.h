@@ -15,4 +15,16 @@ typedef struct {
 	uint8_t chassis_mode;
 } TargetPoints;
 
+typedef struct
+{
+	float ball_x;
+	float ball_y;
+	float ball_distance;
+	float QR_x;
+	float QR_y;
+	float QR_code;
+}shijue_Data;
+
+void flow_task(void const * argument);
+
 #endif

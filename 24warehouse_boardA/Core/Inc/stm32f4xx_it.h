@@ -39,7 +39,7 @@
 /* USER CODE BEGIN EC */
 
 
-#define SHIJUE_BUFF_SIZE 9//视觉数据包大小
+#define SHIJUE_BUFF_SIZE 26//视觉数据包大小
 #define IC_BUFF_SIZE 22//IC卡数据包大小
 #define INS_BUFF_SIZE 5//C板陀螺仪数据包大小
 	 

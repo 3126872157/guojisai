@@ -25,6 +25,7 @@
 
 #include "unitree_a1.h"
 #include "serial_servo.h"
+#include "flow_task.h"
 
 /* USER CODE END Includes */
 
@@ -47,13 +48,20 @@
 /* USER CODE BEGIN PV */
 
 uint8_t RX_shijue_buff[SHIJUE_BUFF_SIZE];//视觉数据包接收缓冲区
-uint8_t RX_IC_buff[IC_BUFF_SIZE];//IC卡数据包接收缓冲区
+//视觉数据帧：球x,y,distance, 二维码x,y,
+shijue_Data shijue_data;
 
+union shijue_msg_t
+{
+	float after;
+	uint8_t before[4];
+} shijue_msg;
+
+uint8_t RX_IC_buff[IC_BUFF_SIZE];//IC卡数据包接收缓冲区
 
 uint8_t RX_INS_buff[INS_BUFF_SIZE];//C板INS接收缓冲区
 uint8_t RX_INS_data[4];//C板INS接收数据(uint8_t类型)
 float rx_gyro;//C板INS接收数据(float类型)
-
 
 uint8_t IC_data_RX;//IC卡内的数据(几行几列)
 
@@ -461,16 +469,45 @@ void USER_SERIAL_SERVO_UART_IRQHandler(void)
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
 	
-	if(huart==&huart8)//视觉数据DMA空闲中断接收
+	if(huart == &huart8)//视觉数据DMA空闲中断接收
 	{
 		HAL_UARTEx_ReceiveToIdle_DMA(&huart8, RX_shijue_buff, SHIJUE_BUFF_SIZE);
-		if(RX_shijue_buff[0] == 0xFF)
+		if(RX_shijue_buff[0] == 0xFF && RX_shijue_buff[25] == 0xFE)
 		{
-//			解包过程可放在此处，若过程复杂，怕中断影响进程，可单开一个task，此处放置接收标志位
+			for(int i = 0; i < 4; i++)
+			{
+				shijue_msg.before[i] = RX_shijue_buff[i+1];
+			}
+			shijue_data.ball_x=shijue_msg.after;
+			for(int i = 0; i < 4; i++)
+			{
+				shijue_msg.before[i] = RX_shijue_buff[i+5];
+			}
+			shijue_data.ball_y=shijue_msg.after;
+			for(int i = 0; i < 4; i++)
+			{
+				shijue_msg.before[i] = RX_shijue_buff[i+9];
+			}
+			shijue_data.ball_distance=shijue_msg.after;
+			for(int i = 0; i < 4; i++)
+			{
+				shijue_msg.before[i] = RX_shijue_buff[i+13];
+			}
+			shijue_data.QR_x=shijue_msg.after;
+			for(int i = 0; i < 4; i++)
+			{
+				shijue_msg.before[i] = RX_shijue_buff[i+17];
+			}
+			shijue_data.QR_y=shijue_msg.after;
+			for(int i = 0; i < 4; i++)
+			{
+				shijue_msg.before[i] = RX_shijue_buff[i+21];
+			}
+			shijue_data.QR_code=shijue_msg.after;	
 		}
 	}
 	
-	if(huart==&huart3)//IC卡数据接收中断
+	if(huart == &huart3)//IC卡数据接收中断
 	{
 		HAL_UARTEx_ReceiveToIdle_IT(&huart3, RX_IC_buff, IC_BUFF_SIZE);
 		if(RX_IC_buff[0] == 0x04)
@@ -482,7 +519,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 		}
 	}
 	
-	if(huart==&huart2)//C板INS数据空闲中断接收
+	if(huart == &huart2)//C板INS数据空闲中断接收
 	{
 		HAL_UARTEx_ReceiveToIdle_IT(&huart2, RX_INS_buff, INS_BUFF_SIZE);
 		if(RX_INS_buff[0] == 0xFE)
@@ -495,7 +532,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 		}
 	}
 	
-	if(huart==&huart4)
+	if(huart == &huart4)
 	{
 //		HAL_UARTEx_ReceiveToIdle_IT(&huart4, buff, SIZE);
 	}

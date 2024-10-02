@@ -145,7 +145,7 @@ void chassis_behaviour_control_set(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, cha
 	if (chassis_behaviour_mode == CHASSIS_INFRARED)
     {
         chassis_infrared_control(vx_set, vy_set, wz_set, chassis_move_vector);
-		chassis_move_vector->chassis_mode = CHASSIS_INFRARED;		//这句话从上面函数里移动到这里
+		chassis_move_vector->chassis_mode = CHASSIS_INFRARED;		//其实这个chassis mode没啥用，直接和behaviour mode结合也行。
     }
     else if (chassis_behaviour_mode == CHASSIS_ULTRASONIC)
 	{
@@ -204,7 +204,7 @@ static void  chassis_infrared_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, 
     {
         return;
     }
-			if(chassis_code_reset_flag==1)
+		if(chassis_code_reset_flag==1)
 		{
 			chassis_code_reset();
 			
@@ -241,9 +241,9 @@ static void chassis_ultrasonic_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set,
 	{
 		chassis_code_reset();
 
-		chassis_move_vector->x_set=0.0f;
-		chassis_move_vector->y_set=0.0f;
-		chassis_code_reset_flag=0;
+		chassis_move_vector->x_set = 0.0f;
+		chassis_move_vector->y_set = 0.0f;
+		chassis_code_reset_flag = 0;
 	}
 	
 	if(fabs(chassis_move_vector->y-30.0f)>0.5f)
@@ -301,7 +301,6 @@ static void chassis_move_and_rotate_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz
 	//缓起
 	ramp_function(&ramp_x, chassis_move_vector->x_set, slow_start_distance_k);
 	ramp_function(&ramp_y, chassis_move_vector->y_set, slow_start_distance_k);
-//	ramp_function(&ramp_z, chassis_move_vector->gyro_set, slow_start_distance_k);
 	
 	//运动时，使用角度环保持偏航角不变
 	if(chassis_move_vector->x_set||chassis_move_vector->y_set)
@@ -309,7 +308,7 @@ static void chassis_move_and_rotate_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz
 	
 		*vx_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->x,ramp_x);
 		*vy_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->y,ramp_y);
-		*wz_set = PID_calc(&chassis_move_vector->motor_move_gyro_pid,chassis_move_vector->gyro,ramp_z);
+		*wz_set = PID_calc(&chassis_move_vector->motor_move_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
 		
 	}
 	//静止时，使用转向环旋转底盘
@@ -322,16 +321,17 @@ static void chassis_move_and_rotate_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz
 	}
 }
 
-//稍后完善！！！！！！！！！
+//速度控制模式，不使用里程计，配合视觉识别参数使用。到达目标速度立马给0
+//底盘前后移动改x，左右移动改y
 static void chassis_V_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, chassis_move_t *chassis_move_vector)
 {
 	if (vx_set == NULL || vy_set == NULL || wz_set == NULL || chassis_move_vector == NULL)
     {
         return;
     }
-	//*vx_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->x,chassis_move_vector->x_set);
-	//*vy_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->y,chassis_move_vector->y_set);
-	//*wz_set = PID_calc(&chassis_move_vector->motor_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
+	*vx_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->x,chassis_move_vector->x_set);
+	*vy_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->y,chassis_move_vector->y_set);
+	*wz_set = PID_calc(&chassis_move_vector->motor_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
 }
 
 //void chassis_vx_movey_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, chassis_move_t *chassis_move_vector)

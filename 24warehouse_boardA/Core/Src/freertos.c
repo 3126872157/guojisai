@@ -29,6 +29,7 @@
 #include "Chassis_Task.h"
 #include "Bodanpan_Task.h"
 #include "arm_task.h"
+#include "flow_task.h"
 
 /* USER CODE END Includes */
 
@@ -141,6 +142,9 @@ void MX_FREERTOS_Init(void) {
 	
 	osThreadDef(armTask, arm_task, osPriorityNormal, 0, 512);
 	armTaskHandle = osThreadCreate(osThread(armTask), NULL);
+	
+	osThreadDef(flowTask, flow_task, osPriorityNormal, 0, 512);
+	armTaskHandle = osThreadCreate(osThread(flowTask), NULL);
 	
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */

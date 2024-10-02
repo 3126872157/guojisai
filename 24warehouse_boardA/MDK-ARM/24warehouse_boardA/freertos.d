@@ -70,3 +70,4 @@
 24warehouse_boarda\freertos.o: ../Arm/serial_servo.h
 24warehouse_boarda\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+24warehouse_boarda\freertos.o: ../Tasks/flow_task.h

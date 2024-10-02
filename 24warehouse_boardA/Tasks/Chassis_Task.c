@@ -156,9 +156,8 @@ static void chassis_init(chassis_move_t *chassis_move_init)
 	
     //底盘开机状态为停止状态
     chassis_move_init->chassis_mode = CHASSIS_STOP;
-    
-    //获取陀螺仪姿态角指针
-//    chassis_move_init->chassis_INS_angle = get_INS_angle_point();
+	
+	//陀螺仪也可以初始化
    
     //各方向的最大 最小速度
     chassis_move_init->vx_max_speed =  NORMAL_MAX_CHASSIS_SPEED_X;
@@ -259,6 +258,7 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 	chassis_move_update->gyro = rx_gyro;
 	
 	//转子角度计，pid更新和重置稍后完善
+	
 }
 
 /**
@@ -295,7 +295,18 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
 		chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed, chassis_move_control->vy_max_speed);
 		chassis_move_control->wz_set = fp32_constrain(chassis_move_control->wz_set, chassis_move_control->wz_min_speed, chassis_move_control->wz_max_speed);
 	}
-	
+	else if(chassis_move_control->chassis_mode == CHASSIS_V)
+	{
+		safe_flag = 0;
+		
+		chassis_move_control->vx_set = vx_set;
+		chassis_move_control->vy_set = vy_set;
+		chassis_move_control->wz_set = wz_set;
+		
+		chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_speed, chassis_move_control->vx_max_speed);
+		chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_speed, chassis_move_control->vy_max_speed);
+		chassis_move_control->wz_set = fp32_constrain(chassis_move_control->wz_set, chassis_move_control->wz_min_speed, chassis_move_control->wz_max_speed);
+	}
 }
 
 /**
@@ -353,13 +364,6 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
             chassis_move_control_loop->motor_chassis[i].speed_set *= vector_rate;
         }
     }
-	
-	//test底盘pid调试
-//	for (i = 0; i < 4; i++)
-//    {
-//		chassis_move_control_loop->motor_chassis[i].speed_set = test_speed_set;
-//    }
-	
 
     //计算pid
     for (i = 0; i < 4; i++)
