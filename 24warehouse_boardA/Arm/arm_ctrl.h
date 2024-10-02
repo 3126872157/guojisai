@@ -64,16 +64,14 @@ void unitree_pos_pid_ctrl(float pos);
 void unitree_move(uint8_t flag, float pos, float w);
 //移动关节上的总线舵机
 void servo_arm_move(float angle1, float angle2);
-//机械爪夹取
-void claw_catch(void);
-//机械爪松开
-void claw_loose(void);
 // 机械臂解算方法控制
 void arm_ctrl(float end_angle, float x, float y);
+//机械爪控制
+void claw_control(bool_t is_catch);
 //滑道pwm控制
-void huadao_control(uint16_t pwm);
+void huadao_control(bool_t is_put_ball);
 //凸轮pwm控制
-void tulun_control(uint16_t pwm);
+void tulun_control(bool_t is_up);
 
 
 #endif

@@ -30,9 +30,8 @@ extern uint8_t Servo_Rx_Data[20];	//生的数据
 //	    2号舵机为第三关节，增大为往下按
 //		3号舵机为夹爪，增大为张开
 //		4号舵机为拨蛋板，增大为归位
-uint16_t claw_catch_pos = 423;
+uint16_t claw_catch_pos = 410;
 uint16_t claw_loose_pos = 600;
-uint16_t claw_pos = 423;
 
 //--------------------------------滑道、凸轮舵机变量----------------------------
 uint16_t huadao_vertical_pwm = 900;//900垂直600放球(范围250-1250)
@@ -75,14 +74,6 @@ void unitree_save_check(void)
 	}
 }
 
-// 宇树电机初始化记录零点
-void unitree_check_zero_pose(unitree_ctrl_t *ctrl)
-{
-	unitree_torque_ctrl(ctrl, 0);
-	osDelay(10);
-	unitree_torque_ctrl(ctrl, 0);
-	ctrl->zero_pose = ctrl->unitree_recv.Pos;
-}
 
 // 速度pid控制
 void unitree_w_pid_ctrl(float w)
@@ -164,7 +155,7 @@ void unitree_move(uint8_t flag, float pos, float w)
 }
 
 
-//--------------------------------总线舵机函数--------------------------------
+//----------------------------------舵机函数--------------------------------
 //移动关节上的总线舵机
 void servo_arm_move(float angle1, float angle2)
 {
@@ -174,34 +165,51 @@ void servo_arm_move(float angle1, float angle2)
 	input1 = 500.0f - angle1 / 0.24f;
 	input2 = 500.0f + angle2 / 0.24f;
 	
-	moveServos(3, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2, 3, claw_pos);
+	moveServos(2, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2);
 }
 
 //机械爪夹取
-void claw_catch(void)
+void claw_control(bool_t is_catch)
 {
-	moveServo(3, claw_catch_pos, 2000);
+	if(is_catch)
+	{
+		moveServo(3, claw_catch_pos, 100);
+	}
+	else
+	{
+		moveServo(3, claw_loose_pos, 100);
+	}
 }
 
-//机械爪松开
-void claw_loose(void)
-{
-	moveServo(3, claw_loose_pos, 2000);
-}
 
-//--------------------------------滑道、凸轮舵机函数--------------------------------
-void huadao_control(uint16_t pwm)
+////1为放球，0为垂直
+void huadao_control(bool_t is_put_ball)
 {
-	__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, pwm);//900垂直600放球(范围250-1250)
+	if(is_put_ball)
+	{
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_slope_pwm);//600放球(范围250-1250)
+	}
+	else
+	{
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_vertical_pwm);//900垂直
+	}
 }	
 
-void tulun_control(uint16_t pwm)
+void tulun_control(bool_t is_up)
 {
-	__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_3, pwm);//1250升起250落下
+	if(is_up)
+	{
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_3, tulun_up_pwm);//1250升起250落下
+	}
+	else
+	{
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_3, tulun_down_pwm);
+	}
+	
 }
 
 
-
+//需修改
 //--------------------------------总机械臂函数--------------------------------
 void arm_ctrl(float end_angle, float x, float y)
 {
@@ -231,5 +239,4 @@ void Arm_Init(void)
 	unitree_Uart_Init(unitree_rx_buf[0], unitree_rx_buf[1], Unitree_RX_BUF_NUM);
 	PID_init(&unitree_w_pid,   PID_POSITION, unitree_w_pid_K,   UNITREE_W_PID_MAX_OUT,   UNITREE_W_PID_MAX_IOUT);
 	PID_init(&unitree_pos_pid, PID_POSITION, unitree_pos_pid_K, UNITREE_POS_PID_MAX_OUT, UNITREE_POS_PID_MAX_IOUT);
-	unitree_check_zero_pose(&unitree_Data);
 }

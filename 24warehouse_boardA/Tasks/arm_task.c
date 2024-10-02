@@ -6,7 +6,7 @@
 extern float set_w;
 float targ_pos = 0;
 float real_pos = 0;
-float arm_zero_pose = 1.14955831f;
+float arm_zero_pose = 1.14955831f;	//特定零点区间内转到竖直位置的“绝对角度”
 
 
 uint8_t direction = 0; //1上2下
@@ -19,9 +19,9 @@ uint16_t tulun_pwm = 250;
 bool_t arm_safe = 1;//机械臂调试保护位
 bool_t unitree_init_flag = 0;//大臂上电初始化标志位
 
-float total_angle = 175;
+float total_angle = 90;
 float x = 300;
-float y = -40;
+float y = 300;
 
 uint16_t servo_start_flag = 99;//每数到100，总线舵机发送信号执行一次(即1s执行一次)
 
@@ -41,7 +41,14 @@ void arm_task(void const * argument)
 	
 	while(1)
 	{
-		while(arm_safe);//调试保护位
+		//调试保护
+		while(arm_safe)
+		{
+			unitree_torque_ctrl(&unitree_Data, 0);
+			osDelay(10);
+		}
+		
+		//初始转到大臂数值位置
 		if(!unitree_init_flag)
 		{
 			targ_pos = arm_zero_pose;
@@ -53,10 +60,10 @@ void arm_task(void const * argument)
 				unitree_init_flag = 1;
 			}
 		}
+		
+/**********机械臂解算调试用程序***********/
 		else
 		{
-			
-/**********机械臂解算调试用程序***********/
 			servo_start_flag++;
 			if(servo_start_flag == 100)//1s发送一次舵机控制信号
 			{
@@ -76,11 +83,11 @@ void arm_task(void const * argument)
 			targ_pos = -solver.a0;
 /***********************************************/	
 		}
-		
+		//大臂电机位置环
 		unitree_pos_pid_ctrl(targ_pos);
-		
-		real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
 		unitree_save_check();
+		real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
+		
 		huadao_control(huadao_pwm);
 		tulun_control(tulun_pwm);
 		osDelay(10);
