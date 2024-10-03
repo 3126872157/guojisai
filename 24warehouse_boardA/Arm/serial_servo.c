@@ -9,6 +9,9 @@
 // 宏函数 获得A的高八位
 #define GET_HIGH_BYTE(A) ((uint8_t)((A) >> 8))
 
+uint16_t servo_Angle_raw[3] = {0};
+float servo_Angle[3] = {0};
+
 uint8_t ServoTxBuf[128]; // 总线舵机发送缓存
 uint8_t ServoRxBuf[20];	 // 总线舵机接收缓存
 uint16_t batteryVolt;
@@ -112,6 +115,15 @@ void USER_SERIAL_SERVO_UART_IDLECallback(UART_HandleTypeDef *huart)
 {
 	if (huart == &SERIAL_SERVO_HUART)
 	{
+		//处理上次收到的数据
+		for(int i = 0;i < 3;++i)
+		{
+			servo_Angle_raw[i] = ServoRxBuf[i*3+6] | (ServoRxBuf[i*3+7]<<8);
+		}
+		servo_Angle[0] = (500 - servo_Angle_raw[0]) * 0.24;	//超出120度数据会乱掉
+		servo_Angle[1] = (servo_Angle_raw[1] - 500) * 0.24;
+		servo_Angle[2] = servo_Angle_raw[2];	//还是生的
+		
 		// 停止本次DMA传输
 		HAL_UART_DMAStop(&SERIAL_SERVO_HUART);
 
@@ -135,8 +147,6 @@ void USER_SERIAL_SERVO_UART_IDLECallback(UART_HandleTypeDef *huart)
 
 		// 重启开始DMA传输 每次255字节数据
 		HAL_UART_Receive_DMA(&SERIAL_SERVO_HUART, (uint8_t *)ServoRxBuf, 255);
-		
-		
 	}
 }
 

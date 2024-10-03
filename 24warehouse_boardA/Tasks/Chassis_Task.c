@@ -30,8 +30,13 @@
 uint8_t safe_flag = 1;
 
 extern float send_data[10];
-extern float rx_gyro;
-	
+extern float rx_gyro;//接收到的陀螺仪角度信息
+extern bool_t chassis_code_reset_flag;//底盘里程计清零标志位
+extern motor_measure_t motor_chassis[5];
+extern float ramp_x;
+extern float ramp_y;
+extern float ramp_z;
+
 //fp32 limit_xspeed_set=0;
 //fp32 limit_yspeed_set=0;
 //fp32 limit_wspeed_set=0;
@@ -60,6 +65,42 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update);
 static void chassis_set_contorl(chassis_move_t *chassis_move_control);
 static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 
+//底盘参数重置
+void chassis_reset(chassis_move_t *chassis_move_reset)
+{
+	if(chassis_code_reset_flag == 1)
+	{
+		for(int i = 0;i < 4;i++)
+		{
+			//清除里程数据
+			motor_chassis[i].code = 0;
+			motor_chassis[i].round_cnt = 0;
+			motor_chassis[i].offset_code = motor_chassis[i].ecd;
+			
+			//清除速度pid
+			PID_clear(&chassis_move_reset->motor_speed_pid[i]);
+		}
+		//清除位置pid
+		PID_clear(&chassis_move_reset->motor_distance_pid);
+		
+		//清除目标值
+		chassis_move_reset->x_set = 0;
+		chassis_move_reset->y_set = 0;
+		chassis_move_reset->chassis_mode = CHASSIS_STOP;
+		
+		//清除测量值
+		chassis_move_reset->x = 0;
+		chassis_move_reset->y = 0;
+		
+		ramp_x = 0;
+		ramp_y = 0;
+		ramp_z = 0;
+		
+		chassis_code_reset_flag = 0;
+	}
+}
+
+//底盘控制任务
 void chassis_task(void const * argument)
 {
 	//空闲一段时间
@@ -141,11 +182,11 @@ static void chassis_init(chassis_move_t *chassis_move_init)
 	const static fp32 motor_distance_pid[3] = {M2006_MOTOR_DISTANCE_PID_KP, M2006_MOTOR_DISTANCE_PID_KI, M2006_MOTOR_DISTANCE_PID_KD};
 	PID_init(&chassis_move_init->motor_distance_pid, PID_POSITION, motor_distance_pid, M2006_MOTOR_DISTANCE_PID_MAX_OUT, M2006_MOTOR_DISTANCE_PID_MAX_IOUT);
 	
-	//角度环
+	//转向环
 	const static fp32 motor_gyro_pid[3] = {M2006_MOTOR_GYRO_PID_KP, M2006_MOTOR_GYRO_PID_KI, M2006_MOTOR_GYRO_PID_KD};
 	PID_init(&chassis_move_init->motor_gyro_pid, PID_POSITION, motor_gyro_pid, M2006_MOTOR_GYRO_PID_MAX_OUT, M2006_MOTOR_GYRO_PID_MAX_IOUT);
 	
-    //转向环
+    //角度环
     const static fp32 motor_move_gyro_pid[3] = {M2006_MOTOR_MOVE_GYRO_PID_KP, M2006_MOTOR_MOVE_GYRO_PID_KI, M2006_MOTOR_MOVE_GYRO_PID_KD};
 	PID_init(&chassis_move_init->motor_move_gyro_pid, PID_POSITION, motor_move_gyro_pid, M2006_MOTOR_MOVE_GYRO_PID_MAX_OUT, M2006_MOTOR_MOVE_GYRO_PID_MAX_IOUT);
 	
@@ -199,19 +240,22 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
     {
         return;
     }
+	
+	//看底盘是否需要重置
+	chassis_reset(chassis_move_update);
 
     for (uint8_t i = 0; i < 4; i++)
     {
 		//转子角度计
-		fp32 temp_angle = chassis_move_update->motor_chassis[i].chassis_motor_measure->ecd - chassis_move_update->motor_chassis[i].chassis_motor_measure->last_ecd;
-		if(temp_angle >= 4096)
-		{
-			temp_angle = (8192.0f - chassis_move_update->motor_chassis[1].chassis_motor_measure->ecd) + chassis_move_update->motor_chassis[1].chassis_motor_measure->last_ecd;
-		}
-		else if(temp_angle <= -4096)
-		{
-			temp_angle = (8192.0f - chassis_move_update->motor_chassis[1].chassis_motor_measure->last_ecd) + chassis_move_update->motor_chassis[1].chassis_motor_measure->ecd;
-		}
+//		fp32 temp_angle = chassis_move_update->motor_chassis[i].chassis_motor_measure->ecd - chassis_move_update->motor_chassis[i].chassis_motor_measure->last_ecd;
+//		if(temp_angle >= 4096)
+//		{
+//			temp_angle = (8192.0f - chassis_move_update->motor_chassis[1].chassis_motor_measure->ecd) + chassis_move_update->motor_chassis[1].chassis_motor_measure->last_ecd;
+//		}
+//		else if(temp_angle <= -4096)
+//		{
+//			temp_angle = (8192.0f - chassis_move_update->motor_chassis[1].chassis_motor_measure->last_ecd) + chassis_move_update->motor_chassis[1].chassis_motor_measure->ecd;
+//		}
 		
         //更新电机速度，加速度是速度的PID微分
         chassis_move_update->motor_chassis[i].speed = CHASSIS_MOTOR_RPM_TO_VECTOR_SEN * chassis_move_update->motor_chassis[i].chassis_motor_measure->speed_rpm;

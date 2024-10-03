@@ -917,6 +917,16 @@
               <FileType>5</FileType>
               <FilePath>..\Application\vofa.h</FilePath>
             </File>
+            <File>
+              <FileName>Gray_sensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Gray_sensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>Gray_sensor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\Gray_sensor.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -64,17 +64,14 @@ void arm_task(void const * argument)
 		else
 		{
 			servo_start_flag++;
-			if(servo_start_flag == 1000)//1s发送一次舵机控制信号
+			if(servo_start_flag == 500)//1s发送一次舵机控制信号
 			{
-				//夹爪控制已包含在内，通过给claw_pos赋值实现
 				
-				if(task_flag==1) Task_1();
-				else if(task_flag==2) Task_2();
-				else if(task_flag==3) Task_3();
-				else if(task_flag==4) Task_4();
 				
-				arm_ctrl(total_angle, x, y);
+				arm_solve(total_angle, x, y);	//内置舵机控制
 				servo_start_flag = 0;
+				
+				//getServosAngle(3,1,2,3);
 			}
 			targ_pos = -solver.a0;
 /***********************************************/	
@@ -85,10 +82,7 @@ void arm_task(void const * argument)
 		unitree_save_check();
 		real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
 		
-		
 		osDelay(1);
-//		getServosAngle(3,1,2,3);
-		
 	}
 }
 

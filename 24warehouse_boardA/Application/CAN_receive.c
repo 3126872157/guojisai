@@ -95,13 +95,13 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 //				motor_chassis[i].code += abs(temp2) < abs(temp1) ? temp2 : temp1;
 				
 				//ÖØÖÃcodeÖµÊ±
-				if(can_reset_flag[i] != 0 )
-				{
-					motor_chassis[i].code = 0;
-					motor_chassis[i].round_cnt = 0;
-					motor_chassis[i].offset_code = motor_chassis[i].ecd;
-					can_reset_flag[i] = 0;
-				}
+//				if(can_reset_flag[i] != 0 )
+//				{
+//					motor_chassis[i].code = 0;
+//					motor_chassis[i].round_cnt = 0;
+//					motor_chassis[i].offset_code = motor_chassis[i].ecd;
+//					can_reset_flag[i] = 0;
+//				}
 			}
 			else
 			{

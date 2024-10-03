@@ -209,7 +209,7 @@ void tulun_control(bool_t is_up)
 
 //需修改
 //--------------------------------总机械臂函数--------------------------------
-void arm_ctrl(float end_angle, float x, float y)
+void arm_solve(float end_angle, float x, float y)
 {
 	error = arm_solver_analyze(&solver, end_angle, x, y);
 	if(!error)
@@ -231,7 +231,7 @@ void Arm_Init(void)
 	
 	// 幻尔舵机初始化
 	serial_servo_UART_Init();
-	servo_Data.serial_servo_Time = 100;
+	servo_Data.serial_servo_Time = 500;
 	
 	// 宇树关节电机初始化
 	unitree_Uart_Init(unitree_rx_buf[0], unitree_rx_buf[1], Unitree_RX_BUF_NUM);

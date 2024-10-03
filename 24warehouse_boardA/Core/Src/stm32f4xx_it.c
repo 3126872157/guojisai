@@ -503,7 +503,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 			{
 				shijue_msg.before[i] = RX_shijue_buff[i+21];
 			}
-			shijue_data.QR_code=shijue_msg.after;	
+			shijue_data.QR_code=shijue_msg.after;
 		}
 	}
 	

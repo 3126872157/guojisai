@@ -54,6 +54,8 @@
 
 bool_t chassis_code_reset_flag; //底盘4个电机里程计清零标志位
 extern bool_t can_reset_flag[5];//单个电机里程计归零的标志(加上拨蛋盘电机一共5个)
+extern motor_measure_t motor_chassis[5];
+
 
 //缓起相关
 float slow_start_distance_k = 0.04f;
@@ -62,11 +64,18 @@ float ramp_y = 0;
 float ramp_z = 0;
 	
 
-//设置底盘4个电机的里程计清零标志位
+//里程计清零，这个移到chassis_task里
 void chassis_code_reset(void)
 {
-	for(uint8_t i=0;i<=3;i++)
-		can_reset_flag[i]=1;
+//	for(uint8_t i=0;i<=3;i++)
+//		can_reset_flag[i]=1;
+	
+	for(int i = 0;i < 4;i++)
+	{
+		motor_chassis[i].code = 0;
+		motor_chassis[i].round_cnt = 0;
+		motor_chassis[i].offset_code = motor_chassis[i].ecd;
+	}
 }
 
 /**
@@ -121,7 +130,7 @@ static void chassis_V_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, chassis_
 
 //留意，这个底盘模式变量
 //可以通过extern来在其他任务里随时改变底盘行为模式，并改变底盘模式
-chassis_mode_e chassis_behaviour_mode = CHASSIS_MOVE_AND_ROTATE;
+chassis_mode_e chassis_behaviour_mode = CHASSIS_STOP;
 
 
 
@@ -204,14 +213,7 @@ static void  chassis_infrared_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, 
     {
         return;
     }
-		if(chassis_code_reset_flag==1)
-		{
-			chassis_code_reset();
-			
-			chassis_move_vector->x_set=0.0f;
-			chassis_move_vector->y_set=0.0f;
-			chassis_code_reset_flag=0;
-		}
+		
 		//稍后完善！！！！！！！！！！！！！！
 //		*wz_set = PID_calc(&chassis_move_vector->motor_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
 //		*vx_set = -IR_V_x/2.5f;
@@ -236,15 +238,6 @@ static void chassis_ultrasonic_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set,
     {
         return;
     }
-	
-	if(chassis_code_reset_flag==1)
-	{
-		chassis_code_reset();
-
-		chassis_move_vector->x_set = 0.0f;
-		chassis_move_vector->y_set = 0.0f;
-		chassis_code_reset_flag = 0;
-	}
 	
 	if(fabs(chassis_move_vector->y-30.0f)>0.5f)
 	{
@@ -289,14 +282,6 @@ static void chassis_move_and_rotate_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz
     {
         return;
     }
-	if(chassis_code_reset_flag==1)
-	{
-		chassis_code_reset();
-
-		chassis_move_vector->x_set=0.0f;
-		chassis_move_vector->y_set=0.0f;
-		chassis_code_reset_flag=0;
-	}
 	
 	//缓起
 	ramp_function(&ramp_x, chassis_move_vector->x_set, slow_start_distance_k);
@@ -316,22 +301,28 @@ static void chassis_move_and_rotate_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz
 	{
 		*vx_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->x,ramp_x);
 		*vy_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->y,ramp_y);
-		*wz_set = PID_calc(&chassis_move_vector->motor_gyro_pid,chassis_move_vector->gyro,ramp_z);
+		*wz_set = PID_calc(&chassis_move_vector->motor_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
 		
 	}
 }
 
 //速度控制模式，不使用里程计，配合视觉识别参数使用。到达目标速度立马给0
 //底盘前后移动改x，左右移动改y
+
+fp32 V_mode_x_speed = 0;
+fp32 V_mode_y_speed = 0;
+fp32 V_mode_w_speed = 0;
+
 static void chassis_V_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, chassis_move_t *chassis_move_vector)
 {
 	if (vx_set == NULL || vy_set == NULL || wz_set == NULL || chassis_move_vector == NULL)
     {
         return;
     }
-	*vx_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->x,chassis_move_vector->x_set);
-	*vy_set = PID_calc(&chassis_move_vector->motor_distance_pid,chassis_move_vector->y,chassis_move_vector->y_set);
-	*wz_set = PID_calc(&chassis_move_vector->motor_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
+	*vx_set = V_mode_x_speed;
+	*vy_set = V_mode_y_speed;
+//	*wz_set = V_mode_w_speed;
+	*wz_set = PID_calc(&chassis_move_vector->motor_move_gyro_pid,chassis_move_vector->gyro,chassis_move_vector->gyro_set);
 }
 
 //void chassis_vx_movey_control(fp32 *vx_set, fp32 *vy_set, fp32 *wz_set, chassis_move_t *chassis_move_vector)

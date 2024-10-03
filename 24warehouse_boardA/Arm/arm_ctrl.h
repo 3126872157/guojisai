@@ -65,7 +65,7 @@ void unitree_move(uint8_t flag, float pos, float w);
 //移动关节上的总线舵机
 void servo_arm_move(float angle1, float angle2);
 // 机械臂解算方法控制
-void arm_ctrl(float end_angle, float x, float y);
+void arm_solve(float end_angle, float x, float y);
 //机械爪控制
 void claw_control(bool_t is_catch);
 //滑道pwm控制
