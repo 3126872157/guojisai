@@ -927,6 +927,16 @@
               <FileType>5</FileType>
               <FilePath>..\Application\Gray_sensor.h</FilePath>
             </File>
+            <File>
+              <FileName>UART_receive.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\UART_receive.c</FilePath>
+            </File>
+            <File>
+              <FileName>UART_receive.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\UART_receive.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

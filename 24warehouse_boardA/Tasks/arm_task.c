@@ -64,7 +64,7 @@ void arm_task(void const * argument)
 		else
 		{
 			servo_start_flag++;
-			if(servo_start_flag == 500)//1s发送一次舵机控制信号
+			if(servo_start_flag == 500)//500ms发送一次舵机控制信号
 			{
 				
 				

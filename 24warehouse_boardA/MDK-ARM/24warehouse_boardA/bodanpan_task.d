@@ -52,6 +52,9 @@
 24warehouse_boarda\bodanpan_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\math.h
 24warehouse_boarda\bodanpan_task.o: ../Application/pid.h
 24warehouse_boarda\bodanpan_task.o: ../Compoents/algorithm/user_lib.h
+24warehouse_boarda\bodanpan_task.o: ../Application/UART_receive.h
+24warehouse_boarda\bodanpan_task.o: ../Core/Inc/stm32f4xx_it.h
+24warehouse_boarda\bodanpan_task.o: ../Core/Inc/usart.h
 24warehouse_boarda\bodanpan_task.o: ../Core/Inc/tim.h
 24warehouse_boarda\bodanpan_task.o: ../Application/bodanpan.h
 24warehouse_boarda\bodanpan_task.o: ..\Tasks\Chassis_Task.h
@@ -61,4 +64,3 @@
 24warehouse_boarda\bodanpan_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
 24warehouse_boarda\bodanpan_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
 24warehouse_boarda\bodanpan_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
-24warehouse_boarda\bodanpan_task.o: ../Core/Inc/usart.h

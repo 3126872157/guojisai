@@ -55,6 +55,9 @@
 24warehouse_boarda\chassis_behaviour.o: ../Tasks/Bodanpan_Task.h
 24warehouse_boarda\chassis_behaviour.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\chassis_behaviour.o: D:\keil5\ARM\ARMCC\Bin\..\include\math.h
+24warehouse_boarda\chassis_behaviour.o: ../Application/UART_receive.h
+24warehouse_boarda\chassis_behaviour.o: ../Core/Inc/stm32f4xx_it.h
+24warehouse_boarda\chassis_behaviour.o: ../Core/Inc/usart.h
 24warehouse_boarda\chassis_behaviour.o: ../Core/Inc/tim.h
 24warehouse_boarda\chassis_behaviour.o: ../Application/bodanpan.h
 24warehouse_boarda\chassis_behaviour.o: ../Tasks/Chassis_Task.h
@@ -62,5 +65,4 @@
 24warehouse_boarda\chassis_behaviour.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
 24warehouse_boarda\chassis_behaviour.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
 24warehouse_boarda\chassis_behaviour.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
-24warehouse_boarda\chassis_behaviour.o: ../Core/Inc/usart.h
 24warehouse_boarda\chassis_behaviour.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
