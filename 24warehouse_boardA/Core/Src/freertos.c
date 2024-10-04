@@ -30,6 +30,7 @@
 #include "Bodanpan_Task.h"
 #include "arm_task.h"
 #include "flow_task.h"
+#include "arm_control_task.h"
 
 /* USER CODE END Includes */
 
@@ -146,6 +147,8 @@ void MX_FREERTOS_Init(void) {
 	osThreadDef(flowTask, flow_task, osPriorityNormal, 0, 512);
 	armTaskHandle = osThreadCreate(osThread(flowTask), NULL);
 	
+	osThreadDef(armControlTask, arm_control_task, osPriorityNormal, 0, 512);
+	armTaskHandle = osThreadCreate(osThread(armControlTask), NULL);
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 

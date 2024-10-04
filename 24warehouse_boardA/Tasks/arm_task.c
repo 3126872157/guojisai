@@ -13,14 +13,14 @@ float arm_zero_pose = 1.14955831f;	//特定零点区间内转到竖直位置的“绝对角度”
 
 uint8_t direction = 0; //1上2下
 extern unitree_ctrl_t unitree_Data;
+extern serial_servo_t servo_Data;
 extern struct arm_solver solver;
+
+arm_ctrl_point point;
 
 bool_t arm_safe = 1;//机械臂调试保护位
 bool_t unitree_init_flag = 0;//大臂上电初始化标志位
-
-float total_angle = 90;
-float x = 300;
-float y = 300;
+bool_t arm_ctrl_signal = 0;
 
 uint16_t servo_start_flag = 99;//每数到100，总线舵机发送信号执行一次(即1s执行一次)
 
@@ -44,6 +44,7 @@ void arm_task(void const * argument)
 		while(arm_safe)
 		{
 			unitree_torque_ctrl(&unitree_Data, 0);
+			ramp_targ_pos = unitree_Data.unitree_recv.Pos;
 			osDelay(10);
 		}
 		
@@ -55,8 +56,13 @@ void arm_task(void const * argument)
 			{
 				targ_pos = 0;
 				real_pos = 0;
+				ramp_targ_pos = 0;
 				unitree_Data.zero_pose = arm_zero_pose;
 				unitree_init_flag = 1;
+//				point.x = 300;
+//				point.y = 300;
+//				point.total_angle = 90;
+				arm_ctrl_signal = 1;
 			}
 		}
 		
@@ -64,16 +70,20 @@ void arm_task(void const * argument)
 		else
 		{
 			servo_start_flag++;
-			if(servo_start_flag == 500)//500ms发送一次舵机控制信号
+			if(servo_start_flag == servo_Data.serial_servo_Time)	//100ms发送一次舵机控制信号，查看舵机角度
 			{
-				
-				
-				arm_solve(total_angle, x, y);	//内置舵机控制
+				if(arm_ctrl_signal)	//不能同时发送
+				{
+					arm_solve(point.total_angle, point.x, point.y);
+					servo_arm_move(solver.a1, solver.a2);	//控制舵机转到制定角度
+					targ_pos = -solver.a0;					//设置电机角度
+				}
+				else
+				{
+					getServosAngle(3,1,2,3);
+				}
 				servo_start_flag = 0;
-				
-				//getServosAngle(3,1,2,3);
 			}
-			targ_pos = -solver.a0;
 /***********************************************/	
 		}
 		//大臂电机位置控制
@@ -84,32 +94,4 @@ void arm_task(void const * argument)
 		
 		osDelay(1);
 	}
-}
-
-void Task_1(void)
-{
-	x = 280;
-	y = -30;
-	total_angle = 175;
-}
-
-void Task_2(void)
-{
-	x = 300;
-	y = 300;
-	total_angle = 90;
-}
-
-void Task_3(void)
-{
-	x = 500;
-	y = 350;
-	total_angle = 100;
-}
-
-void Task_4(void)
-{
-	x = 300;
-	y = 300;
-	total_angle = 90;
 }

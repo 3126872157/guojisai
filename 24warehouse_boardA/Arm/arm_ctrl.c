@@ -30,8 +30,10 @@ extern uint8_t Servo_Rx_Data[20];	//生的数据
 //	    2号舵机为第三关节，增大为往下按
 //		3号舵机为夹爪，增大为张开
 //		4号舵机为拨蛋板，增大为归位
+uint16_t claw_pos = 600;
 uint16_t claw_catch_pos = 410;
 uint16_t claw_loose_pos = 600;
+uint16_t claw_middle_pos = 470;
 
 //--------------------------------滑道、凸轮舵机变量----------------------------
 uint16_t huadao_vertical_pwm = 900;//900垂直600放球(范围250-1250)
@@ -163,19 +165,23 @@ void servo_arm_move(float angle1, float angle2)
 	input1 = 500.0f - angle1 / 0.24f;
 	input2 = 500.0f + angle2 / 0.24f;
 	
-	moveServos(2, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2);
+	moveServos(3, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2, 3, claw_pos);
 }
 
-//机械爪夹取
-void claw_control(bool_t is_catch)
+//机械爪夹取，0夹取，1松开，2中间位置
+void claw_control(uint8_t mode)
 {
-	if(is_catch)
+	switch(mode)
 	{
-		moveServo(3, claw_catch_pos, 100);
-	}
-	else
-	{
-		moveServo(3, claw_loose_pos, 100);
+		case 0:
+			claw_pos = claw_catch_pos;
+			break;
+		case 1:
+			claw_pos = claw_loose_pos;
+			break;
+		case 2:
+			claw_pos = claw_middle_pos;
+			break;
 	}
 }
 
@@ -215,7 +221,7 @@ void arm_solve(float end_angle, float x, float y)
 	if(!error)
 	{
 		// 输入a0为弧度制		
-		servo_arm_move(solver.a1, solver.a2);
+//		servo_arm_move(solver.a1, solver.a2);
 	}
 	else
 	{
@@ -231,7 +237,7 @@ void Arm_Init(void)
 	
 	// 幻尔舵机初始化
 	serial_servo_UART_Init();
-	servo_Data.serial_servo_Time = 500;
+	servo_Data.serial_servo_Time = 400;
 	
 	// 宇树关节电机初始化
 	unitree_Uart_Init(unitree_rx_buf[0], unitree_rx_buf[1], Unitree_RX_BUF_NUM);

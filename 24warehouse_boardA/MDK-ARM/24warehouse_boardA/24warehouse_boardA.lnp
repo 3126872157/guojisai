@@ -53,6 +53,7 @@
 "24warehouse_boarda\vofa.o"
 "24warehouse_boarda\gray_sensor.o"
 "24warehouse_boarda\uart_receive.o"
+"24warehouse_boarda\arm_control_task.o"
 "24warehouse_boarda\chassis_task.o"
 "24warehouse_boarda\bodanpan_task.o"
 "24warehouse_boarda\arm_task.o"

@@ -943,6 +943,16 @@
           <GroupName>Tasks</GroupName>
           <Files>
             <File>
+              <FileName>arm_control_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tasks\arm_control_task.h</FilePath>
+            </File>
+            <File>
+              <FileName>arm_control_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\arm_control_task.c</FilePath>
+            </File>
+            <File>
               <FileName>Chassis_Task.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Tasks\Chassis_Task.c</FilePath>

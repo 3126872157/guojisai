@@ -74,3 +74,4 @@
 24warehouse_boarda\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\freertos.o: ../Tasks/flow_task.h
 24warehouse_boarda\freertos.o: ../Application/Gray_sensor.h
+24warehouse_boarda\freertos.o: ../Tasks/arm_control_task.h

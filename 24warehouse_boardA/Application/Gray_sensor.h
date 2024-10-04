@@ -4,8 +4,6 @@
 #include "main.h"
 
 
-
-
 void gray_sensor_read(void);
 
 
