@@ -5,7 +5,7 @@
 
 //IC卡
 uint8_t RX_IC_buff[IC_BUFF_SIZE];//IC卡数据包接收缓冲区
-uint8_t IC_data;//IC卡内的数据(几行几列)
+uint8_t IC_data;//当前识别到的IC卡内的数据(几行几列)
 
 
 //C板陀螺仪

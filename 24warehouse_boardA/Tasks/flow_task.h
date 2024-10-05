@@ -11,9 +11,9 @@
 
 typedef struct {
 	uint8_t mode;
-	float x;
-	float y;
-	float gyro;
+	float para1;
+	float para2;
+	float para3;
 	float tolerance;
 	uint8_t chassis_mode;
 } TargetPoints;

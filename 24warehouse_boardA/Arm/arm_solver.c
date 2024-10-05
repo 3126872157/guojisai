@@ -54,7 +54,8 @@ uint8_t arm_solver_analyze(struct arm_solver *solver, float a_total, float x, fl
 		y0 = solver->l0 * cosf(a0);
 		x1 = x1 - x0;
 		y1 = y1 - y0;
-		a1 = PI_2 - a0 - atanf(y1 / x1);
+		//a1 = PI_2 - a0 - atanf(y1 / x1);
+		a1 = PI - acosf((solver->l1 * solver->l1 + solver->l0 * solver->l0 - l * l) / (2 * solver->l1 * solver->l0));
 		a2 = solver->a_total - a0 - a1;
 		
 		

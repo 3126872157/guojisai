@@ -30,14 +30,15 @@ extern uint8_t Servo_Rx_Data[20];	//生的数据
 //	    2号舵机为第三关节，增大为往下按
 //		3号舵机为夹爪，增大为张开
 //		4号舵机为拨蛋板，增大为归位
-uint16_t claw_pos = 600;
+uint16_t claw_pos = 470;
 uint16_t claw_catch_pos = 410;
 uint16_t claw_loose_pos = 600;
 uint16_t claw_middle_pos = 470;
 
 //--------------------------------滑道、凸轮舵机变量----------------------------
-uint16_t huadao_vertical_pwm = 900;//900垂直600放球(范围250-1250)
-uint16_t huadao_slope_pwm = 600;
+uint16_t huadao_vertical_pwm = 800;//900垂直600放球(范围250-1250)
+uint16_t huadao_slope_out_pwm = 600;
+uint16_t huadao_slope_in_pwm = 1100;
 uint16_t tulun_up_pwm = 1250;//1250升起250落下(范围250-1250)
 uint16_t tulun_down_pwm = 250;
 
@@ -186,16 +187,20 @@ void claw_control(uint8_t mode)
 }
 
 
-//滑道斜率调整，1为放球，0为垂直
+//滑道斜率调整，2为向内扣，1为放球，0为垂直
 void huadao_control(bool_t is_put_ball)
 {
-	if(is_put_ball)
+	if(is_put_ball == 1)
 	{
-		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_slope_pwm);//600放球(范围250-1250)
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_slope_out_pwm);//600放球(范围250-1250)
+	}
+	else if(is_put_ball == 0)
+	{
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_vertical_pwm);//900垂直
 	}
 	else
 	{
-		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_vertical_pwm);//900垂直
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_slope_in_pwm);//1200
 	}
 }	
 //顶球，凸轮调整

@@ -67,3 +67,4 @@
 24warehouse_boarda\flow_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
 24warehouse_boarda\flow_task.o: ../Application/Gray_sensor.h
 24warehouse_boarda\flow_task.o: ../Application/chassis_behaviour.h
+24warehouse_boarda\flow_task.o: ..\Tasks\arm_control_task.h

@@ -6,14 +6,13 @@ pid_type_def bodanpan_angle_pid,
 			 bodanpan_speed_pid;
 
 uint8_t ball_num=0;//储蛋机构内已有球的个数
-bool_t a_new_ball_in_flag = 0;
-
+bool_t a_new_ball_in = 0;
 extern uint8_t IC_data; //Uart_Task中接收到的，当前位置扭蛋球的IC卡数据
-
+uint8_t err_IC_data = 0xFF;//取球错误标识
 extern Pan_t bodanpan;
 extern motor_measure_t motor_chassis[5];
 
-void IC_story(void);
+void IC_story(uint8_t data);
 
 void Bodanpan_Task(void const * argument)
 {
@@ -23,17 +22,25 @@ void Bodanpan_Task(void const * argument)
 	bodanpan_motor_init();
 	while(1)
 	{
-		if(a_new_ball_in_flag)
+		if(a_new_ball_in)
 		{
 			bodanpan_position_set(1,1);
-			osDelay(50);
-			if(IC_data == bodanpan.IC_date[ball_num-1]||IC_data == 0)//如果检测到的还是上一个球的数据或者没有检测到
-				osDelay(500);
-			if(IC_data == bodanpan.IC_date[ball_num-1]||IC_data == 0)
-				osDelay(500);
-			IC_story();
-			a_new_ball_in_flag = 0;
+			osDelay(800);
+			//如果检测到的还是上一个球的数据或者没有检测到,来回动一下，防止IC卡读不到
+			if(IC_data == bodanpan.IC_date_pan[ball_num-1] || IC_data == 0)
+			{
+				bodanpan_position_set(-1,1);
+				osDelay(800);
+				bodanpan_position_set(1,1);
+				osDelay(800);
+			}
+			else IC_story(IC_data);
+			//如果还是没有数据，则默认夹球失误，给当前位置存入错误标识err_IC_data
+			if(IC_data == bodanpan.IC_date_pan[ball_num-1] || IC_data == 0)
+				IC_story(err_IC_data);
+			a_new_ball_in = 0;
 		}
+
 		osDelay(5);
 	}
 }
@@ -65,11 +72,11 @@ void bodanpan_motor_control(void)
 
 }
 
-void IC_story(void)
+void IC_story(uint8_t data)
 {
-	if(ball_num==0||IC_data!=bodanpan.IC_date[ball_num-1])
+	if(ball_num==0||IC_data!=bodanpan.IC_date_pan[ball_num-1])
 	{
-			bodanpan.IC_date[ball_num] = IC_data;
+			bodanpan.IC_date_pan[ball_num] = data;
 			bodanpan.box_state[ball_num] = 1;
 			ball_num++;
 	}

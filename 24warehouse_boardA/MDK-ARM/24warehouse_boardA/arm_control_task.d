@@ -62,3 +62,13 @@
 24warehouse_boarda\arm_control_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
 24warehouse_boarda\arm_control_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
 24warehouse_boarda\arm_control_task.o: ../Core/Inc/usart.h
+24warehouse_boarda\arm_control_task.o: ..\Tasks\Bodanpan_Task.h
+24warehouse_boarda\arm_control_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+24warehouse_boarda\arm_control_task.o: ../Application/CAN_receive.h
+24warehouse_boarda\arm_control_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\math.h
+24warehouse_boarda\arm_control_task.o: ../Application/UART_receive.h
+24warehouse_boarda\arm_control_task.o: ../Core/Inc/stm32f4xx_it.h
+24warehouse_boarda\arm_control_task.o: ../Application/bodanpan.h
+24warehouse_boarda\arm_control_task.o: ..\Tasks\Chassis_Task.h
+24warehouse_boarda\arm_control_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+24warehouse_boarda\arm_control_task.o: ..\Tasks\Bodanpan_Task.h
