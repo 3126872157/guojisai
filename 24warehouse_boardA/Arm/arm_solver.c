@@ -2,6 +2,8 @@
 // Created by ken on 24-9-16.
 //
 #include "arm_solver.h"
+#include "main.h"
+#include "struct_typedef.h"
 
 bool_t nan_error = 0;
 

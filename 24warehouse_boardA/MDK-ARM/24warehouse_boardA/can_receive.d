@@ -3,8 +3,8 @@
 24warehouse_boarda\can_receive.o: ..\Application\struct_typedef.h
 24warehouse_boarda\can_receive.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\can_receive.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-24warehouse_boarda\can_receive.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
-24warehouse_boarda\can_receive.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+24warehouse_boarda\can_receive.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+24warehouse_boarda\can_receive.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 24warehouse_boarda\can_receive.o: ../Core/Inc/FreeRTOSConfig.h
 24warehouse_boarda\can_receive.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 24warehouse_boarda\can_receive.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

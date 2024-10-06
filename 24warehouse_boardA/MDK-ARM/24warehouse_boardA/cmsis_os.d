@@ -1,9 +1,9 @@
 24warehouse_boarda\cmsis_os.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c
-24warehouse_boarda\cmsis_os.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+24warehouse_boarda\cmsis_os.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 24warehouse_boarda\cmsis_os.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\cmsis_os.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-24warehouse_boarda\cmsis_os.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
-24warehouse_boarda\cmsis_os.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+24warehouse_boarda\cmsis_os.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+24warehouse_boarda\cmsis_os.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 24warehouse_boarda\cmsis_os.o: ../Core/Inc/FreeRTOSConfig.h
 24warehouse_boarda\cmsis_os.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 24warehouse_boarda\cmsis_os.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

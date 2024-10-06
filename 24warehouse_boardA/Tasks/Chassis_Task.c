@@ -382,6 +382,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
     fp32 temp = 0.0f;
     fp32 wheel_speed[4] = {0.0f, 0.0f, 0.0f, 0.0f};
     uint8_t i = 0;
+	fp32 error_sum = 0.0f;
 
     //全向轮运动分解
     chassis_vector_to_omni_wheel_speed(chassis_move_control_loop->vx_set,
@@ -399,7 +400,13 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
         {
             max_vector = temp;
         }
+		
+		//计算error总和
+		error_sum += chassis_move_control_loop->motor_speed_pid[i].error[0];
     }
+	
+	//计算4个电机error平均值
+	error_sum /= 4;
 
     if (max_vector > MAX_WHEEL_SPEED)
     {
@@ -419,6 +426,7 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop)
     //赋值电流值
     for (i = 0; i < 4; i++)
     {
-        chassis_move_control_loop->motor_chassis[i].give_current = (int16_t)(chassis_move_control_loop->motor_speed_pid[i].out);
+		//赋的电流乘上error的系数，error大的系数大
+        chassis_move_control_loop->motor_chassis[i].give_current = (int16_t)(chassis_move_control_loop->motor_speed_pid[i].out * chassis_move_control_loop->motor_speed_pid[i].error[0] / error_sum);
     }
 }
