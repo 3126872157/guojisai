@@ -31,7 +31,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 	if(huart == &huart8)//视觉数据DMA空闲中断接收
 	{
 		HAL_UARTEx_ReceiveToIdle_DMA(&huart8, RX_shijue_buff, SHIJUE_BUFF_SIZE);
-		if(RX_shijue_buff[0] == 0xFF && RX_shijue_buff[25] == 0xFE)
+		if(RX_shijue_buff[0] == 0xFF && RX_shijue_buff[37] == 0xFE)
 		{
 			for(int i = 0; i < 4; i++)
 			{
@@ -63,6 +63,22 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 				shijue_msg.before[i] = RX_shijue_buff[i+21];
 			}
 			shijue_data.QR_code=shijue_msg.after;
+			for(int i = 0; i < 4; i++)
+			{
+				shijue_msg.before[i] = RX_shijue_buff[i+25];
+			}
+			shijue_data.obstacle_x=shijue_msg.after;
+			for(int i = 0; i < 4; i++)
+			{
+				shijue_msg.before[i] = RX_shijue_buff[i+29];
+			}
+			shijue_data.obstacle_y=shijue_msg.after;
+			for(int i = 0; i < 4; i++)
+			{
+				shijue_msg.before[i] = RX_shijue_buff[i+33];
+			}
+			shijue_data.obstacle_distance=shijue_msg.after;
+
 		}
 	}
 	
@@ -78,9 +94,9 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 		}
 	}
 	
-	if(huart == &huart2)//C板INS数据空闲中断接收
+	if(huart == &huart4)//C板INS数据空闲中断接收
 	{
-		HAL_UARTEx_ReceiveToIdle_IT(&huart2, RX_INS_buff, INS_BUFF_SIZE);
+		HAL_UARTEx_ReceiveToIdle_IT(&huart4, RX_INS_buff, INS_BUFF_SIZE);
 		if(RX_INS_buff[0] == 0xFE)
 		{
 			RX_INS_data[0] = RX_INS_buff[4];

@@ -6,7 +6,7 @@
 #include "usart.h"
 #include "struct_typedef.h"
 
-#define SHIJUE_BUFF_SIZE 26//视觉数据包大小
+#define SHIJUE_BUFF_SIZE 38//视觉数据包大小
 #define IC_BUFF_SIZE 22//IC卡数据包大小
 #define INS_BUFF_SIZE 5//C板陀螺仪数据包大小
 
@@ -19,6 +19,9 @@ typedef struct
 	float QR_x;
 	float QR_y;
 	float QR_code;
+	float obstacle_x;
+	float obstacle_y;
+	float obstacle_distance;
 }shijue_Data;
 
 

@@ -76,6 +76,8 @@ uint8_t arm_solver_analyze(struct arm_solver *solver, float a_total, float x, fl
 			nan_error = 1;
 			return 9;	//nan了
 		}
+		else//如果不nan了，回到正常状态
+			nan_error = 0;
 		
 		solver->a0 = a0;
 		solver->a1 = a1;

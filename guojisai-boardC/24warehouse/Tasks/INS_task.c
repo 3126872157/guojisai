@@ -161,6 +161,11 @@ static fp32 INS_quat[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 fp32 INS_angle[3] = {0.0f, 0.0f, 0.0f};      //euler angle, unit rad.欧拉角 单位 rad
 fp32 my_angle[3] = {0.0f, 0.0f, 0.0f};		//转换成角度制
 
+
+fp32 my_yaw = 0.0f;//扩容之后
+fp32 my_last_yaw = 0.0f;
+
+
 extern  uint8_t my_cali_flag;//校验完成标志位
 uint8_t TX_INS_buff[5] = {0xFE,0,0,0,0};
 
@@ -269,9 +274,23 @@ void INS_task(void const *pvParameters)
 
         AHRS_update(INS_quat, timing_time, INS_gyro, accel_fliter_3, INS_mag);
         get_angle(INS_quat, INS_angle + INS_YAW_ADDRESS_OFFSET, INS_angle + INS_PITCH_ADDRESS_OFFSET, INS_angle + INS_ROLL_ADDRESS_OFFSET);
+		
+//		my_last_yaw = my_yaw;
+//		my_yaw = INS_angle[0] * RAD;
+//		if(my_yaw - my_last_yaw < -180)
+//		{
+//			real_angle = my_yaw + 360;
+//			cnt++;
+//		}
+//		else if(my_yaw - my_last_yaw > 180)
+//		{
+//			real_angle = my_yaw - 360;
+//			cnt--;
+//		}
+//		else real_angle = my_yaw + ;
 		my_angle[0] = INS_angle[0] * RAD;
-		my_angle[1] = INS_angle[1] * RAD;
-		my_angle[2] = INS_angle[2] * RAD;
+//		my_angle[1] = INS_angle[1] * RAD;
+//		my_angle[2] = INS_angle[2] * RAD;
 		
 		
 //		if(my_cali_flag == 1)

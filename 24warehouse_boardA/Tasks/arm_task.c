@@ -59,9 +59,6 @@ void arm_task(void const * argument)
 				ramp_targ_pos = 0;
 				unitree_Data.zero_pose = arm_zero_pose;
 				unitree_init_flag = 1;
-//				point.x = 300;
-//				point.y = 300;
-//				point.total_angle = 90;
 				arm_ctrl_signal = 1;
 			}
 		}

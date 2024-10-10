@@ -59,7 +59,9 @@ static void chassis_control_loop(chassis_move_t *chassis_move_control_loop);
 
 extern uint8_t my_cali_flag;
 extern uint8_t TX_INS_buff[5];
-
+bool_t gyro_uart_send_start = 0;
+float my_angle_offset = 100.0f;
+float angle_uart_send = 0;
 
 
 void chassis_task(void const * argument)
@@ -70,19 +72,25 @@ void chassis_task(void const * argument)
 	while(1)
 	{
 		
+		if(my_cali_flag == 1 && gyro_uart_send_start == 0)
+		{
+			my_angle_offset = my_angle[0];
+			gyro_uart_send_start = 1;
+		}
+		
 		//œµÕ≥—” ±
-		if(my_cali_flag == 1)
+		if(gyro_uart_send_start == 1)
 		{
 			uint8_t farray[4];
-			*(float *)farray = my_angle[0];
+			angle_uart_send = my_angle[0] - my_angle_offset;
+			*(float *)farray = angle_uart_send;
 			TX_INS_buff[4] = farray[0];
 			TX_INS_buff[3] = farray[1];
 			TX_INS_buff[2] = farray[2];
 			TX_INS_buff[1] = farray[3];
 			HAL_UART_Transmit_IT(&huart1, TX_INS_buff, 5);
-			osDelay(10);
 		}
-        vTaskDelay(CHASSIS_CONTROL_TIME_MS);
+        vTaskDelay(10);
 	}
 }
 

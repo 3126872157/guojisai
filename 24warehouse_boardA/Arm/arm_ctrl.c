@@ -34,6 +34,7 @@ uint16_t claw_pos = 470;
 uint16_t claw_catch_pos = 410;
 uint16_t claw_loose_pos = 600;
 uint16_t claw_middle_pos = 470;
+uint16_t paidanban_pos = 500;
 
 //--------------------------------滑道、凸轮舵机变量----------------------------
 uint16_t huadao_vertical_pwm = 800;//900垂直600放球(范围250-1250)
@@ -166,7 +167,7 @@ void servo_arm_move(float angle1, float angle2)
 	input1 = 500.0f - angle1 / 0.24f;
 	input2 = 500.0f + angle2 / 0.24f;
 	
-	moveServos(3, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2, 3, claw_pos);
+	moveServos(4, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2, 3, claw_pos, 4, paidanban_pos);
 }
 
 //机械爪夹取，0夹取，1松开，2中间位置

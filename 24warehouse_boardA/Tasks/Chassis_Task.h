@@ -98,7 +98,7 @@
 //底盘运动过程最大前进，平移，旋转速度（原本为现在的两倍）
 #define NORMAL_MAX_CHASSIS_SPEED_X 50.0f	//2.0f
 #define NORMAL_MAX_CHASSIS_SPEED_Y 50.0f    //1.5f
-#define NORMAL_MAX_CHASSIS_SPEED_Z 100.0f   //????
+#define NORMAL_MAX_CHASSIS_SPEED_Z 80.0f   //????
 //单个底盘电机最大速度
 #define MAX_WHEEL_SPEED 70.0f
 

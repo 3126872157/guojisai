@@ -25,19 +25,22 @@ void Bodanpan_Task(void const * argument)
 		if(a_new_ball_in)
 		{
 			bodanpan_position_set(1,1);
-			osDelay(800);
+			osDelay(1500);
 			//如果检测到的还是上一个球的数据或者没有检测到,来回动一下，防止IC卡读不到
 			if(IC_data == bodanpan.IC_date_pan[ball_num-1] || IC_data == 0)
 			{
 				bodanpan_position_set(-1,1);
-				osDelay(800);
+				osDelay(500);
 				bodanpan_position_set(1,1);
-				osDelay(800);
+				osDelay(1000);
+				if(IC_data != bodanpan.IC_date_pan[ball_num-1] && IC_data != 0)
+					IC_story(IC_data);
+				else
+					IC_story(err_IC_data);
 			}
 			else IC_story(IC_data);
 			//如果还是没有数据，则默认夹球失误，给当前位置存入错误标识err_IC_data
-			if(IC_data == bodanpan.IC_date_pan[ball_num-1] || IC_data == 0)
-				IC_story(err_IC_data);
+			
 			a_new_ball_in = 0;
 		}
 
@@ -74,11 +77,9 @@ void bodanpan_motor_control(void)
 
 void IC_story(uint8_t data)
 {
-	if(ball_num==0||IC_data!=bodanpan.IC_date_pan[ball_num-1])
-	{
-			bodanpan.IC_date_pan[ball_num] = data;
-			bodanpan.box_state[ball_num] = 1;
-			ball_num++;
-	}
+	bodanpan.IC_date_pan[ball_num] = data;
+	bodanpan.box_state[ball_num] = 1;
+	ball_num++;
+
 }
 

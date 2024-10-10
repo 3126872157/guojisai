@@ -28,9 +28,9 @@ void bodanpan_init()
 	
 }
 
-void bodanpan_position_set(uint8_t direction, uint8_t num)//向direction方向转动num个格子
+void bodanpan_position_set(int8_t direction, uint8_t num)//向direction方向转动num个格子
 {
-	if(direction)
+	if(direction == 1)
 	{
 		bodanpan.angle_set += num * ANGLE_PER_BOX;
 		bodanpan.position += num;
@@ -48,8 +48,8 @@ void bodanpan_position_set(uint8_t direction, uint8_t num)//向direction方向转动n
 
 bool_t bodanpan_find_ball(uint8_t x,uint8_t y)//根据行(x)列(y)号旋转拨蛋盘到对应球的位置，便于后续取出该球
 {                                                
-	int8_t Num,Direction = 1;
-	for(uint8_t i = 0;i < BOX_NUM;i++)
+	int8_t Num,Direction = 1,i;
+	for(i = 0;i < BOX_NUM;i++)
 	{
 		if(bodanpan.IC_date_pan[i] == x * 16 + y )//该部分还未完成,是用10个储球机构还是9个？？？
 		{
@@ -57,17 +57,17 @@ bool_t bodanpan_find_ball(uint8_t x,uint8_t y)//根据行(x)列(y)号旋转拨蛋盘到对应
 			
 			if(Num < -5)
 			{
-				Direction = 0;
+				Direction = -1;
 				Num += 10;
 			}
 			else if(Num > 5)
 			{
-				Direction = 0;
+				Direction = 1;
 				Num = 10 - Num;
 			}
 			else if(Num > 0 && Num <= 5)
 			{
-				Direction=1;
+				Direction = -1;
 			}
 			else if(Num < 0 && Num >= -5)
 			{
@@ -77,9 +77,9 @@ bool_t bodanpan_find_ball(uint8_t x,uint8_t y)//根据行(x)列(y)号旋转拨蛋盘到对应
 			bodanpan_position_set(Direction, Num);
 			return 0;
 		}
-		if(i == BOX_NUM)
-		{
-			return 1;
-		}
+	}
+	if(i == BOX_NUM)
+	{
+		return 1;
 	}
 }
