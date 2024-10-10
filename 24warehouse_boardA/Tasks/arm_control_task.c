@@ -15,6 +15,8 @@ extern arm_ctrl_point point;
 
 extern shijue_Data shijue_data;
 uint8_t arm_shijue_error = 0;
+float piancha = 75;//摄像头到夹爪的距离偏差
+
 
 //从高往低0,1,2
 float jie_ti_ping_tai[3] = {245, 190, 145};
@@ -319,7 +321,6 @@ void li_cang_put_diceng(void)
 		}
 }
 
-float piancha = 75;
 
 void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 {
