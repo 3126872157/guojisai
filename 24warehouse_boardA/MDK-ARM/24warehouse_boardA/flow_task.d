@@ -68,3 +68,8 @@
 24warehouse_boarda\flow_task.o: ../Application/Gray_sensor.h
 24warehouse_boarda\flow_task.o: ../Application/chassis_behaviour.h
 24warehouse_boarda\flow_task.o: ..\Tasks\arm_control_task.h
+24warehouse_boarda\flow_task.o: ../Arm/arm_ctrl.h
+24warehouse_boarda\flow_task.o: ../Arm/unitree_a1.h
+24warehouse_boarda\flow_task.o: ../Arm/A1_motor_msg.h
+24warehouse_boarda\flow_task.o: ../Arm/serial_servo.h
+24warehouse_boarda\flow_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h

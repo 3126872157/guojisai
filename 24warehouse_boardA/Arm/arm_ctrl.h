@@ -72,6 +72,6 @@ void claw_control(uint8_t mode);
 void huadao_control(bool_t is_put_ball);
 //Í¹ÂÖpwm¿ØÖÆ
 void tulun_control(bool_t is_up);
-
-
+//Ô²ÅÌ»ú²¦¸Ë¿ØÖÆ
+void bogan_control(uint8_t mode);
 #endif

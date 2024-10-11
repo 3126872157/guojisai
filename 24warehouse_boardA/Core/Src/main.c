@@ -118,7 +118,7 @@ int main(void)
 	HAL_UARTEx_ReceiveToIdle_IT(&huart4, RX_INS_buff, INS_BUFF_SIZE);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_4);
-
+	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_2);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

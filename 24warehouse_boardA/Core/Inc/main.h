@@ -69,8 +69,14 @@ void Error_Handler(void);
 #define A1Motor_RE_GPIO_Port GPIOI
 #define unitree_RX_Pin GPIO_PIN_9
 #define unitree_RX_GPIO_Port GPIOG
+#define huadao_Pin GPIO_PIN_0
+#define huadao_GPIO_Port GPIOI
 #define gray_D2_Pin GPIO_PIN_1
 #define gray_D2_GPIO_Port GPIOF
+#define tulun_Pin GPIO_PIN_12
+#define tulun_GPIO_Port GPIOH
+#define bogan_Pin GPIO_PIN_11
+#define bogan_GPIO_Port GPIOH
 #define fuyong_TX_Pin GPIO_PIN_2
 #define fuyong_TX_GPIO_Port GPIOA
 #define servo_TX_Pin GPIO_PIN_8

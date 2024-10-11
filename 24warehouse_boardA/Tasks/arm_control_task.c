@@ -44,6 +44,7 @@ void set_normal_pos(void)
 	point.y = 300;
 	point.total_angle = 110;
 	tulun_control(0);
+	bogan_control(0);
 }
 
 void set_jieti_middle_pos(void)
@@ -383,6 +384,28 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 		}
 }
 
+void zhuanpanji_take(void)
+{
+	switch(arm_current_step)
+		{
+			case 0:
+				arm_ctrl_signal = 1;
+				extra_time = 1000;
+				claw_control(1);
+				tulun_control(0);
+				huadao_control(1);
+				bogan_control(2);
+				arm_current_step ++;
+				break;
+			case 1:
+				point.x = 435;
+				point.y = 230;
+				point.total_angle = 85;
+				break;
+		}
+}
+
+
 void arm_control_task(void const * argument)
 {
 	while(1)
@@ -426,7 +449,10 @@ void arm_control_task(void const * argument)
 				break;
 			
 			case 10:
-				lizhuang_shijue_take();//先用视觉横移到球所在平面，再通过测距走到可夹球位置
+				lizhuang_shijue_take();
+				break;
+			case 11:
+				zhuanpanji_take();
 				break;
 			//调试用
 			case 66:

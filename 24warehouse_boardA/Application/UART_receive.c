@@ -17,6 +17,8 @@ float rx_gyro;//C板INS接收数据(float类型)
 //视觉
 uint8_t RX_shijue_buff[SHIJUE_BUFF_SIZE];//视觉数据包接收缓冲区
 shijue_Data shijue_data;//视觉数据帧：球x,y,distance, 二维码x,y,
+uint8_t TX_shijue_mode = 0;//给视觉发工作模式
+
 
 union shijue_msg_t//联合体(用于数据类型转换)
 {
@@ -78,7 +80,8 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 				shijue_msg.before[i] = RX_shijue_buff[i+33];
 			}
 			shijue_data.obstacle_distance=shijue_msg.after;
-
+			
+			HAL_UART_Transmit_DMA(&huart8,&TX_shijue_mode,1);
 		}
 	}
 	
@@ -111,7 +114,6 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 	{
 //		HAL_UARTEx_ReceiveToIdle_IT(&huart4, buff, SIZE);
 	}
-		
 	
 }
 

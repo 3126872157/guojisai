@@ -3,6 +3,7 @@
 #include "bodanpan.h"
 #include "Bodanpan_Task.h"
 #include "arm_control_task.h"
+#include "arm_ctrl.h"
 
 #define distance_tol 2
 #define gyro_tol 0.2f
@@ -15,21 +16,29 @@ extern bool_t chassis_code_reset_flag;
 extern fp32 V_mode_x_speed;
 extern fp32 V_mode_y_speed;
 extern fp32 V_mode_w_speed;
+
+//取球放入拨蛋盘后的标志位
 extern bool_t a_new_ball_in;
-//灰度传感器数据，0为白色红色，1为黑色，目前受硬件限制只有一路数据gray_data[1]
+
+//灰度传感器数据，0为白色红色，1为黑色，目前受硬件限制只有一路数据gray_data[0]
 extern uint8_t gray_data[2];
 
 //机械臂控制有关参数
 extern uint8_t arm_control_mode;
+extern bool_t arm_ctrl_signal;
+extern uint8_t arm_current_step;
 
-
+//视觉有关参数
 extern shijue_Data shijue_data;
 int8_t shi_jue_x_pianzhi = 5;
 float shijue_k = -1;
 uint8_t shijue_error = 0;
-float shijue_tolerance = 5;
-float obstacle_x_tol = 280;
-float obstacle_distance_tol = 280;
+float shijue_suoqiu_tolerance = 5;//视觉锁球忍耐值
+float shijue_suozhang_tolerance = 5;//视觉锁障忍耐值(用于避障前的精准中心定位)
+float obstacle_x_tol = 280;//用于大幅度横移过程中的锁定障碍
+float obstacle_distance_tol = 300;//在障碍物前多少距离停下
+extern uint8_t TX_shijue_mode;
+
 
 bool_t take_a_ball = 0;
 uint8_t ball_x;
@@ -47,8 +56,13 @@ uint8_t ball_y;
 8：无力状态，用于debug控制
 ********************************************************/
 
+//机械臂任务开始的标志位
 bool_t mode4_task_start = 0;
 bool_t mode5_task_start = 0;
+bool_t mode9_task_start = 0;
+bool_t bogan_zhunbei_flag = 1;
+bool_t bogan_jiqiu_flag = 0;
+uint8_t zhuanpanji_ball_num = 0;
 
 //控制变量列表，格式如下
 //控制模式		para1		para2		para3		到达判断误差值			底盘运动模式
@@ -70,7 +84,7 @@ TargetPoints targ_point[] = {
 	{5,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//测距模式夹球
 	
 	
-	{8,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+	{11,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
 	//底盘立桩到阶梯平台过渡
 	{1,		 -20,	 	0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//立桩完成，后退20
 	{1,		 0,		  	0,			-90,		gyro_tol,		CHASSIS_MOVE_AND_ROTATE},//顺时针转90
@@ -78,7 +92,7 @@ TargetPoints targ_point[] = {
 	{2,		 5,	      	0,			0,			non,			CHASSIS_V},				 //前进灰度识别白线后停
 	
 	
-	{8,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+	{11,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
 	//阶梯平台
 	{3,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁球
 	{4,		 non,	    non,	    non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第一个
@@ -92,12 +106,13 @@ TargetPoints targ_point[] = {
 	{4,		 non,		non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第三个
 	
 	
-	{8,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+	{11,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
 	//阶梯平台到圆盘机过渡
 	{1,		 -20,	 	0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//阶梯平台完成，后退20
 	{1,		 0,	 		0,			180,		gyro_tol,		CHASSIS_MOVE_AND_ROTATE},//逆时针旋转180，以便视觉锁障
 	{6,		 0,		  	-160,		0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//锁障，若跑到160，说明没锁上，停下
 	{7,		 100,		 0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//锁障后向前，待距离小于给定值，作避障动作
+	{8,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁障
 	{1,		 0,	 		40,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//避障动作
 	{1,		 70,	 	0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//避障动作
 	{1,		 0,	 		-40,		0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//避障动作
@@ -105,6 +120,7 @@ TargetPoints targ_point[] = {
 	
 	
 	//圆盘机
+	{9,		 non,		non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//机械臂就位,拨杆拨球
 	
 	{8,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
 	//圆盘机到仓库过渡
@@ -131,10 +147,15 @@ uint8_t isFinished = 0;
 
 bool_t flag;
 
+uint16_t test_pos = 900;
+uint16_t test_pos_2 = 600;
 void flow_task(void const * argument)
 {
 	while(1)
 	{
+		if(shijue_data.ball_distance == 1) __HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, test_pos);//250
+		else __HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, 250);
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, test_pos_2);//600放球(范围250-1250)
 		//判断所有步骤是否走完
 		if(currentTargIndex < sizeof(targ_point) / sizeof(TargetPoints))
 		{
@@ -178,6 +199,7 @@ void flow_task(void const * argument)
 			else if(target.mode == 3)
 			{
 				chassis_behaviour_mode = target.chassis_mode;
+				TX_shijue_mode = 0;
 				//球在左边
 				if(shijue_data.ball_x < 0 && fabs(shijue_data.ball_x - 666) > 2)
 				{
@@ -196,7 +218,7 @@ void flow_task(void const * argument)
 					shijue_error ++;
 				}
 				
-				if(fabs(shijue_data.ball_x + shi_jue_x_pianzhi) < shijue_tolerance)
+				if(fabs(shijue_data.ball_x + shi_jue_x_pianzhi) < shijue_suoqiu_tolerance)
 				{
 					chassis_code_reset_flag = 1;
 					V_mode_y_speed = 0;
@@ -207,6 +229,7 @@ void flow_task(void const * argument)
 			else if(target.mode == 4)
 			{
 				chassis_behaviour_mode = target.chassis_mode;
+				TX_shijue_mode = 0;
 				if(mode4_task_start == 0)
 				{
 					if(shijue_data.ball_y < 0)/*距离为最高一层*/
@@ -253,6 +276,7 @@ void flow_task(void const * argument)
 			else if(target.mode == 6)
 			{
 				//设置底盘运动目标
+				TX_shijue_mode = 2;
 				chassis_behaviour_mode = target.chassis_mode;
 				chassis_move.x_set = target.para1;
 				chassis_move.y_set = target.para2;
@@ -282,6 +306,7 @@ void flow_task(void const * argument)
 			else if(target.mode == 7)
 			{
 				//设置底盘运动目标
+				TX_shijue_mode = 2;
 				chassis_behaviour_mode = target.chassis_mode;
 				chassis_move.x_set = target.para1;
 				chassis_move.y_set = target.para2;
@@ -300,6 +325,70 @@ void flow_task(void const * argument)
 			}
 			
 			else if(target.mode == 8)
+			{
+				TX_shijue_mode = 2;
+				chassis_behaviour_mode = target.chassis_mode;
+				//障碍在左边
+				if(shijue_data.obstacle_x < 0)
+				{
+					V_mode_y_speed = target.para2;
+				}
+				//障碍在右边
+				else if(shijue_data.obstacle_x > 0)
+				{
+					V_mode_y_speed = -target.para2;
+				}
+								
+				if(fabs(shijue_data.obstacle_x) < shijue_suozhang_tolerance)
+				{
+					chassis_code_reset_flag = 1;
+					V_mode_y_speed = 0;
+					currentTargIndex ++;
+				}
+			}
+			
+			else if(target.mode == 9)
+			{
+				TX_shijue_mode = 1;
+				chassis_behaviour_mode = target.chassis_mode;
+				if(mode9_task_start == 0)
+				{
+					arm_control_mode = 10;
+					mode9_task_start = 1;
+					osDelay(1000);
+				}
+				
+				if(bogan_jiqiu_flag == 0 && shijue_data.ball_distance == 1)
+				{
+					bogan_control(1);
+					bogan_jiqiu_flag = 1;
+					bogan_zhunbei_flag = 0;
+					zhuanpanji_ball_num++;
+				}
+				
+				if(bogan_zhunbei_flag == 0 && shijue_data.ball_distance == 0)
+				{
+					bogan_control(2);
+					bogan_zhunbei_flag = 1;
+					bogan_jiqiu_flag = 0;
+				}
+				
+				
+				/*******这里a_new_ball_in不知道咋加！！！！*******/
+				
+				
+				if(zhuanpanji_ball_num == 5)
+				{
+					osDelay(500);//这里延迟一下，防止最后一次击球还没成功，机械臂就抬起来了
+					arm_control_mode = 0;
+					arm_current_step = 0;
+					arm_ctrl_signal = 0;
+					currentTargIndex ++;
+				}
+
+			}
+			
+			else if(target.mode == 11)
 			{
 				chassis_behaviour_mode = target.chassis_mode;
 				if(take_a_ball)

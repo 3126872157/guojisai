@@ -35,10 +35,14 @@ uint16_t claw_catch_pos = 410;
 uint16_t claw_loose_pos = 600;
 uint16_t claw_middle_pos = 470;
 uint16_t paidanban_pos = 500;
+uint16_t bogan_zhunbei_pos = 250;
+uint16_t bogan_jiqiu_pos = 800;
+uint16_t bogan_shouqi_pos = 1250;
+
 
 //--------------------------------滑道、凸轮舵机变量----------------------------
 uint16_t huadao_vertical_pwm = 800;//900垂直600放球(范围250-1250)
-uint16_t huadao_slope_out_pwm = 600;
+uint16_t huadao_slope_out_pwm = 700;
 uint16_t huadao_slope_in_pwm = 1100;
 uint16_t tulun_up_pwm = 1250;//1250升起250落下(范围250-1250)
 uint16_t tulun_down_pwm = 250;
@@ -193,7 +197,7 @@ void huadao_control(bool_t is_put_ball)
 {
 	if(is_put_ball == 1)
 	{
-		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_slope_out_pwm);//600放球(范围250-1250)
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_slope_out_pwm);//700放球(范围250-1250)
 	}
 	else if(is_put_ball == 0)
 	{
@@ -214,6 +218,25 @@ void tulun_control(bool_t is_up)
 	else
 	{
 		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_3, tulun_down_pwm);
+	}
+	
+}
+
+
+//圆盘机拨球控制
+void bogan_control(uint8_t mode)
+{
+	if(mode == 0)	//收起
+	{
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, bogan_shouqi_pos);//1250
+	}
+	else if(mode == 1)	//击球
+	{
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, bogan_jiqiu_pos);//800
+	}
+	else if(mode == 2)	//准备击球
+	{
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, bogan_zhunbei_pos);//250
 	}
 	
 }
