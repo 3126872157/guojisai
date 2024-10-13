@@ -32,7 +32,7 @@ extern uint8_t Servo_Rx_Data[20];	//生的数据
 //		4号舵机为拨蛋板，增大为归位
 uint16_t claw_pos = 470;
 uint16_t claw_catch_pos = 410;
-uint16_t claw_loose_pos = 600;
+uint16_t claw_loose_pos = 510;
 uint16_t claw_middle_pos = 470;
 uint16_t paidanban_pos = 500;
 uint16_t bogan_zhunbei_pos = 250;
@@ -201,7 +201,7 @@ void huadao_control(bool_t is_put_ball)
 	}
 	else if(is_put_ball == 0)
 	{
-		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_vertical_pwm);//900垂直
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, huadao_vertical_pwm);//800垂直
 	}
 	else
 	{

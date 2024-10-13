@@ -27,6 +27,7 @@ extern uint8_t gray_data[2];
 extern uint8_t arm_control_mode;
 extern bool_t arm_ctrl_signal;
 extern uint8_t arm_current_step;
+extern uint16_t claw_middle_pos;
 
 //视觉有关参数
 extern shijue_Data shijue_data;
@@ -35,8 +36,8 @@ float shijue_k = -1;
 uint8_t shijue_error = 0;
 float shijue_suoqiu_tolerance = 5;//视觉锁球忍耐值
 float shijue_suozhang_tolerance = 5;//视觉锁障忍耐值(用于避障前的精准中心定位)
-float obstacle_x_tol = 280;//用于大幅度横移过程中的锁定障碍
-float obstacle_distance_tol = 300;//在障碍物前多少距离停下
+float obstacle_x_tol = 10;//用于大幅度横移过程中的锁定障碍
+float obstacle_distance_tol = 250;//在障碍物前多少距离停下
 extern uint8_t TX_shijue_mode;
 
 
@@ -53,7 +54,10 @@ uint8_t ball_y;
 5：机械臂立桩取球
 6：底盘平移位置环配合视觉锁障
 7：底盘平移位置环配合视觉锁障后前进
-8：无力状态，用于debug控制
+8：视觉横移锁障，居中调整
+9：转盘机机械臂就位
+10：机械臂nan了，向前跑一点
+66：无力状态，用于debug控制
 ********************************************************/
 
 //机械臂任务开始的标志位
@@ -76,57 +80,58 @@ uint8_t zhuanpanji_ball_num = 0;
 const uint8_t non = 0;
 
 TargetPoints targ_point[] = {
-	//立桩
-	{1,		 180,	 	10,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//走到立桩前
-	{3,		 0,		  	5,			0,			non,			CHASSIS_V},				 //横移视觉锁球
-	{5,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//测距模式夹球
-	{3,		 0,		  	5,			0,			non,			CHASSIS_V},				 //横移视觉锁球
-	{5,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//测距模式夹球
+		//立桩
+/*0*/	{1,		 0,	 		35,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//走到立桩前
+/*1*/	{1,		 195,	 	0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//走到立桩前
+/*2*/	{3,		 0,		  	-5,			0,			non,			CHASSIS_V},				 //横移视觉锁球
+/*3*/	{5,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//测距模式夹球
+/*4*/	{3,		 0,		  	-5,			0,			non,			CHASSIS_V},				 //横移视觉锁球
+/*5*/	{5,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//测距模式夹球
 	
 	
-	{11,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
-	//底盘立桩到阶梯平台过渡
-	{1,		 -20,	 	0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//立桩完成，后退20
-	{1,		 0,		  	0,			-90,		gyro_tol,		CHASSIS_MOVE_AND_ROTATE},//顺时针转90
-	{1,		 90,	 	10,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//大致来到阶梯平台右侧
-	{2,		 5,	      	0,			0,			non,			CHASSIS_V},				 //前进灰度识别白线后停
+//	{11,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+		//底盘立桩到阶梯平台过渡
+/*6*/	{1,		 -20,	 	0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//立桩完成，后退20
+/*7*/	{1,		 0,		  	0,			-90,		gyro_tol,		CHASSIS_MOVE_AND_ROTATE},//顺时针转90
+/*8*/	{1,		 60,	 	0,			-90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//大致来到阶梯平台右侧
+/*9*/	{1,		 0,	 		8,			-90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//大致来到阶梯平台右侧
+/*10*/	{2,		 5,	      	0,			0,			non,			CHASSIS_V},				 //前进灰度识别白线后停
 	
 	
-	{11,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
-	//阶梯平台
-	{3,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁球
-	{4,		 non,	    non,	    non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第一个
+//	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+		//阶梯平台
+/*11*/	{3,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁球
+/*12*/	{4,		 non,	    non,	    non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第一个
 	
-	{1,		 0,	 		10,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//往左走10，以防视觉看不到球
-	{3,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁球
-	{4,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第二个
+/*13*/	{3,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁球
+/*14*/	{4,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第二个
 	
-	{1,		 0,	 		10,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//往左走10，以防视觉看不到球
-	{3,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁球
-	{4,		 non,		non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第三个
+/*15*/	{3,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁球
+/*16*/	{4,		 non,		non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第三个
 	
 	
-	{11,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
-	//阶梯平台到圆盘机过渡
-	{1,		 -20,	 	0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//阶梯平台完成，后退20
-	{1,		 0,	 		0,			180,		gyro_tol,		CHASSIS_MOVE_AND_ROTATE},//逆时针旋转180，以便视觉锁障
-	{6,		 0,		  	-160,		0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//锁障，若跑到160，说明没锁上，停下
-	{7,		 100,		 0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//锁障后向前，待距离小于给定值，作避障动作
-	{8,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁障
-	{1,		 0,	 		40,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//避障动作
-	{1,		 70,	 	0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//避障动作
-	{1,		 0,	 		-40,		0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//避障动作
-	{2,		 10,	     0,			0,			non,			CHASSIS_V},//前进灰度识别白线后停
+//	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+		//阶梯平台到圆盘机过渡
+/*17*/	{1,		 -20,	 	0,			-90,		distance_tol,	CHASSIS_MOVE_AND_ROTATE},//阶梯平台完成，后退20
+/*18*/	{1,		 0,	 		0,			90,			gyro_tol,		CHASSIS_MOVE_AND_ROTATE},//逆时针旋转180，以便视觉锁障
+/*19*/	{1,		 0,		  	-80,		90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//锁障前
+/*20*/	{6,		 0,		  	-5,			0,			non,			CHASSIS_V},//缓慢平移锁障
+/*21*/	{7,		 5,		 	0,			0,			non,			CHASSIS_V},//锁障后向前，待距离小于给定值，作避障动作
+/*22*/	{8,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁障
+/*23*/	{1,		 0,	 		40,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//避障动作
+/*24*/	{1,		 90,	 	0,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//避障动作
+/*25*/	{1,		 0,	 		-40,		90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//避障动作，这里会偏一点，加一点补偿，误识别十字当做白线要处理一下
+/*26*/	{2,		 10,	     0,			0,			non,			CHASSIS_V},//前进灰度识别白线后停
 	
 	
-	//圆盘机
-	{9,		 non,		non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//机械臂就位,拨杆拨球
+		//圆盘机
+/*27*/	{9,		 non,		non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//机械臂就位,拨杆拨球
 	
-	{8,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
-	//圆盘机到仓库过渡
-	{1,		 -10,	 	0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//后退10
-	{1,		 0,	 	  220,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//应该要配合二维码锁定位置(待增加)
-	{2,		 5,	      	0,			0,			non,			CHASSIS_V},//前进灰度识别白线后停
+/*28*/	{8,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+		//圆盘机到仓库过渡
+/*29*/	{1,		 -10,	 	0,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//后退10
+/*30*/	{1,		 0,	 	  150,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//应该要配合二维码锁定位置(待增加)
+/*31*/	{2,		 5,	      	0,			0,			non,			CHASSIS_V},//前进灰度识别白线后停
 	
 	
 	//仓库
@@ -134,7 +139,7 @@ TargetPoints targ_point[] = {
 	
 	
 	
-	{8,		 non,	 	non,		non,		non,			CHASSIS_V},
+	{66,		 non,	 	non,		non,		non,			CHASSIS_V},
 	
 	
 };
@@ -147,15 +152,13 @@ uint8_t isFinished = 0;
 
 bool_t flag;
 
-uint16_t test_pos = 900;
+uint16_t test_pos = 250;
 uint16_t test_pos_2 = 600;
 void flow_task(void const * argument)
 {
 	while(1)
 	{
-		if(shijue_data.ball_distance == 1) __HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, test_pos);//250
-		else __HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, 250);
-		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, test_pos_2);//600放球(范围250-1250)
+//		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_3, test_pos);
 		//判断所有步骤是否走完
 		if(currentTargIndex < sizeof(targ_point) / sizeof(TargetPoints))
 		{
@@ -169,7 +172,7 @@ void flow_task(void const * argument)
 				chassis_behaviour_mode = target.chassis_mode;
 				chassis_move.x_set = target.para1;
 				chassis_move.y_set = target.para2;
-				chassis_move.gyro_set += target.para3;
+				chassis_move.gyro_set = target.para3;
 				//判断误差
 				float distance = sqrt(pow(target.para1 - chassis_move.x, 2) + pow(target.para2 - chassis_move.y, 2));
 				if(distance < distance_tol && fabs(chassis_move.gyro - target.para3) < gyro_tol)
@@ -200,23 +203,27 @@ void flow_task(void const * argument)
 			{
 				chassis_behaviour_mode = target.chassis_mode;
 				TX_shijue_mode = 0;
+				V_mode_x_speed = target.para1;
+				V_mode_y_speed = target.para2;
+				if(V_mode_y_speed < 0) 
+					shi_jue_x_pianzhi = -shi_jue_x_pianzhi;
 				//球在左边
-				if(shijue_data.ball_x < 0 && fabs(shijue_data.ball_x - 666) > 2)
-				{
-					V_mode_y_speed = target.para2;
-				}
-				//球在右边
-				else if(shijue_data.ball_x > 0 && fabs(shijue_data.ball_x - 666) > 2)
-				{
-					V_mode_y_speed = -target.para2;
-				}
-				
-				//发666过来表示识别不到
-				else if(fabs(shijue_data.ball_x - 666) < 2)
-				{	
-					V_mode_y_speed = 0;
-					shijue_error ++;
-				}
+//				if(shijue_data.ball_x < 0 && fabs(shijue_data.ball_x - 666) > 2)
+//				{
+//					V_mode_y_speed = target.para2;
+//				}
+//				//球在右边
+//				else if(shijue_data.ball_x > 0 && fabs(shijue_data.ball_x - 666) > 2)
+//				{
+//					V_mode_y_speed = -target.para2;
+//				}
+//				
+//				//发666过来表示识别不到
+//				else if(fabs(shijue_data.ball_x - 666) < 2)
+//				{	
+//					V_mode_y_speed = 0;
+//					shijue_error ++;
+//				}
 				
 				if(fabs(shijue_data.ball_x + shi_jue_x_pianzhi) < shijue_suoqiu_tolerance)
 				{
@@ -241,11 +248,13 @@ void flow_task(void const * argument)
 					else if(shijue_data.ball_y < 8 && shijue_data.ball_y > 0/*距离为中间一层*/)
 					{
 						arm_control_mode = 2;
+						claw_middle_pos = 450;
 						mode4_task_start = 1;
 					}
 					else if(shijue_data.ball_y > 9/*距离为最低一层*/)
 					{
 						arm_control_mode = 3;
+						claw_middle_pos = 450;
 						mode4_task_start = 1;
 					}
 				}
@@ -253,6 +262,7 @@ void flow_task(void const * argument)
 				{
 					a_new_ball_in = 1;
 					mode4_task_start = 0;
+					claw_middle_pos = 470;
 					currentTargIndex ++;
 				}
 			}	
@@ -277,25 +287,10 @@ void flow_task(void const * argument)
 			{
 				//设置底盘运动目标
 				TX_shijue_mode = 2;
-				chassis_behaviour_mode = target.chassis_mode;
-				chassis_move.x_set = target.para1;
-				chassis_move.y_set = target.para2;
-				chassis_move.gyro_set = target.para3;
-				chassis_move.vy_max_speed = 20.0f;//锁球会有滞后性，所以这里速度限幅一下
-				chassis_move.vy_min_speed = -20.0f;//锁球若不在正中心可以考虑用底盘横移微调一下(视具体情况再决定是否添加)
-				
+				chassis_behaviour_mode = target.chassis_mode;	
+				V_mode_x_speed = target.para1;
+				V_mode_y_speed = target.para2;
 				if(fabs(shijue_data.obstacle_x) < obstacle_x_tol)
-				{
-					//里程计清零
-					chassis_code_reset_flag = 1;
-					
-					chassis_move.vy_max_speed = 50.0f;
-					chassis_move.vy_min_speed = -50.0f;
-					currentTargIndex ++;
-				}
-				
-				float distance = sqrt(pow(target.para1 - chassis_move.x, 2) + pow(target.para2 - chassis_move.y, 2));
-				if(distance < distance_tol && fabs(chassis_move.gyro - target.para3) < gyro_tol)
 				{
 					//里程计清零
 					chassis_code_reset_flag = 1;
@@ -308,17 +303,12 @@ void flow_task(void const * argument)
 				//设置底盘运动目标
 				TX_shijue_mode = 2;
 				chassis_behaviour_mode = target.chassis_mode;
-				chassis_move.x_set = target.para1;
-				chassis_move.y_set = target.para2;
-				chassis_move.gyro_set = target.para3;
-				chassis_move.vx_max_speed = 20.0f;////锁球会有滞后性，所以这里速度限幅一下
-				chassis_move.vx_min_speed = -20.0f;
+				V_mode_x_speed = target.para1;
+				V_mode_y_speed = target.para2;
 				if(fabs(shijue_data.obstacle_distance) < obstacle_distance_tol)
 				{
 					//里程计清零			
 					chassis_code_reset_flag = 1;
-					chassis_move.vx_max_speed = 50.0f;
-					chassis_move.vx_min_speed = -50.0f;
 					currentTargIndex ++;
 				}
 				
@@ -326,7 +316,7 @@ void flow_task(void const * argument)
 			
 			else if(target.mode == 8)
 			{
-				TX_shijue_mode = 2;
+				TX_shijue_mode = 2;			
 				chassis_behaviour_mode = target.chassis_mode;
 				//障碍在左边
 				if(shijue_data.obstacle_x < 0)
@@ -388,7 +378,7 @@ void flow_task(void const * argument)
 
 			}
 			
-			else if(target.mode == 11)
+			else if(target.mode == 66)
 			{
 				chassis_behaviour_mode = target.chassis_mode;
 				if(take_a_ball)

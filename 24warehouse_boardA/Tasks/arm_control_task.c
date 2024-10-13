@@ -19,7 +19,7 @@ float piancha = 75;//摄像头到夹爪的距离偏差
 
 
 //从高往低0,1,2
-float jie_ti_ping_tai[3] = {245, 190, 145};
+float jie_ti_ping_tai[3] = {240, 195, 130};
 //从高往低0,1,2
 float li_cang[3] = {345, 225, 105};
 float lizhuang_x =  250.0f;
@@ -62,9 +62,9 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 			case 0:
 				arm_ctrl_signal = 1;
 				claw_control(2);	//claw中间位置
-				point.x = 495;		//阶梯的坐标
+				point.x = 500;		//阶梯的坐标
 				point.y = jie_ti_ping_tai[jie_ti_num];
-				point.total_angle = 90;
+				point.total_angle = 110;
 				arm_current_step ++;
 				break;
 			case 1:
