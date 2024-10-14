@@ -39,7 +39,6 @@ void set_bodanpan_pos(void)
 
 void set_normal_pos(void)
 {
-	claw_control(1);
 	point.x = 300;
 	point.y = 300;
 	point.total_angle = 110;
@@ -140,7 +139,10 @@ void li_cang_take(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 7:
-				set_normal_pos();
+				claw_control(0);
+				point.x = 300;
+				point.y = 300;
+				point.total_angle = 110;
 				arm_current_step ++;
 				break;
 			case 8:
@@ -193,7 +195,10 @@ void li_cang_take_diceng(void)
 				arm_current_step ++;
 				break;
 			case 7:
-				set_normal_pos();
+				claw_control(0);
+				point.x = 300;
+				point.y = 300;
+				point.total_angle = 110;
 				arm_current_step ++;
 				break;
 			case 8:

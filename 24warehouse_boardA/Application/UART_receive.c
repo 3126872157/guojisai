@@ -32,7 +32,14 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 	
 	if(huart == &huart8)//视觉数据DMA空闲中断接收
 	{
+		//防掉线
+//		HAL_StatusTypeDef fake_watchdog = HAL_ERROR;
+//		do 
+//		{
+//			fake_watchdog = HAL_UARTEx_ReceiveToIdle_DMA(&huart8, RX_shijue_buff, SHIJUE_BUFF_SIZE);
+//		}while(fake_watchdog != HAL_OK);
 		HAL_UARTEx_ReceiveToIdle_DMA(&huart8, RX_shijue_buff, SHIJUE_BUFF_SIZE);
+		
 		if(RX_shijue_buff[0] == 0xFF && RX_shijue_buff[37] == 0xFE)
 		{
 			for(int i = 0; i < 4; i++)

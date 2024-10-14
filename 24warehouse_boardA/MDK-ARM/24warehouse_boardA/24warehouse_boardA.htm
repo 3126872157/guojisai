@@ -3,7 +3,7 @@
 <title>Static Call Graph - [24warehouse_boardA\24warehouse_boardA.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image 24warehouse_boardA\24warehouse_boardA.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Sun Oct 13 11:18:19 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Sun Oct 13 23:40:26 2024
 <BR><P>
 <H3>Maximum Stack Usage =        456 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2071,7 +2071,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[16b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;chassis_set_contorl
 </UL>
 
-<P><STRONG><a name="[167]"></a>chassis_reset</STRONG> (Thumb, 172 bytes, Stack size 16 bytes, chassis_task.o(i.chassis_reset))
+<P><STRONG><a name="[167]"></a>chassis_reset</STRONG> (Thumb, 202 bytes, Stack size 16 bytes, chassis_task.o(i.chassis_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = chassis_reset
 </UL>
 <BR>[Calls]<UL><LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_clear
@@ -2095,7 +2095,6 @@ Global Symbols
 </UL>
 <P><STRONG><a name="[172]"></a>claw_control</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, arm_ctrl.o(i.claw_control))
 <BR><BR>[Called By]<UL><LI><a href="#[14a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;zhuanpanji_take
-<LI><a href="#[143]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_normal_pos
 <LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lizhuang_shijue_take
 <LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;li_cang_take_diceng
 <LI><a href="#[147]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;li_cang_take
@@ -2130,7 +2129,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
 </UL>
 
-<P><STRONG><a name="[74]"></a>flow_task</STRONG> (Thumb, 1632 bytes, Stack size 72 bytes, flow_task.o(i.flow_task))
+<P><STRONG><a name="[74]"></a>flow_task</STRONG> (Thumb, 3090 bytes, Stack size 72 bytes, flow_task.o(i.flow_task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 456<LI>Call Chain = flow_task &rArr; __hardfp_pow &rArr; sqrt &rArr; _dsqrt &rArr; __fpl_dnaninf &rArr; __dunder_d &rArr; _fp_trapveneer &rArr; _fp_trap &rArr; __rt_SIGFPE &rArr; __rt_SIGFPE_inner &rArr; __default_signal_display &rArr; _ttywrch
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -2142,6 +2141,7 @@ Global Symbols
 <LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
 <LI><a href="#[14f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_fabs
 <LI><a href="#[14d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
+<LI><a href="#[13c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
 <LI><a href="#[14e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdcmple
 <LI><a href="#[13a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
@@ -2214,21 +2214,19 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arm_control_task
 </UL>
 
-<P><STRONG><a name="[147]"></a>li_cang_take</STRONG> (Thumb, 276 bytes, Stack size 8 bytes, arm_control_task.o(i.li_cang_take))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = li_cang_take &rArr; set_normal_pos
+<P><STRONG><a name="[147]"></a>li_cang_take</STRONG> (Thumb, 304 bytes, Stack size 8 bytes, arm_control_task.o(i.li_cang_take))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = li_cang_take
 </UL>
 <BR>[Calls]<UL><LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;claw_control
-<LI><a href="#[143]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_normal_pos
 </UL>
 <BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arm_control_task
 </UL>
 
-<P><STRONG><a name="[148]"></a>li_cang_take_diceng</STRONG> (Thumb, 294 bytes, Stack size 8 bytes, arm_control_task.o(i.li_cang_take_diceng))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = li_cang_take_diceng &rArr; set_normal_pos
+<P><STRONG><a name="[148]"></a>li_cang_take_diceng</STRONG> (Thumb, 322 bytes, Stack size 8 bytes, arm_control_task.o(i.li_cang_take_diceng))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = li_cang_take_diceng
 </UL>
 <BR>[Calls]<UL><LI><a href="#[176]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;huadao_control
 <LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;claw_control
-<LI><a href="#[143]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_normal_pos
 </UL>
 <BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arm_control_task
 </UL>
@@ -2387,17 +2385,14 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jie_ti_ping_tai_take
 </UL>
 
-<P><STRONG><a name="[143]"></a>set_normal_pos</STRONG> (Thumb, 48 bytes, Stack size 8 bytes, arm_control_task.o(i.set_normal_pos))
+<P><STRONG><a name="[143]"></a>set_normal_pos</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, arm_control_task.o(i.set_normal_pos))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = set_normal_pos
 </UL>
 <BR>[Calls]<UL><LI><a href="#[175]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tulun_control
-<LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;claw_control
 <LI><a href="#[16f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bogan_control
 </UL>
 <BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arm_control_task
 <LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lizhuang_shijue_take
-<LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;li_cang_take_diceng
-<LI><a href="#[147]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;li_cang_take
 <LI><a href="#[146]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;li_cang_put_diceng
 <LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;li_cang_put
 <LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jie_ti_ping_tai_take
@@ -3040,7 +3035,8 @@ Global Symbols
 <P><STRONG><a name="[13c]"></a>__aeabi_cdrcmple</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, drleqf.o(x$fpl$drleqf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = __aeabi_cdrcmple
 </UL>
-<BR>[Called By]<UL><LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lizhuang_shijue_take
+<BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;flow_task
+<LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lizhuang_shijue_take
 <LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arm_solver_analyze
 <LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
 </UL>

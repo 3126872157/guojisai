@@ -37,9 +37,14 @@ uint8_t shijue_error = 0;
 float shijue_suoqiu_tolerance = 5;//视觉锁球忍耐值
 float shijue_suozhang_tolerance = 5;//视觉锁障忍耐值(用于避障前的精准中心定位)
 float obstacle_x_tol = 10;//用于大幅度横移过程中的锁定障碍
+float QR_x_tol = 10;//锁定二维码忍耐值
 float obstacle_distance_tol = 250;//在障碍物前多少距离停下
 extern uint8_t TX_shijue_mode;
-
+uint8_t licang_current_line;//仓库层数记录
+uint8_t QR_code[4];//0、1、2分别记录从左到右QR值，第四个用不到
+uint8_t QR_num;
+uint8_t QR_doing[3] = {0};
+uint8_t QR_doing_num = 0;
 
 bool_t take_a_ball = 0;
 uint8_t ball_x;
@@ -56,7 +61,8 @@ uint8_t ball_y;
 7：底盘平移位置环配合视觉锁障后前进
 8：视觉横移锁障，居中调整
 9：转盘机机械臂就位
-10：机械臂nan了，向前跑一点
+10：底盘横移锁二维码停
+11：立仓倒垛机械臂夹球
 66：无力状态，用于debug控制
 ********************************************************/
 
@@ -64,6 +70,7 @@ uint8_t ball_y;
 bool_t mode4_task_start = 0;
 bool_t mode5_task_start = 0;
 bool_t mode9_task_start = 0;
+bool_t mode11_task_start = 0;
 bool_t bogan_zhunbei_flag = 1;
 bool_t bogan_jiqiu_flag = 0;
 uint8_t zhuanpanji_ball_num = 0;
@@ -87,18 +94,14 @@ TargetPoints targ_point[] = {
 /*3*/	{5,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//测距模式夹球
 /*4*/	{3,		 0,		  	-5,			0,			non,			CHASSIS_V},				 //横移视觉锁球
 /*5*/	{5,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//测距模式夹球
-	
-	
-//	{11,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+
 		//底盘立桩到阶梯平台过渡
 /*6*/	{1,		 -20,	 	0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//立桩完成，后退20
 /*7*/	{1,		 0,		  	0,			-90,		gyro_tol,		CHASSIS_MOVE_AND_ROTATE},//顺时针转90
 /*8*/	{1,		 60,	 	0,			-90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//大致来到阶梯平台右侧
 /*9*/	{1,		 0,	 		8,			-90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//大致来到阶梯平台右侧
 /*10*/	{2,		 5,	      	0,			0,			non,			CHASSIS_V},				 //前进灰度识别白线后停
-	
-	
-//	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+
 		//阶梯平台
 /*11*/	{3,		 0,		  	5,			0,			non,			CHASSIS_V},				 //视觉横移锁球
 /*12*/	{4,		 non,	    non,	    non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第一个
@@ -123,23 +126,58 @@ TargetPoints targ_point[] = {
 /*25*/	{1,		 0,	 		-40,		90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//避障动作，这里会偏一点，加一点补偿，误识别十字当做白线要处理一下
 /*26*/	{2,		 10,	     0,			0,			non,			CHASSIS_V},//前进灰度识别白线后停
 	
-	
 		//圆盘机
 /*27*/	{9,		 non,		non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//机械臂就位,拨杆拨球
 	
 /*28*/	{8,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
 		//圆盘机到仓库过渡
-/*29*/	{1,		 -10,	 	0,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//后退10
-/*30*/	{1,		 0,	 	  150,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//应该要配合二维码锁定位置(待增加)
-/*31*/	{2,		 5,	      	0,			0,			non,			CHASSIS_V},//前进灰度识别白线后停
+/*29*/	{1,		 -15,	 	0,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//后退15
+/*30*/	{1,		 0,	 		140,		90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//左移130cm，差不多到立仓
+
+		//立仓倒垛（重复三次）
+/*31*/	{10,	 0,	      	5,			0,			non,			CHASSIS_V},//视觉平移记录3个二维码对应的位置 ，向左移动
+		{3,		 0,		  	5,			0,			non,			CHASSIS_V},//视觉横移锁球
+		{2,		 5,	     	0,			0,			non,			CHASSIS_V},//底盘前进灰度识别线
+		{11,	 non,	    non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹球
+		{1,		 -20,	 	0,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//后退，以识别二维码，最好慢一点，并根据二维码数字记录当前列数
+/*36*/	{14,	 0,	      	-5,			0,			non,			CHASSIS_V},//锁最右边的二维码，定位用
+/*37*/	{13,	 0,	 		-20,		90,			distance_tol,	CHASSIS_V},//右移到倒垛位，可以单开一个倒垛模式，让速度变慢
+		{2,		 5,	     	0,			0,			non,			CHASSIS_V},//前进灰度识别白线后停，然后放球
+		//放球
+/*38*/	{1,		 -20,	 	0,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//后退，来锁球和二维码，防止偷窥注意距离
+		{12,	0,	 		5,			90,			distance_tol,	CHASSIS_V},//左移，锁特定二维码
+		{3,		 0,		  	5,			0,			non,			CHASSIS_V},//视觉横移锁球
+		{2,		 5,	     	0,			0,			non,			CHASSIS_V},//底盘前进灰度识别线
+		{11,	 non,	    non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹球
+/*43*/	{1,		 -20,	 	0,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//后退，以识别二维码，并根据二维码数字记录当前列数
+		{14,	 0,	      	-5,			0,			non,			CHASSIS_V},//锁最右边的二维码，定位用
+		{13,	 0,	 		-20,		90,			distance_tol,	CHASSIS_V},//右移到倒垛位，可以单开一个倒垛模式，让速度变慢
+		{2,		 5,	     	0,			0,			non,			CHASSIS_V},//前进灰度识别白线后停，然后放球
+		//放球
+/*47*/	{1,		 -20,	 	0,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//后退，来锁球和二维码
+		{12,	0,	 		5,			90,			distance_tol,	CHASSIS_V},//左移，锁特定二维码
+		{3,		 0,		  	5,			0,			non,			CHASSIS_V},//视觉横移锁球
+		{2,		 5,	     	0,			0,			non,			CHASSIS_V},//底盘前进灰度识别线
+		{11,	 non,	    non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹球
+/*50*/	{1,		 -20,	 	0,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//后退，以识别二维码，并根据二维码数字记录当前列数
+		{14,	 0,	      	-5,			0,			non,			CHASSIS_V},//锁最右边的二维码，定位用
+		{13,	 0,	 		-20,		90,			distance_tol,	CHASSIS_V},//右移到倒垛位，可以单开一个倒垛模式，让速度变慢
+		{2,		 5,	     	0,			0,			non,			CHASSIS_V},//前进灰度识别白线后停，然后放球
+		//放球
+
+/*34*/
+/*35*/
+/*36*/
+/*37*/
+
+		//立仓放球
+/*40*/	{3,		 0,	      	5,			0,			non,			CHASSIS_V},//从最右边往左走，逐个锁二维码
+/*41*/	{2,		 5,	     	0,			0,			non,			CHASSIS_V},//前进灰度识别白线后停，放三个球
+/*42*/	{1,		 -15,	 	0,			90,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},//后退，锁二维码，重复
+		
 	
-	
-	//仓库
-	
-	
-	
-	
-	{66,		 non,	 	non,		non,		non,			CHASSIS_V},
+
+		{66,		 non,	 	non,		non,		non,			CHASSIS_V}
 	
 	
 };
@@ -177,6 +215,20 @@ void flow_task(void const * argument)
 				float distance = sqrt(pow(target.para1 - chassis_move.x, 2) + pow(target.para2 - chassis_move.y, 2));
 				if(distance < distance_tol && fabs(chassis_move.gyro - target.para3) < gyro_tol)
 				{
+					
+					//立仓用，这里要求视觉不要666
+					if(currentTargIndex >= 29 && currentTargIndex <= 60)
+					{
+						for(int i  = 0;i<3;i++)
+						{
+							//记录当前倒垛的列数
+							if(shijue_data.QR_code == QR_code[i])
+							{
+								QR_doing[i] = 1;
+							}
+						}
+					}
+					
 					//里程计清零
 					chassis_code_reset_flag = 1;
 					currentTargIndex ++;
@@ -190,7 +242,7 @@ void flow_task(void const * argument)
 				gray_sensor_read();
 				V_mode_x_speed = target.para1;
 				
-				//逻辑待完善
+				//逻辑待完善！！！！！！！！！！！！！！！！！
 				if(gray_data[0] == 0)
 				{
 					chassis_code_reset_flag = 1;
@@ -203,32 +255,41 @@ void flow_task(void const * argument)
 			{
 				chassis_behaviour_mode = target.chassis_mode;
 				TX_shijue_mode = 0;
-				V_mode_x_speed = target.para1;
-				V_mode_y_speed = target.para2;
-				if(V_mode_y_speed < 0) 
-					shi_jue_x_pianzhi = -shi_jue_x_pianzhi;
+//				V_mode_x_speed = target.para1;
+//				V_mode_y_speed = target.para2;
+				
 				//球在左边
-//				if(shijue_data.ball_x < 0 && fabs(shijue_data.ball_x - 666) > 2)
-//				{
-//					V_mode_y_speed = target.para2;
-//				}
-//				//球在右边
-//				else if(shijue_data.ball_x > 0 && fabs(shijue_data.ball_x - 666) > 2)
-//				{
-//					V_mode_y_speed = -target.para2;
-//				}
-//				
-//				//发666过来表示识别不到
-//				else if(fabs(shijue_data.ball_x - 666) < 2)
-//				{	
-//					V_mode_y_speed = 0;
-//					shijue_error ++;
-//				}
+				if(shijue_data.ball_x < 0 && fabs(shijue_data.ball_x - 666) > 2)
+				{
+					V_mode_y_speed = target.para2;
+				}
+				//球在右边，反方向动
+				else if(shijue_data.ball_x > 0 && fabs(shijue_data.ball_x - 666) > 2)
+				{
+					V_mode_y_speed = -target.para2;
+				}
+				
+				//发666过来表示识别不到，按照给定方向动
+				else if(fabs(shijue_data.ball_x - 666) < 2)
+				{	
+					V_mode_y_speed = target.para2;
+					shijue_error ++;
+				}
+
+				if(V_mode_y_speed < 0)
+				{	
+					//根据左右方向调整偏置
+					shi_jue_x_pianzhi = -shi_jue_x_pianzhi;
+				}
 				
 				if(fabs(shijue_data.ball_x + shi_jue_x_pianzhi) < shijue_suoqiu_tolerance)
 				{
 					chassis_code_reset_flag = 1;
+					V_mode_x_speed = 0;
 					V_mode_y_speed = 0;
+					
+					//这里可以加结束判断条件，任务就是左右扫球，或者直接让currentTargetIndex指向另一个步骤
+					//可以多开一个last currentTargIndex
 					currentTargIndex ++;
 				}
 			}
@@ -267,6 +328,7 @@ void flow_task(void const * argument)
 				}
 			}	
 			
+			//机械臂立桩取球
 			else if(target.mode == 5)
 			{
 				chassis_behaviour_mode = target.chassis_mode;
@@ -283,6 +345,7 @@ void flow_task(void const * argument)
 				}
 			}
 			
+			//视觉锁障
 			else if(target.mode == 6)
 			{
 				//设置底盘运动目标
@@ -298,6 +361,7 @@ void flow_task(void const * argument)
 				}
 			}
 			
+			//避障：靠近障碍物
 			else if(target.mode == 7)
 			{
 				//设置底盘运动目标
@@ -314,6 +378,7 @@ void flow_task(void const * argument)
 				
 			}
 			
+			//避障：对齐障碍物
 			else if(target.mode == 8)
 			{
 				TX_shijue_mode = 2;			
@@ -337,6 +402,7 @@ void flow_task(void const * argument)
 				}
 			}
 			
+			//转盘机机械臂拨球
 			else if(target.mode == 9)
 			{
 				TX_shijue_mode = 1;
@@ -378,6 +444,122 @@ void flow_task(void const * argument)
 
 			}
 			
+			//立仓视觉存二维码
+			else if(target.mode == 10)
+			{
+				TX_shijue_mode = 0;
+				chassis_behaviour_mode = target.chassis_mode;	
+				V_mode_x_speed = target.para1;
+				V_mode_y_speed = target.para2;
+				
+				//二维码存在且跟上次读到的不一样时，从尾部开始存
+				if((shijue_data.QR_code == 1 || shijue_data.QR_code == 2 || shijue_data.QR_code == 3) &&
+						(shijue_data.QR_code != QR_code[0] && shijue_data.QR_code != QR_code[1] && shijue_data.QR_code != QR_code[2]))
+				{
+					QR_code[2-QR_num] = shijue_data.QR_code;
+					QR_num++;
+				}
+				
+				if(QR_num == 3 && fabs(shijue_data.QR_x) < 10)
+				{
+					QR_num = 0;
+					chassis_code_reset_flag = 1;
+					currentTargIndex ++;
+				}
+			}
+			
+			//倒垛夹球
+			else if(target.mode == 11)
+			{
+				TX_shijue_mode = 0;
+				chassis_behaviour_mode = target.chassis_mode;
+				if(mode11_task_start == 0)
+				{
+					if(shijue_data.ball_y < -10)//最高一层
+					{
+						arm_control_mode = 7;
+						mode11_task_start = 1;
+						licang_current_line = 3;
+					}
+					
+					else if(shijue_data.ball_y > 10 && shijue_data.ball_y < 20)
+					{
+						arm_control_mode = 8;
+						mode11_task_start = 1;
+						licang_current_line = 2;
+					}
+					else if(shijue_data.ball_y == 666)//最低一层
+					{
+						arm_control_mode = 9;
+						mode11_task_start = 1;
+						licang_current_line = 1;
+					}
+				}
+				if(arm_control_mode == 0)
+				{
+					mode11_task_start = 0;
+					currentTargIndex ++;
+				}
+			}	
+			
+			//视觉锁特定二维码
+			else if(target.mode == 12)
+			{
+				TX_shijue_mode = 0;
+				chassis_behaviour_mode = target.chassis_mode;	
+				V_mode_x_speed = target.para1;
+				V_mode_y_speed = target.para2;
+				
+				uint8_t i = 0;
+				for(i = 0;i<3;++i)
+				{
+					if(QR_doing[i] == 0)
+					{
+						break;
+					}
+				}
+				
+				if(shijue_data.QR_code == QR_code[i] && shijue_data.QR_x < 10)
+				{
+					chassis_code_reset_flag = 1;
+					currentTargIndex ++;
+				}
+			}
+			
+			//慢速的移动，看里程停下，往右走
+			else if(target.mode == 13)
+			{
+				chassis_behaviour_mode = target.chassis_mode;
+				V_mode_x_speed = 0;
+				V_mode_y_speed = -5;
+				
+				//判断误差
+				float distance = sqrt(pow(target.para1 - chassis_move.x, 2) + pow(target.para2 - chassis_move.y, 2));
+				if(distance < distance_tol && fabs(chassis_move.gyro - target.para3) < gyro_tol)
+				{
+					//里程计清零
+					chassis_code_reset_flag = 1;
+					currentTargIndex ++;
+				}
+			}
+			
+			//锁最后的二维码
+			else if(target.mode == 14)
+			{
+				TX_shijue_mode = 0;
+				chassis_behaviour_mode = target.chassis_mode;	
+				V_mode_x_speed = target.para1;
+				V_mode_y_speed = target.para2;
+				
+				//锁最后一个二维码，列3
+				if(shijue_data.QR_code == QR_code[2] && shijue_data.QR_x < 10)
+				{
+					chassis_code_reset_flag = 1;
+					currentTargIndex ++;
+				}
+			}
+
+			//测试用
 			else if(target.mode == 66)
 			{
 				chassis_behaviour_mode = target.chassis_mode;

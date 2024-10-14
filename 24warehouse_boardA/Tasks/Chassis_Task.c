@@ -37,6 +37,10 @@ extern float ramp_x;
 extern float ramp_y;
 extern float ramp_z;
 
+extern fp32 V_mode_x_speed;
+extern fp32 V_mode_y_speed;
+extern fp32 V_mode_w_speed;
+
 //fp32 limit_xspeed_set=0;
 //fp32 limit_yspeed_set=0;
 //fp32 limit_wspeed_set=0;
@@ -91,6 +95,10 @@ void chassis_reset(chassis_move_t *chassis_move_reset)
 		//Çå³ý²âÁ¿Öµ
 		chassis_move_reset->x = 0;
 		chassis_move_reset->y = 0;
+		
+		V_mode_x_speed = 0;
+		V_mode_y_speed = 0;
+		V_mode_w_speed = 0;
 		
 		ramp_x = 0;
 		ramp_y = 0;
