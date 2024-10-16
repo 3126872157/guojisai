@@ -35,14 +35,14 @@ uint16_t claw_catch_pos = 410;
 uint16_t claw_loose_pos = 510;
 uint16_t claw_middle_pos = 470;
 uint16_t paidanban_pos = 500;
-uint16_t bogan_zhunbei_pos = 250;
-uint16_t bogan_jiqiu_pos = 800;
-uint16_t bogan_shouqi_pos = 1250;
+uint16_t bogan_zhunbei_pos = 850;
+uint16_t bogan_jiqiu_pos = 650;
+uint16_t bogan_shouqi_pos = 250;
 
 
 //--------------------------------滑道、凸轮舵机变量----------------------------
 uint16_t huadao_vertical_pwm = 800;//900垂直600放球(范围250-1250)
-uint16_t huadao_slope_out_pwm = 700;
+uint16_t huadao_slope_out_pwm = 770;
 uint16_t huadao_slope_in_pwm = 1100;
 uint16_t tulun_up_pwm = 1250;//1250升起250落下(范围250-1250)
 uint16_t tulun_down_pwm = 250;

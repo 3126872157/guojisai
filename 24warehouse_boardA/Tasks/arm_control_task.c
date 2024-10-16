@@ -21,7 +21,7 @@ float piancha = 75;//摄像头到夹爪的距离偏差
 //从高往低0,1,2
 float jie_ti_ping_tai[3] = {240, 195, 130};
 //从高往低0,1,2
-float li_cang[3] = {345, 225, 105};
+float li_cang[3] = {330, 210, 90};//{355, 235, 115}
 float lizhuang_x =  250.0f;
 float lizhuang_angle = 20.0f * D2R;
 
@@ -32,7 +32,7 @@ uint16_t extra_time = 1000;
 
 void set_bodanpan_pos(void)
 {
-	point.x = 295;
+	point.x = 280;
 	point.y = -35;
 	point.total_angle = 175;
 }
@@ -266,6 +266,43 @@ void li_cang_put(uint8_t li_cang_num)
 		}
 }
 
+void daoduo_put(uint8_t li_cang_num)
+{
+	switch(arm_current_step)
+		{
+			case 0:	
+				arm_ctrl_signal = 1;
+				extra_time = 300;
+				point.x = 380;		//立仓的坐标
+				point.y = li_cang[li_cang_num];
+				point.total_angle = 90;
+				arm_current_step ++;
+				break;
+			case 1:
+				point.x = 480;
+				arm_current_step ++;
+				break;
+			case 2:
+				claw_control(2);
+				arm_current_step ++;
+				break;
+			case 3:
+				point.x = 380;
+				arm_current_step ++;
+				break;
+			case 4:
+				set_normal_pos();
+				arm_current_step ++;
+				break;
+			case 5:
+				arm_control_mode = 0;
+				extra_time = 1000;
+				arm_current_step = 0;
+				arm_ctrl_signal = 0;
+				break;
+		}
+}
+
 void li_cang_put_diceng(void)
 {
 	switch(arm_current_step)
@@ -327,6 +364,47 @@ void li_cang_put_diceng(void)
 		}
 }
 
+void daoduo_put_diceng(void)
+{
+	switch(arm_current_step)
+		{
+			case 0:
+				arm_ctrl_signal = 1;
+				extra_time = 500;
+				huadao_control(2);
+				point.x = 380;		//立仓的坐标
+				point.y = li_cang[2];
+				point.total_angle = 110;
+				arm_current_step ++;
+				break;
+			case 1:
+				point.x = 480;
+				arm_current_step ++;
+				break;
+			case 2:
+				claw_control(2);	
+				arm_current_step ++;
+				break;
+			case 3:
+				point.x = 410;
+				point.total_angle = 130;
+				point.y = 80;
+				arm_current_step ++;
+				break;
+			case 4:
+				set_normal_pos();
+				arm_current_step ++;
+				break;
+			case 5:
+				huadao_control(0);
+				arm_control_mode = 0;
+				extra_time = 1000;
+				arm_current_step = 0;
+				arm_ctrl_signal = 0;
+				break;
+		}
+}
+
 
 void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 {
@@ -335,7 +413,7 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 			case 0:
 				arm_ctrl_signal = 1;
 				extra_time = 1000;
-				claw_control(1);
+				claw_control(2);
 				huadao_control(0);
 				arm_current_step ++;
 				break;
@@ -343,7 +421,7 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				//如果识别到球
 				if(fabs(shijue_data.ball_x - 666) > 2)
 				{
-					point.x += (shijue_data.ball_distance - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
+					point.x += 15.0f + (shijue_data.ball_distance - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
 				}
 				else
 				{
@@ -378,6 +456,7 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				break;
 			case 7:
 				set_normal_pos();
+				a_new_ball_in = 1;
 				arm_current_step ++;
 				break;
 			case 8:
@@ -403,10 +482,19 @@ void zhuanpanji_take(void)
 				arm_current_step ++;
 				break;
 			case 1:
+				point.x = 445;
+				point.y = 280;
+				point.total_angle = 85;
+				bogan_control(2);
+				arm_current_step ++;
+				break;
+			case 2:
 				point.x = 435;
 				point.y = 230;
 				point.total_angle = 85;
+				bogan_control(2);
 				break;
+			
 		}
 }
 
@@ -431,15 +519,15 @@ void arm_control_task(void const * argument)
 			case 3:
 				jie_ti_ping_tai_take(2);
 				break;
-			//将球放入立仓：4最高，5中间，6最低
+			//将球放入立仓：4最低，5中间，6最高
 			case 4:
-				li_cang_put(0);
+				li_cang_put_diceng();	//licang_current_line = 1，第一行
 				break;
 			case 5:
 				li_cang_put(1);
 				break;
 			case 6:
-				li_cang_put_diceng();
+				li_cang_put(0);
 				break;
 			
 			//将球从立仓中拿出(倒垛)
@@ -459,6 +547,18 @@ void arm_control_task(void const * argument)
 			case 11:
 				zhuanpanji_take();
 				break;
+			
+			//将倒垛球放入立仓：12最低，13中间，14最高
+			case 12:
+				daoduo_put_diceng();	//licang_current_line = 1，第一行
+				break;
+			case 13:
+				daoduo_put(1);
+				break;
+			case 14:
+				daoduo_put(0);
+				break;
+			
 			//调试用
 			case 66:
 				arm_ctrl_signal = 1;

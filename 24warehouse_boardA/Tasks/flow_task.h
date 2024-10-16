@@ -14,7 +14,7 @@ typedef struct {
 	float para1;
 	float para2;
 	float para3;
-	float tolerance;
+	float chassis_V_max;
 	uint8_t chassis_mode;
 } TargetPoints;
 
