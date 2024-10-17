@@ -51,7 +51,7 @@ bool_t bodanpan_find_ball(uint8_t x,uint8_t y)//根据行(x)列(y)号旋转拨蛋盘到对应
 	int8_t Num,Direction = 1,i;
 	for(i = 0;i < BOX_NUM;i++)
 	{
-		if(bodanpan.IC_date_pan[i] == x * 16 + y )//该部分还未完成,是用10个储球机构还是9个？？？
+		if(bodanpan.IC_date_pan[i] == x * 16 + y )
 		{
 			Num = bodanpan.position-i;
 			

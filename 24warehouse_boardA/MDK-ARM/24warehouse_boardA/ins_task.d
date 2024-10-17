@@ -1,6 +1,6 @@
-24warehouse_boarda\ins_task.o: ..\Tasks\INS_task.c
-24warehouse_boarda\ins_task.o: ..\Tasks\INS_task.h
-24warehouse_boarda\ins_task.o: ../Application/struct_typedef.h
+24warehouse_boarda\ins_task.o: ..\Application\INS_task.c
+24warehouse_boarda\ins_task.o: ..\Application\INS_task.h
+24warehouse_boarda\ins_task.o: ..\Application\struct_typedef.h
 24warehouse_boarda\ins_task.o: ../Core/Inc/main.h
 24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 24warehouse_boarda\ins_task.o: ../Core/Inc/stm32f4xx_hal_conf.h
@@ -29,11 +29,8 @@
 24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
-24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
-24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
 24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
-24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 24warehouse_boarda\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
@@ -51,12 +48,3 @@
 24warehouse_boarda\ins_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 24warehouse_boarda\ins_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 24warehouse_boarda\ins_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
-24warehouse_boarda\ins_task.o: ../Boards/bsp_imu_pwm.h
-24warehouse_boarda\ins_task.o: ../Boards/bsp_spi.h
-24warehouse_boarda\ins_task.o: ../Compoents/devices/bmi088driver.h
-24warehouse_boarda\ins_task.o: ../Compoents/devices/ist8310driver.h
-24warehouse_boarda\ins_task.o: ../Application/pid.h
-24warehouse_boarda\ins_task.o: ../Compoents/algorithm/user_lib.h
-24warehouse_boarda\ins_task.o: ../Compoents/algorithm/ahrs.h
-24warehouse_boarda\ins_task.o: ../Compoents/algorithm/AHRS_MiddleWare.h
-24warehouse_boarda\ins_task.o: ..\Tasks\calibrate_task.h

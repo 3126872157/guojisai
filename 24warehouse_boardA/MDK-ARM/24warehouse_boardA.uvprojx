@@ -18,7 +18,7 @@
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32F4xx_DFP.2.17.1</PackID>
           <PackURL>https://www.keil.com/pack/</PackURL>
-          <Cpu>IRAM(0x20000000-0x2002FFFF) IRAM2(0x10000000-0x1000FFFF) IROM(0x8000000-0x81FFFFF)  CLOCK(25000000) FPU2 CPUTYPE("Cortex-M4") TZ</Cpu>
+          <Cpu>IRAM(0x20000000-0x2002FFFF) IRAM2(0x10000000-0x1000FFFF) IROM(0x8000000-0x81FFFFF) CLOCK(25000000) FPU2 CPUTYPE("Cortex-M4") TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>
@@ -81,7 +81,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
-            <RunUserProg2>1</RunUserProg2>
+            <RunUserProg2>0</RunUserProg2>
             <UserProg1Name></UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -138,7 +138,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2V8M.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -338,9 +338,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F427xx,USE_HAL_DRIVER,STM32F427xx,ARM_MATH_CM4,__FPU_USED=1U,__FPU_PRESENT=1U,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
+              <Define>USE_HAL_DRIVER,STM32F427xx,USE_HAL_DRIVER,ARM_MATH_CM4,__FPU_USED=1U,__FPU_PRESENT=1U,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Application;../Boards;../Tasks;../Compoents/algorithm;../Compoents/devices;../Compoents/algorithm/Include;../Arm</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\Application;..\Arm;..\Boards;..\Tasks;..\Compoents\algorithm\Include;..\Compoents\algorithm</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -423,113 +423,11 @@
               <FileName>tim.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/tim.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/usart.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>stm32f4xx_it.c</FileName>
@@ -635,57 +533,6 @@
               <FileName>stm32f4xx_hal_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
           </Files>
         </Group>
@@ -755,18 +602,218 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>algorithm</GroupName>
+          <GroupName>Application</GroupName>
           <Files>
             <File>
-              <FileName>AHRS_middleware.c</FileName>
+              <FileName>chassis_behaviour.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Compoents\algorithm\AHRS_middleware.c</FilePath>
+              <FilePath>..\Application\chassis_behaviour.c</FilePath>
             </File>
             <File>
-              <FileName>user_lib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Compoents\algorithm\user_lib.c</FilePath>
+              <FileName>chassis_behaviour.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\chassis_behaviour.h</FilePath>
             </File>
+            <File>
+              <FileName>bodanpan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\bodanpan.c</FilePath>
+            </File>
+            <File>
+              <FileName>bodanpan.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\bodanpan.h</FilePath>
+            </File>
+            <File>
+              <FileName>CAN_receive.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\CAN_receive.c</FilePath>
+            </File>
+            <File>
+              <FileName>CAN_receive.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\CAN_receive.h</FilePath>
+            </File>
+            <File>
+              <FileName>Gray_sensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Gray_sensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>Gray_sensor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\Gray_sensor.h</FilePath>
+            </File>
+            <File>
+              <FileName>pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\pid.c</FilePath>
+            </File>
+            <File>
+              <FileName>pid.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\pid.h</FilePath>
+            </File>
+            <File>
+              <FileName>struct_typedef.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\struct_typedef.h</FilePath>
+            </File>
+            <File>
+              <FileName>UART_receive.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\UART_receive.c</FilePath>
+            </File>
+            <File>
+              <FileName>UART_receive.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\UART_receive.h</FilePath>
+            </File>
+            <File>
+              <FileName>vofa.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\vofa.c</FilePath>
+            </File>
+            <File>
+              <FileName>vofa.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\vofa.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Boards</GroupName>
+          <Files>
+            <File>
+              <FileName>bsp_can.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Boards\bsp_can.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_can.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Boards\bsp_can.h</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Boards\bsp_delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_delay.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Boards\bsp_delay.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Tasks</GroupName>
+          <Files>
+            <File>
+              <FileName>arm_control_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\arm_control_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_control_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tasks\arm_control_task.h</FilePath>
+            </File>
+            <File>
+              <FileName>arm_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\arm_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tasks\arm_task.h</FilePath>
+            </File>
+            <File>
+              <FileName>Bodanpan_Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\Bodanpan_Task.c</FilePath>
+            </File>
+            <File>
+              <FileName>Bodanpan_Task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tasks\Bodanpan_Task.h</FilePath>
+            </File>
+            <File>
+              <FileName>Chassis_Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\Chassis_Task.c</FilePath>
+            </File>
+            <File>
+              <FileName>Chassis_Task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tasks\Chassis_Task.h</FilePath>
+            </File>
+            <File>
+              <FileName>flow_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\flow_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>flow_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tasks\flow_task.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Arm</GroupName>
+          <Files>
+            <File>
+              <FileName>A1_motor_msg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\A1_motor_msg.h</FilePath>
+            </File>
+            <File>
+              <FileName>arm_ctrl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arm\arm_ctrl.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_ctrl.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\arm_ctrl.h</FilePath>
+            </File>
+            <File>
+              <FileName>arm_solver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arm\arm_solver.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_solver.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\arm_solver.h</FilePath>
+            </File>
+            <File>
+              <FileName>serial_servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arm\serial_servo.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial_servo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\serial_servo.h</FilePath>
+            </File>
+            <File>
+              <FileName>unitree_a1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arm\unitree_a1.c</FilePath>
+            </File>
+            <File>
+              <FileName>unitree_a1.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\unitree_a1.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Compoents</GroupName>
+          <Files>
             <File>
               <FileName>arm_common_tables.h</FileName>
               <FileType>5</FileType>
@@ -803,6 +850,11 @@
               <FilePath>..\Compoents\algorithm\AHRS.lib</FilePath>
             </File>
             <File>
+              <FileName>AHRS_middleware.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Compoents\algorithm\AHRS_middleware.c</FilePath>
+            </File>
+            <File>
               <FileName>AHRS_middleware.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Compoents\algorithm\AHRS_middleware.h</FilePath>
@@ -813,234 +865,14 @@
               <FilePath>..\Compoents\algorithm\arm_cortexM4lf_math.lib</FilePath>
             </File>
             <File>
+              <FileName>user_lib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Compoents\algorithm\user_lib.c</FilePath>
+            </File>
+            <File>
               <FileName>user_lib.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Compoents\algorithm\user_lib.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Boards</GroupName>
-          <Files>
-            <File>
-              <FileName>bsp_can.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Boards\bsp_can.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_can.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Boards\bsp_can.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Boards\bsp_delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_delay.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Boards\bsp_delay.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_flash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Boards\bsp_flash.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_flash.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Boards\bsp_flash.h</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_buzzer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Boards\bsp_buzzer.c</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_buzzer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Boards\bsp_buzzer.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Applications</GroupName>
-          <Files>
-            <File>
-              <FileName>CAN_receive.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Application\CAN_receive.c</FilePath>
-            </File>
-            <File>
-              <FileName>CAN_receive.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Application\CAN_receive.h</FilePath>
-            </File>
-            <File>
-              <FileName>pid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Application\pid.c</FilePath>
-            </File>
-            <File>
-              <FileName>pid.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Application\pid.h</FilePath>
-            </File>
-            <File>
-              <FileName>chassis_behaviour.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Application\chassis_behaviour.c</FilePath>
-            </File>
-            <File>
-              <FileName>chassis_behaviour.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Application\chassis_behaviour.h</FilePath>
-            </File>
-            <File>
-              <FileName>bodanpan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Application\bodanpan.c</FilePath>
-            </File>
-            <File>
-              <FileName>bodanpan.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Application\bodanpan.h</FilePath>
-            </File>
-            <File>
-              <FileName>vofa.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Application\vofa.c</FilePath>
-            </File>
-            <File>
-              <FileName>vofa.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Application\vofa.h</FilePath>
-            </File>
-            <File>
-              <FileName>Gray_sensor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Application\Gray_sensor.c</FilePath>
-            </File>
-            <File>
-              <FileName>Gray_sensor.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Application\Gray_sensor.h</FilePath>
-            </File>
-            <File>
-              <FileName>UART_receive.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Application\UART_receive.c</FilePath>
-            </File>
-            <File>
-              <FileName>UART_receive.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Application\UART_receive.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Tasks</GroupName>
-          <Files>
-            <File>
-              <FileName>arm_control_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\arm_control_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>arm_control_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\arm_control_task.h</FilePath>
-            </File>
-            <File>
-              <FileName>Chassis_Task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\Chassis_Task.c</FilePath>
-            </File>
-            <File>
-              <FileName>Chassis_Task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\Chassis_Task.h</FilePath>
-            </File>
-            <File>
-              <FileName>Bodanpan_Task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\Bodanpan_Task.c</FilePath>
-            </File>
-            <File>
-              <FileName>Bodanpan_Task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\Bodanpan_Task.h</FilePath>
-            </File>
-            <File>
-              <FileName>arm_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\arm_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>arm_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\arm_task.h</FilePath>
-            </File>
-            <File>
-              <FileName>flow_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\flow_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>flow_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\flow_task.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Arm</GroupName>
-          <Files>
-            <File>
-              <FileName>arm_ctrl.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Arm\arm_ctrl.c</FilePath>
-            </File>
-            <File>
-              <FileName>arm_ctrl.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Arm\arm_ctrl.h</FilePath>
-            </File>
-            <File>
-              <FileName>serial_servo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Arm\serial_servo.c</FilePath>
-            </File>
-            <File>
-              <FileName>unitree_a1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Arm\unitree_a1.c</FilePath>
-            </File>
-            <File>
-              <FileName>unitree_a1.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Arm\unitree_a1.h</FilePath>
-            </File>
-            <File>
-              <FileName>serial_servo.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Arm\serial_servo.h</FilePath>
-            </File>
-            <File>
-              <FileName>A1_motor_msg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Arm\A1_motor_msg.h</FilePath>
-            </File>
-            <File>
-              <FileName>arm_solver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Arm\arm_solver.c</FilePath>
-            </File>
-            <File>
-              <FileName>arm_solver.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Arm\arm_solver.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1063,14 +895,5 @@
     </components>
     <files/>
   </RTE>
-
-  <LayerInfo>
-    <Layers>
-      <Layer>
-        <LayName>24warehouse_boardA</LayName>
-        <LayPrjMark>1</LayPrjMark>
-      </Layer>
-    </Layers>
-  </LayerInfo>
 
 </Project>

@@ -67,7 +67,7 @@ void servo_arm_move(float angle1, float angle2);
 // 机械臂解算方法控制
 void arm_solve(float end_angle, float x, float y);
 //机械爪控制
-void claw_control(uint8_t mode);
+void claw_control(uint16_t pos);
 //滑道pwm控制
 void huadao_control(bool_t is_put_ball);
 //凸轮pwm控制

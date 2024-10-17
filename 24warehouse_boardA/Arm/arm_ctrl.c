@@ -175,20 +175,22 @@ void servo_arm_move(float angle1, float angle2)
 }
 
 //机械爪夹取，0夹取，1松开，2中间位置
-void claw_control(uint8_t mode)
+void claw_control(uint16_t pos)
 {
-	switch(mode)
-	{
-		case 0:
-			claw_pos = claw_catch_pos;
-			break;
-		case 1:
-			claw_pos = claw_loose_pos;
-			break;
-		case 2:
-			claw_pos = claw_middle_pos;
-			break;
-	}
+	
+	claw_pos = pos;
+//	switch(mode)
+//	{
+//		case 0:
+//			claw_pos = claw_catch_pos;
+//			break;
+//		case 1:
+//			claw_pos = claw_loose_pos;
+//			break;
+//		case 2:
+//			claw_pos = claw_middle_pos;
+//			break;
+//	}
 }
 
 

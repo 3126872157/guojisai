@@ -1,6 +1,6 @@
-24warehouse_boarda\calibrate_task.o: ..\Tasks\calibrate_task.c
-24warehouse_boarda\calibrate_task.o: ..\Tasks\calibrate_task.h
-24warehouse_boarda\calibrate_task.o: ../Application/struct_typedef.h
+24warehouse_boarda\calibrate_task.o: ..\Application\calibrate_task.c
+24warehouse_boarda\calibrate_task.o: ..\Application\calibrate_task.h
+24warehouse_boarda\calibrate_task.o: ..\Application\struct_typedef.h
 24warehouse_boarda\calibrate_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
 24warehouse_boarda\calibrate_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\calibrate_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
@@ -18,7 +18,3 @@
 24warehouse_boarda\calibrate_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 24warehouse_boarda\calibrate_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 24warehouse_boarda\calibrate_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
-24warehouse_boarda\calibrate_task.o: ../Boards/bsp_buzzer.h
-24warehouse_boarda\calibrate_task.o: ../Boards/bsp_flash.h
-24warehouse_boarda\calibrate_task.o: ../Application/can_receive.h
-24warehouse_boarda\calibrate_task.o: ..\Tasks\INS_task.h

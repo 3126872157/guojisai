@@ -19,8 +19,8 @@ void arm_solver_init(struct arm_solver *solver, float b0, float b1, float l0, fl
 //输入参数：解算结构体、总角度(角度制)、x、y坐标值(单位：毫米)
 uint8_t arm_solver_analyze(struct arm_solver *solver, float a_total, float x, float y)
 {
-	if(nan_error != 1)
-	{
+//	if(nan_error != 1)
+//	{
 		if(a_total < 30 || a_total >181)
 		return 3;
 	
@@ -84,7 +84,7 @@ uint8_t arm_solver_analyze(struct arm_solver *solver, float a_total, float x, fl
 		solver->a0 = a0;
 		solver->a1 = a1;
 		solver->a2 = a2;
-	}
+//	}
 
     return 0;
 }

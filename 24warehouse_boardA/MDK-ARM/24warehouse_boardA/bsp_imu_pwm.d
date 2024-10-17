@@ -1,6 +1,6 @@
 24warehouse_boarda\bsp_imu_pwm.o: ..\Boards\bsp_imu_pwm.c
 24warehouse_boarda\bsp_imu_pwm.o: ..\Boards\bsp_imu_pwm.h
-24warehouse_boarda\bsp_imu_pwm.o: ../Application/struct_typedef.h
+24warehouse_boarda\bsp_imu_pwm.o: ..\Application\struct_typedef.h
 24warehouse_boarda\bsp_imu_pwm.o: ../Core/Inc/main.h
 24warehouse_boarda\bsp_imu_pwm.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 24warehouse_boarda\bsp_imu_pwm.o: ../Core/Inc/stm32f4xx_hal_conf.h

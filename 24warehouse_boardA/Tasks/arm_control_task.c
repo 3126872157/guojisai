@@ -60,14 +60,17 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 		{
 			case 0:
 				arm_ctrl_signal = 1;
-				claw_control(2);	//claw中间位置
 				point.x = 500;		//阶梯的坐标
 				point.y = jie_ti_ping_tai[jie_ti_num];
-				point.total_angle = 110;
+				if(jie_ti_num == 0)
+					claw_control(600);
+				else
+					claw_control(450);	//担心碰到边沿，设小一点
+				point.total_angle = 90;
 				arm_current_step ++;
 				break;
 			case 1:
-				claw_control(0);	//claw夹取
+				claw_control(410);	//claw夹取
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
@@ -86,7 +89,7 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 				arm_current_step ++;
 				break;
 			case 5:					//放球
-				claw_control(1);	
+				claw_control(470);	
 				arm_current_step ++;
 				break;
 			case 6:					//回归
@@ -115,19 +118,20 @@ void li_cang_take(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 1:
-				claw_control(1);	
+				claw_control(470);	
 				arm_current_step ++;
 				break;
 			case 2:
 				point.x = 480;
 				arm_current_step ++;
 				break;
-			case 3:	
+			case 3:		
+				claw_control(510);	
 				point.y = li_cang[li_cang_num] - 50;
 				arm_current_step ++;
 				break;
 			case 4:
-				claw_control(0);	
+				claw_control(410);	
 				arm_current_step ++;
 				break;
 			case 5:
@@ -139,7 +143,7 @@ void li_cang_take(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 7:
-				claw_control(0);
+				claw_control(410);
 				point.x = 300;
 				point.y = 300;
 				point.total_angle = 110;
@@ -172,7 +176,7 @@ void li_cang_take_diceng(void)
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(1);	
+				claw_control(510);	
 				arm_current_step ++;
 				break;
 			case 3:	
@@ -181,7 +185,7 @@ void li_cang_take_diceng(void)
 				arm_current_step ++;
 				break;
 			case 4:
-				claw_control(0);	
+				claw_control(410);	
 				arm_current_step ++;
 				break;
 			case 5:
@@ -195,7 +199,7 @@ void li_cang_take_diceng(void)
 				arm_current_step ++;
 				break;
 			case 7:
-				claw_control(0);
+				claw_control(410);
 				point.x = 300;
 				point.y = 300;
 				point.total_angle = 110;
@@ -217,7 +221,7 @@ void li_cang_put(uint8_t li_cang_num)
 			case 0:
 				arm_ctrl_signal = 1;
 				extra_time = 300;
-				claw_control(1);
+				claw_control(600);
 				tulun_control(1);
 				arm_current_step ++;
 				break;
@@ -226,7 +230,7 @@ void li_cang_put(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(0);	//claw夹取
+				claw_control(410);	//claw夹取
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
@@ -246,7 +250,7 @@ void li_cang_put(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 6:
-				claw_control(2);
+				claw_control(470);
 				arm_current_step ++;
 				break;
 			case 7:
@@ -283,7 +287,7 @@ void daoduo_put(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(2);
+				claw_control(470);
 				arm_current_step ++;
 				break;
 			case 3:
@@ -310,7 +314,7 @@ void li_cang_put_diceng(void)
 			case 0:
 				arm_ctrl_signal = 1;
 				extra_time = 500;
-				claw_control(1);
+				claw_control(600);
 				tulun_control(1);
 				huadao_control(0);
 				arm_current_step ++;
@@ -320,7 +324,7 @@ void li_cang_put_diceng(void)
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(0);	//claw夹取
+				claw_control(410);	//claw夹取
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
@@ -341,7 +345,7 @@ void li_cang_put_diceng(void)
 				arm_current_step ++;
 				break;
 			case 6:
-				claw_control(2);	
+				claw_control(470);	
 				arm_current_step ++;
 				break;
 			case 7:
@@ -382,7 +386,7 @@ void daoduo_put_diceng(void)
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(2);	
+				claw_control(470);	
 				arm_current_step ++;
 				break;
 			case 3:
@@ -413,7 +417,7 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 			case 0:
 				arm_ctrl_signal = 1;
 				extra_time = 1000;
-				claw_control(2);
+				claw_control(470);
 				huadao_control(0);
 				arm_current_step ++;
 				break;
@@ -432,7 +436,7 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(0);	//claw夹取
+				claw_control(410);	//claw夹取
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
@@ -451,7 +455,7 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				arm_current_step ++;
 				break;
 			case 6:
-				claw_control(2);
+				claw_control(470);
 				arm_current_step ++;
 				break;
 			case 7:
@@ -475,7 +479,7 @@ void zhuanpanji_take(void)
 			case 0:
 				arm_ctrl_signal = 1;
 				extra_time = 1000;
-				claw_control(1);
+				claw_control(510);
 				tulun_control(0);
 				huadao_control(1);
 				bogan_control(2);
@@ -498,6 +502,55 @@ void zhuanpanji_take(void)
 		}
 }
 
+void gan_rao_qiu(void)//干扰球去阶梯平台
+{
+	switch(arm_current_step)
+		{
+			case 0:
+				arm_ctrl_signal = 1;
+				extra_time = 500;
+				claw_control(490);
+				tulun_control(1);
+				huadao_control(0);
+				arm_current_step ++;
+				break;
+			case 1:
+				set_bodanpan_pos();
+				arm_current_step ++;
+				break;
+			case 2:
+				claw_control(410);	//claw夹取
+				arm_current_step ++;
+				//这可以加是否夹到球的判断
+				break;
+			case 3:
+				set_normal_pos();
+				tulun_control(0);
+				arm_current_step ++;
+				break;
+			case 4:
+				point.x = 500;		//立仓的坐标
+				point.y = jie_ti_ping_tai[2] + 20;
+				point.total_angle = 90;
+				arm_current_step ++;
+				break;
+			case 5:
+				claw_control(470);	
+				arm_current_step ++;
+				break;
+			case 6:
+				set_normal_pos();
+				arm_current_step ++;
+				break;
+			case 7:
+				huadao_control(0);
+				arm_control_mode = 0;
+				extra_time = 1000;
+				arm_current_step = 0;
+				arm_ctrl_signal = 0;
+				break;
+		}
+}
 
 void arm_control_task(void const * argument)
 {

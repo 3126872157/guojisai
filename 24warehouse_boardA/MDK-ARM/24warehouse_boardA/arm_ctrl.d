@@ -37,9 +37,9 @@
 24warehouse_boarda\arm_ctrl.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
 24warehouse_boarda\arm_ctrl.o: ..\Arm\A1_motor_msg.h
 24warehouse_boarda\arm_ctrl.o: ..\Arm\serial_servo.h
-24warehouse_boarda\arm_ctrl.o: ../Application/pid.h
-24warehouse_boarda\arm_ctrl.o: ../Application/struct_typedef.h
-24warehouse_boarda\arm_ctrl.o: ../Compoents/algorithm/user_lib.h
+24warehouse_boarda\arm_ctrl.o: ..\Application\pid.h
+24warehouse_boarda\arm_ctrl.o: ..\Application\struct_typedef.h
+24warehouse_boarda\arm_ctrl.o: ..\Compoents\algorithm\user_lib.h
 24warehouse_boarda\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 24warehouse_boarda\arm_ctrl.o: ../Core/Inc/FreeRTOSConfig.h

@@ -33,7 +33,7 @@
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 24warehouse_boarda\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 24warehouse_boarda\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h
-24warehouse_boarda\stm32f4xx_it.o: ../Arm/unitree_a1.h
+24warehouse_boarda\stm32f4xx_it.o: ..\Arm\unitree_a1.h
 24warehouse_boarda\stm32f4xx_it.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
-24warehouse_boarda\stm32f4xx_it.o: ../Arm/A1_motor_msg.h
-24warehouse_boarda\stm32f4xx_it.o: ../Arm/serial_servo.h
+24warehouse_boarda\stm32f4xx_it.o: ..\Arm\A1_motor_msg.h
+24warehouse_boarda\stm32f4xx_it.o: ..\Arm\serial_servo.h

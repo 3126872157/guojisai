@@ -38,9 +38,9 @@
 24warehouse_boarda\unitree_a1.o: ..\Arm\unitree_a1.h
 24warehouse_boarda\unitree_a1.o: ..\Arm\A1_motor_msg.h
 24warehouse_boarda\unitree_a1.o: ..\Arm\serial_servo.h
-24warehouse_boarda\unitree_a1.o: ../Application/pid.h
-24warehouse_boarda\unitree_a1.o: ../Application/struct_typedef.h
-24warehouse_boarda\unitree_a1.o: ../Compoents/algorithm/user_lib.h
+24warehouse_boarda\unitree_a1.o: ..\Application\pid.h
+24warehouse_boarda\unitree_a1.o: ..\Application\struct_typedef.h
+24warehouse_boarda\unitree_a1.o: ..\Compoents\algorithm\user_lib.h
 24warehouse_boarda\unitree_a1.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 24warehouse_boarda\unitree_a1.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 24warehouse_boarda\unitree_a1.o: ../Core/Inc/FreeRTOSConfig.h
