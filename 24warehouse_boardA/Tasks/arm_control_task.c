@@ -54,18 +54,16 @@ void set_jieti_middle_pos(void)
 }
 
 //extra_time 0，arm_slow_start_k 0.001
-void jie_ti_ping_tai_take(uint8_t jie_ti_num)
+
+void jie_ti_ping_tai_take_dingceng(void)
 {
 	switch(arm_current_step)
 		{
 			case 0:
 				arm_ctrl_signal = 1;
 				point.x = 500;		//阶梯的坐标
-				point.y = jie_ti_ping_tai[jie_ti_num];
-				if(jie_ti_num == 0)
-					claw_control(600);
-				else
-					claw_control(450);	//担心碰到边沿，设小一点
+				point.y = jie_ti_ping_tai[0];
+				claw_control(600);
 				point.total_angle = 90;
 				arm_current_step ++;
 				break;
@@ -98,6 +96,62 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 				a_new_ball_in = 1;
 				break;
 			case 7:
+				arm_control_mode = 0;
+				arm_current_step = 0;
+				arm_ctrl_signal = 0;
+				break;
+		}
+}
+
+
+void jie_ti_ping_tai_take(uint8_t jie_ti_num)
+{
+	switch(arm_current_step)
+		{
+			case 0:
+				arm_ctrl_signal = 1;
+				point.x = 500;		//阶梯的坐标
+				point.y = jie_ti_ping_tai[0] - 20;
+				claw_control(400);	//担心碰到边沿，先关闭夹爪
+				point.total_angle = 90;
+				arm_current_step ++;
+				break;
+				
+			case 1:
+				point.y = jie_ti_ping_tai[jie_ti_num];
+				claw_control(480);	//张开夹爪
+				arm_current_step ++;
+				break;
+				
+			case 2:
+				claw_control(410);	//claw夹取
+				arm_current_step ++;
+				//这可以加是否夹到球的判断
+				break;
+			case 3:					//缓冲
+				set_jieti_middle_pos();
+				arm_current_step ++;
+				break;
+			case 4:					//缓冲
+				point.x = 300;
+				point.y = 300;
+				point.total_angle = 110;
+				arm_current_step ++;
+				break;
+			case 5:					//对准拨蛋盘
+				set_bodanpan_pos();
+				arm_current_step ++;
+				break;
+			case 6:					//放球
+				claw_control(470);	
+				arm_current_step ++;
+				break;
+			case 7:					//回归
+				set_normal_pos();
+				arm_current_step ++;
+				a_new_ball_in = 1;
+				break;
+			case 8:
 				arm_control_mode = 0;
 				arm_current_step = 0;
 				arm_ctrl_signal = 0;
@@ -425,7 +479,7 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				//如果识别到球
 				if(fabs(shijue_data.ball_x - 666) > 2)
 				{
-					point.x += 15.0f + (shijue_data.ball_distance - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
+					point.x += 10.0f + (shijue_data.ball_distance - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
 				}
 				else
 				{
@@ -564,7 +618,7 @@ void arm_control_task(void const * argument)
 				break;
 			//拿阶梯平台的球：1最高，2中间，3最低
 			case 1:
-				jie_ti_ping_tai_take(0);
+				jie_ti_ping_tai_take_dingceng();
 				break;
 			case 2:
 				jie_ti_ping_tai_take(1);

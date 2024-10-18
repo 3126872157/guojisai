@@ -73,3 +73,4 @@
 24warehouse_boarda\flow_task.o: ..\Arm\A1_motor_msg.h
 24warehouse_boarda\flow_task.o: ..\Arm\serial_servo.h
 24warehouse_boarda\flow_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+24warehouse_boarda\flow_task.o: ..\Arm\arm_solver.h

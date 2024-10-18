@@ -104,6 +104,11 @@ void chassis_reset(chassis_move_t *chassis_move_reset)
 		ramp_y = 0;
 		ramp_z = 0;
 		
+		chassis_move_reset->vx_max_speed = 50.0f;
+		chassis_move_reset->vx_min_speed = -50.0f;
+		chassis_move_reset->vy_max_speed = 50.0f;
+		chassis_move_reset->vy_min_speed = -50.0f;
+		
 		chassis_code_reset_flag = 0;
 	}
 }
