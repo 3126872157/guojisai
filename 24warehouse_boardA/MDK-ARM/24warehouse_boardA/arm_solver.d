@@ -34,4 +34,4 @@
 24warehouse_boarda\arm_solver.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 24warehouse_boarda\arm_solver.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 24warehouse_boarda\arm_solver.o: D:\keil5\ARM\ARMCC\Bin\..\include\math.h
-24warehouse_boarda\arm_solver.o: ..\Application\struct_typedef.h
+24warehouse_boarda\arm_solver.o: ../Application/struct_typedef.h

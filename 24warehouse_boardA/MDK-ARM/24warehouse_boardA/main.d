@@ -51,8 +51,8 @@
 24warehouse_boarda\main.o: ../Core/Inc/tim.h
 24warehouse_boarda\main.o: ../Core/Inc/usart.h
 24warehouse_boarda\main.o: ../Core/Inc/gpio.h
-24warehouse_boarda\main.o: ..\Boards\bsp_can.h
-24warehouse_boarda\main.o: ..\Application\struct_typedef.h
-24warehouse_boarda\main.o: ..\Boards\bsp_delay.h
-24warehouse_boarda\main.o: ..\Application\UART_receive.h
+24warehouse_boarda\main.o: ../Boards/bsp_can.h
+24warehouse_boarda\main.o: ../Application/struct_typedef.h
+24warehouse_boarda\main.o: ../Boards/bsp_delay.h
+24warehouse_boarda\main.o: ../Application/UART_receive.h
 24warehouse_boarda\main.o: ../Core/Inc/stm32f4xx_it.h

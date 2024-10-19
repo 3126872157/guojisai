@@ -168,32 +168,22 @@
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>arm_control_mode</ItemText>
+          <ItemText>arm_safe</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>arm_safe</ItemText>
+          <ItemText>IC_data</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>shijue_data</ItemText>
+          <ItemText>rx_gyro</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>IC_data</ItemText>
-        </Ww>
-        <Ww>
-          <count>6</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>rx_gyro</ItemText>
-        </Ww>
-        <Ww>
-          <count>7</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>motor_chassis</ItemText>
+          <ItemText>test_pos_2,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -211,6 +201,16 @@
           <count>2</count>
           <WinNumber>2</WinNumber>
           <ItemText>a_new_ball_in</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>\\24warehouse_boardA\../Tasks/arm_control_task.c\arm_control_mode,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>\\24warehouse_boardA\../Application/UART_receive.c\shijue_data</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>
@@ -1099,7 +1099,7 @@
 
   <Group>
     <GroupName>Application</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

@@ -36,4 +36,4 @@
 24warehouse_boarda\bodanpan.o: ..\Application\CAN_receive.h
 24warehouse_boarda\bodanpan.o: ..\Application\struct_typedef.h
 24warehouse_boarda\bodanpan.o: ..\Application\pid.h
-24warehouse_boarda\bodanpan.o: ..\Compoents\algorithm\user_lib.h
+24warehouse_boarda\bodanpan.o: ../Compoents/algorithm/user_lib.h

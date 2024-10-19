@@ -32,8 +32,8 @@ uint16_t extra_time = 1000;
 
 void set_bodanpan_pos(void)
 {
-	point.x = 280;
-	point.y = -35;
+	point.x = 295;
+	point.y = -45;
 	point.total_angle = 175;
 }
 
@@ -477,6 +477,7 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				break;
 			case 1:
 				//如果识别到球
+				osDelay(100);
 				if(fabs(shijue_data.ball_x - 666) > 2)
 				{
 					point.x += 10.0f + (shijue_data.ball_distance - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
@@ -486,11 +487,11 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 					arm_shijue_error ++;
 				}
 				//point.x = 590;b
-				point.y = 210;	//调高了一点点，原本220,原本的原本210
+				point.y = 21;	//调高了一点点，原本220,原本的原本210
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(410);	//claw夹取
+				claw_control(400);	//claw夹取
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;

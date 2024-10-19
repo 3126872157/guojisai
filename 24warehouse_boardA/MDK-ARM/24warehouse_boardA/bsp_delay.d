@@ -1,6 +1,6 @@
 24warehouse_boarda\bsp_delay.o: ..\Boards\bsp_delay.c
 24warehouse_boarda\bsp_delay.o: ..\Boards\bsp_delay.h
-24warehouse_boarda\bsp_delay.o: ..\Application\struct_typedef.h
+24warehouse_boarda\bsp_delay.o: ../Application/struct_typedef.h
 24warehouse_boarda\bsp_delay.o: ../Core/Inc/main.h
 24warehouse_boarda\bsp_delay.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 24warehouse_boarda\bsp_delay.o: ../Core/Inc/stm32f4xx_hal_conf.h
