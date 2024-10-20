@@ -106,7 +106,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 	
 	if(huart == &huart4)//C板INS数据空闲中断接收
 	{
-		HAL_UARTEx_ReceiveToIdle_IT(&huart4, RX_INS_buff, INS_BUFF_SIZE);
+		HAL_UARTEx_ReceiveToIdle_IT(&huart2, RX_INS_buff, INS_BUFF_SIZE);
 		if(RX_INS_buff[0] == 0xFE)
 		{
 			RX_INS_data[0] = RX_INS_buff[4];

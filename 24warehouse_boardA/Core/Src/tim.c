@@ -123,7 +123,7 @@ void MX_TIM5_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.Pulse = 800;
+  sConfigOC.Pulse = 900;
   if (HAL_TIM_PWM_ConfigChannel(&htim5, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
   {
     Error_Handler();

@@ -23,7 +23,7 @@ float jie_ti_ping_tai[3] = {240, 195, 130};
 //从高往低0,1,2
 float li_cang[3] = {330, 210, 90};//{355, 235, 115}
 float lizhuang_x =  250.0f;
-float lizhuang_angle = 20.0f * D2R;
+float lizhuang_angle = 20.4f * D2R;
 
 uint8_t arm_control_mode = 0;
 uint8_t arm_current_step = 0;
@@ -462,7 +462,7 @@ void daoduo_put_diceng(void)
 				break;
 		}
 }
-
+float pianzhi_test = 3.3;
 
 void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 {
@@ -477,17 +477,25 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				break;
 			case 1:
 				//如果识别到球
-				osDelay(100);
+				uint8_t num = 0;
+				float distance_total = 0;
+				while(num < 100)
+				{
+					distance_total += shijue_data.ball_y;
+					num ++;
+					osDelay(1);
+				}
 				if(fabs(shijue_data.ball_x - 666) > 2)
 				{
-					point.x += 10.0f + (shijue_data.ball_distance - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
+					point.x += (140.0f - distance_total / 100.0f * pianzhi_test) / tanf(lizhuang_angle) - 95.0f * cosf(lizhuang_angle);
+//					point.x += 10.0f + (distance_total/100.0f - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
 				}
 				else
 				{
 					arm_shijue_error ++;
 				}
 				//point.x = 590;b
-				point.y = 21;	//调高了一点点，原本220,原本的原本210
+				point.y = 210;	//调高了一点点，原本220,原本的原本210
 				arm_current_step ++;
 				break;
 			case 2:

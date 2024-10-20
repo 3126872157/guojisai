@@ -243,8 +243,8 @@ void flow_task(void const * argument)
 {
 	while(1)
 	{
-//		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, test_pos);//拨杆
-//		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, test_pos_2);//滑道
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, test_pos);//拨杆
+		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, test_pos_2);//滑道
 //		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_3, test_pos);
 		//判断所有步骤是否走完
 		if(currentTargIndex < sizeof(targ_point) / sizeof(TargetPoints))
