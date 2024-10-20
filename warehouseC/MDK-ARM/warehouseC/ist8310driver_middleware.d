@@ -1,6 +1,6 @@
 warehousec\ist8310driver_middleware.o: ..\Compoents\devices\ist8310driver_middleware.c
 warehousec\ist8310driver_middleware.o: ..\Compoents\devices\ist8310driver_middleware.h
-warehousec\ist8310driver_middleware.o: ..\Application\struct_typedef.h
+warehousec\ist8310driver_middleware.o: ../Application/struct_typedef.h
 warehousec\ist8310driver_middleware.o: ../Core/Inc/main.h
 warehousec\ist8310driver_middleware.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 warehousec\ist8310driver_middleware.o: ../Core/Inc/stm32f4xx_hal_conf.h
@@ -54,4 +54,4 @@ warehousec\ist8310driver_middleware.o: ../Middlewares/Third_Party/FreeRTOS/Sourc
 warehousec\ist8310driver_middleware.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 warehousec\ist8310driver_middleware.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 warehousec\ist8310driver_middleware.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
-warehousec\ist8310driver_middleware.o: ..\Boards\bsp_delay.h
+warehousec\ist8310driver_middleware.o: ../Boards/bsp_delay.h

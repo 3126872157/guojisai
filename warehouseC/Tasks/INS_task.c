@@ -598,7 +598,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			{	
 				recvStat = COM_START_BIT;
 				//这要延时下 跳过起始位等待
-				my_delay_us(4);
+				my_delay_us(52);
 				//开启Time1中断计数
 				HAL_TIM_Base_Start_IT(&Serial_TIM);
 			}

@@ -71,6 +71,11 @@ void DMA2_Stream7_IRQHandler(void);
 void USART6_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 
+//宇树电机
+void USER_Unitree_A1_Motor_UART_IRQHandler(void);
+//总线舵机
+void USER_SERIAL_SERVO_UART_IRQHandler(void);
+
 /* USER CODE END EFP */
 
 #ifdef __cplusplus

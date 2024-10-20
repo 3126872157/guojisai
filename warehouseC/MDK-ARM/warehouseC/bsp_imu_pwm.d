@@ -1,6 +1,6 @@
 warehousec\bsp_imu_pwm.o: ..\Boards\bsp_imu_pwm.c
 warehousec\bsp_imu_pwm.o: ..\Boards\bsp_imu_pwm.h
-warehousec\bsp_imu_pwm.o: ..\Application\struct_typedef.h
+warehousec\bsp_imu_pwm.o: ../Application/struct_typedef.h
 warehousec\bsp_imu_pwm.o: ../Core/Inc/main.h
 warehousec\bsp_imu_pwm.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 warehousec\bsp_imu_pwm.o: ../Core/Inc/stm32f4xx_hal_conf.h

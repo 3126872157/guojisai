@@ -44,9 +44,9 @@ warehousec\unitree_a1.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_e
 warehousec\unitree_a1.o: ..\Arm\unitree_a1.h
 warehousec\unitree_a1.o: ..\Arm\A1_motor_msg.h
 warehousec\unitree_a1.o: ..\Arm\serial_servo.h
-warehousec\unitree_a1.o: ..\Application\pid.h
-warehousec\unitree_a1.o: ..\Application\struct_typedef.h
-warehousec\unitree_a1.o: ..\Compoents\algorithm\user_lib.h
+warehousec\unitree_a1.o: ../Application/pid.h
+warehousec\unitree_a1.o: ../Application/struct_typedef.h
+warehousec\unitree_a1.o: ../Compoents/algorithm/user_lib.h
 warehousec\unitree_a1.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 warehousec\unitree_a1.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 warehousec\unitree_a1.o: ../Core/Inc/FreeRTOSConfig.h

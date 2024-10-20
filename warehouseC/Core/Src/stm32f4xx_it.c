@@ -22,6 +22,10 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include "unitree_a1.h"
+#include "serial_servo.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -264,6 +268,10 @@ void USART1_IRQHandler(void)
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
+	
+	//关节电机，此处须在.h文件里声明
+	USER_Unitree_A1_Motor_UART_IRQHandler();
+
 
   /* USER CODE END USART1_IRQn 1 */
 }
@@ -313,16 +321,16 @@ void DMA2_Stream1_IRQHandler(void)
 /**
   * @brief This function handles DMA2 stream2 global interrupt.
   */
-__weak void DMA2_Stream2_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA2_Stream2_IRQn 0 */
+//void DMA2_Stream2_IRQHandler(void)
+//{
+//  /* USER CODE BEGIN DMA2_Stream2_IRQn 0 */
 
-  /* USER CODE END DMA2_Stream2_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_spi1_rx);
-  /* USER CODE BEGIN DMA2_Stream2_IRQn 1 */
+//  /* USER CODE END DMA2_Stream2_IRQn 0 */
+//  HAL_DMA_IRQHandler(&hdma_spi1_rx);
+//  /* USER CODE BEGIN DMA2_Stream2_IRQn 1 */
 
-  /* USER CODE END DMA2_Stream2_IRQn 1 */
-}
+//  /* USER CODE END DMA2_Stream2_IRQn 1 */
+//}
 
 /**
   * @brief This function handles DMA2 stream3 global interrupt.
@@ -405,9 +413,49 @@ void USART6_IRQHandler(void)
   HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART6_IRQn 1 */
 
+	//总线舵机，此为空闲中断，此处须在.h文件里声明
+	USER_SERIAL_SERVO_UART_IRQHandler();
+	
   /* USER CODE END USART6_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
+
+__weak void USER_Unitree_A1_Motor_UART_IDLECallback(UART_HandleTypeDef* huart)
+{
+	return;
+}
+
+void USER_Unitree_A1_Motor_UART_IRQHandler(void)
+{
+	if(UNITREE_MOTOR_HUART.Instance->SR & UART_FLAG_RXNE)//接收到数据：状态寄存器里的接受寄存器非空为1（非空了）
+	{
+		__HAL_UART_CLEAR_PEFLAG(&UNITREE_MOTOR_HUART);	//此函数用来清除IDLE标志位
+	}
+	else if(UNITREE_MOTOR_UART->SR & UART_FLAG_IDLE)	//查询状态寄存器，此时串口空闲
+	{
+		// 清除空闲中断标志（否则会一直重复进入中断）
+		__HAL_UART_CLEAR_IDLEFLAG(&UNITREE_MOTOR_HUART);                    
+		// 调用中断处理函数，此函数在宇树电机文件里
+		USER_Unitree_A1_Motor_UART_IDLECallback(&UNITREE_MOTOR_HUART); 
+	}
+}
+
+__weak void USER_SERIAL_SERVO_UART_IDLECallback(UART_HandleTypeDef *huart)
+{
+	return;
+}
+
+void USER_SERIAL_SERVO_UART_IRQHandler(void)
+{
+	if (RESET != __HAL_UART_GET_FLAG(&SERIAL_SERVO_HUART, UART_FLAG_IDLE))
+	{
+		// 清除空闲中断标志（否则会一直不断进入中断）
+		__HAL_UART_CLEAR_IDLEFLAG(&SERIAL_SERVO_HUART);
+		// 调用中断处理函数
+		USER_SERIAL_SERVO_UART_IDLECallback(&SERIAL_SERVO_HUART);
+	}
+}
+
 
 /* USER CODE END 1 */

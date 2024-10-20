@@ -209,7 +209,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
 	
 	//陀螺仪数据置0
 	chassis_move_init->gyro=0.0f;
-	//chassis_move_init->gyro_set=0.0f;
+	chassis_move_init->gyro_set=0.0f;
 	chassis_move_init->last_gyro=0.0f;
 	
     //底盘开机状态为停止状态

@@ -1,6 +1,6 @@
 warehousec\bmi088middleware.o: ..\Compoents\devices\BMI088Middleware.c
 warehousec\bmi088middleware.o: ..\Compoents\devices\BMI088Middleware.h
-warehousec\bmi088middleware.o: ..\Application\struct_typedef.h
+warehousec\bmi088middleware.o: ../Application/struct_typedef.h
 warehousec\bmi088middleware.o: ../Core/Inc/main.h
 warehousec\bmi088middleware.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 warehousec\bmi088middleware.o: ../Core/Inc/stm32f4xx_hal_conf.h
@@ -54,4 +54,4 @@ warehousec\bmi088middleware.o: ../Middlewares/Third_Party/FreeRTOS/Source/includ
 warehousec\bmi088middleware.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
 warehousec\bmi088middleware.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 warehousec\bmi088middleware.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
-warehousec\bmi088middleware.o: ..\Boards\bsp_delay.h
+warehousec\bmi088middleware.o: ../Boards/bsp_delay.h

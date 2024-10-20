@@ -43,9 +43,9 @@ warehousec\arm_ctrl.o: ..\Arm\unitree_a1.h
 warehousec\arm_ctrl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 warehousec\arm_ctrl.o: ..\Arm\A1_motor_msg.h
 warehousec\arm_ctrl.o: ..\Arm\serial_servo.h
-warehousec\arm_ctrl.o: ..\Application\pid.h
-warehousec\arm_ctrl.o: ..\Application\struct_typedef.h
-warehousec\arm_ctrl.o: ..\Compoents\algorithm\user_lib.h
+warehousec\arm_ctrl.o: ../Application/pid.h
+warehousec\arm_ctrl.o: ../Application/struct_typedef.h
+warehousec\arm_ctrl.o: ../Compoents/algorithm/user_lib.h
 warehousec\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 warehousec\arm_ctrl.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 warehousec\arm_ctrl.o: ../Core/Inc/FreeRTOSConfig.h

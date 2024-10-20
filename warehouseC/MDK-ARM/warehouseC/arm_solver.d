@@ -40,4 +40,4 @@ warehousec\arm_solver.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 warehousec\arm_solver.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 warehousec\arm_solver.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
 warehousec\arm_solver.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-warehousec\arm_solver.o: ..\Application\struct_typedef.h
+warehousec\arm_solver.o: ../Application/struct_typedef.h

@@ -1,6 +1,6 @@
 warehousec\bmi088driver.o: ..\Compoents\devices\BMI088driver.c
 warehousec\bmi088driver.o: ..\Compoents\devices\BMI088driver.h
-warehousec\bmi088driver.o: ..\Application\struct_typedef.h
+warehousec\bmi088driver.o: ../Application/struct_typedef.h
 warehousec\bmi088driver.o: ../Core/Inc/main.h
 warehousec\bmi088driver.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 warehousec\bmi088driver.o: ../Core/Inc/stm32f4xx_hal_conf.h

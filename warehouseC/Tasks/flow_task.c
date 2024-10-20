@@ -29,7 +29,6 @@ extern uint8_t gray_data[2];
 extern uint8_t arm_control_mode;
 extern bool_t arm_ctrl_signal;
 extern uint8_t arm_current_step;
-extern uint16_t claw_middle_pos;
 extern bool_t nan_error;
 
 //视觉有关参数
@@ -100,14 +99,14 @@ float test_v_max = 5;
 TargetPoints targ_point[] = {
 		//立桩
 	
-///*0*/	{67,		 1000,	 		0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},
-///*1*/	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
-///*2*/	{67,		 0,	 		100,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},
-///*3*/	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
-///*4*/	{67,		 -100,	 		0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},
-///*5*/	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
-///*6*/	{67,		 0,	 		-100,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},
-///*26*/	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+/*0*/	{67,		 1000,	 		0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},
+/*1*/	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+/*2*/	{67,		 0,	 		100,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},
+/*3*/	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+/*4*/	{67,		 -100,	 		0,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},
+/*5*/	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
+/*6*/	{67,		 0,	 		-100,			0,			distance_tol,	CHASSIS_MOVE_AND_ROTATE},
+/*26*/	{66,		 non,	 	non,		non,		non,			CHASSIS_V},//用来调试，不需要就删掉
 
 
 		//起点到立桩
@@ -386,20 +385,18 @@ void flow_task(void const * argument)
 					else if(shijue_data.ball_y < 8 && shijue_data.ball_y > 0/*距离为中间一层*/)
 					{
 						arm_control_mode = 2;
-						claw_middle_pos = 450;
 						modeN_task_start = 1;
 					}
 					else if(shijue_data.ball_y > 9/*距离为最低一层*/)
 					{
 						arm_control_mode = 3;
-						claw_middle_pos = 450;
 						modeN_task_start = 1;
 					}
 				}
 				if(arm_control_mode == 0)
 				{
 					modeN_task_start = 0;
-					claw_middle_pos = 470;
+
 					currentTargIndex ++;
 				}
 			}	

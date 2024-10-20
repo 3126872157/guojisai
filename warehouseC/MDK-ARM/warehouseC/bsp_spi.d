@@ -1,6 +1,6 @@
 warehousec\bsp_spi.o: ..\Boards\bsp_spi.c
 warehousec\bsp_spi.o: ..\Boards\bsp_spi.h
-warehousec\bsp_spi.o: ..\Application\struct_typedef.h
+warehousec\bsp_spi.o: ../Application/struct_typedef.h
 warehousec\bsp_spi.o: ../Core/Inc/main.h
 warehousec\bsp_spi.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 warehousec\bsp_spi.o: ../Core/Inc/stm32f4xx_hal_conf.h

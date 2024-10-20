@@ -31,21 +31,20 @@ extern uint8_t Servo_Rx_Data[20];	//生的数据
 //		3号舵机为夹爪，增大为张开
 //		4号舵机为拨蛋板，增大为归位
 uint16_t claw_pos = 470;
-uint16_t claw_catch_pos = 410;
-uint16_t claw_loose_pos = 510;
-uint16_t claw_middle_pos = 470;
-uint16_t paidanban_pos = 500;
-uint16_t bogan_zhunbei_pos = 850;
-uint16_t bogan_jiqiu_pos = 650;
-uint16_t bogan_shouqi_pos = 250;
-
+//uint16_t claw_catch_pos = 410;
+//uint16_t claw_loose_pos = 510;
+//uint16_t claw_middle_pos = 470;
+//uint16_t paidanban_pos = 500;
 
 //--------------------------------滑道、凸轮舵机变量----------------------------
-uint16_t huadao_vertical_pwm = 800;//900垂直600放球(范围250-1250)
-uint16_t huadao_slope_out_pwm = 770;
-uint16_t huadao_slope_in_pwm = 1100;
+uint16_t huadao_vertical_pwm = 900;//900垂直600放球(范围250-1250)
+uint16_t huadao_slope_out_pwm = 900;
+uint16_t huadao_slope_in_pwm = 1150;
 uint16_t tulun_up_pwm = 1250;//1250升起250落下(范围250-1250)
 uint16_t tulun_down_pwm = 250;
+uint16_t bogan_zhunbei_pos = 1000;
+uint16_t bogan_jiqiu_pos = 800;
+uint16_t bogan_shouqi_pos = 350;
 
 //--------------------------------机械臂与解算变量----------------------------
 // 逆运动学解算结构体
@@ -171,7 +170,7 @@ void servo_arm_move(float angle1, float angle2)
 	input1 = 500.0f - angle1 / 0.24f;
 	input2 = 500.0f + angle2 / 0.24f;
 	
-	moveServos(4, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2, 3, claw_pos, 4, paidanban_pos);
+	moveServos(3, servo_Data.serial_servo_Time, 1, (uint16_t)input1, 2, (uint16_t)input2, 3, claw_pos);
 }
 
 //机械爪夹取，0夹取，1松开，2中间位置
@@ -199,15 +198,15 @@ void huadao_control(bool_t is_put_ball)
 {
 	if(is_put_ball == 1)
 	{
-		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_slope_out_pwm);//700放球(范围250-1250)
+		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_slope_out_pwm);//900放球(范围250-1250)
 	}
 	else if(is_put_ball == 0)
 	{
-		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_vertical_pwm);//800垂直
+		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_vertical_pwm);//900垂直
 	}
 	else
 	{
-		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_slope_in_pwm);//1200
+		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_slope_in_pwm);//1150
 	}
 }	
 //顶球，凸轮调整
@@ -230,7 +229,7 @@ void bogan_control(uint8_t mode)
 {
 	if(mode == 0)	//收起
 	{
-		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, BOGAN_CHANNEL, bogan_shouqi_pos);//1250
+		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, BOGAN_CHANNEL, bogan_shouqi_pos);//350
 	}
 	else if(mode == 1)	//击球
 	{
@@ -238,7 +237,7 @@ void bogan_control(uint8_t mode)
 	}
 	else if(mode == 2)	//准备击球
 	{
-		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, BOGAN_CHANNEL, bogan_zhunbei_pos);//250
+		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, BOGAN_CHANNEL, bogan_zhunbei_pos);//1000
 	}
 	
 }

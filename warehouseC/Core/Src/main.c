@@ -31,6 +31,12 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "bsp_can.h"
+#include "INS_task.h"
+#include "calibrate_task.h"
+#include "bsp_delay.h"
+#include "IO_Serial.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,6 +57,17 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+//IC卡
+uint8_t ic_read_start = 0;
+uint8_t ic_buf_size = 0;
+uint8_t ic_buf[22] = {0};
+uint8_t X = 0;
+uint8_t IC_data;//当前识别到的IC卡内的数据(几行几列)
+
+uint8_t Data;
+uint8_t recvData = 0;  //接收数据
+uint8_t recvStat = COM_STOP_BIT;  //接收状态
 
 /* USER CODE END PV */
 
@@ -108,6 +125,16 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
+	HAL_TIM_Base_Start(&htim3);	//用于io串口的延时产生
+	can_filter_init();
+	delay_init();
+    cali_param_init();
+	
+	//舵机
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+	
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */
@@ -186,14 +213,69 @@ void SystemClock_Config(void)
   * @param  htim : TIM handle
   * @retval None
   */
-__weak void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   /* USER CODE BEGIN Callback 0 */
 
   /* USER CODE END Callback 0 */
-  
+  if (htim->Instance == TIM6) {
+    HAL_IncTick();
+  }
   /* USER CODE BEGIN Callback 1 */
 
+  if(htim == &Serial_TIM)    //如果是TIM1 触发中断
+	{
+		recvStat++;
+		if(recvStat == COM_STOP_BIT)
+		{
+			HAL_TIM_Base_Stop(&Serial_TIM);
+			__HAL_TIM_SetCounter(&Serial_TIM, 0);
+			
+			//到这就接收到完整的1个字节数据
+			if(ic_read_start == 1)
+			{
+				if(ic_buf_size == 1 && recvData != 0x16)	//第二帧对不上
+				{
+					ic_read_start = 0;
+					ic_buf_size = -1;
+				}
+				ic_buf[ic_buf_size++] = recvData;
+				
+				if(ic_buf_size == 22)						//接收完毕
+				{
+					ic_read_start = 0;
+					ic_buf_size = 0;						//计数归零
+					for(uint8_t i = 0;i < 21 ; i++)
+					{
+						X^=ic_buf[i];
+					}
+					X=~X;
+					if(X == ic_buf[21])						//校验成功
+					{
+						IC_data = ic_buf[15];				//将球的数据存入IC_Data
+					}
+					X = 0;
+				}
+			}
+		
+			if(ic_read_start == 0 && recvData == 0x04)		//检测到帧头
+			{
+				ic_read_start = 1;
+				ic_buf[ic_buf_size++] = recvData;
+			}
+			return;
+		}
+		
+		if(IO_SERIAL_RX)
+		{
+			recvData |= (1 << (recvStat - 1));
+		}
+		else
+		{
+			recvData &= ~(1 << (recvStat - 1));
+		}
+	}
+	
   /* USER CODE END Callback 1 */
 }
 
