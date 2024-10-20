@@ -49,7 +49,7 @@ warehousec\usbd_cdc_if.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_
 warehousec\usbd_cdc_if.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
 warehousec\usbd_cdc_if.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
 warehousec\usbd_cdc_if.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
-warehousec\usbd_cdc_if.o: ..\Application\struct_typedef.h
-warehousec\usbd_cdc_if.o: ..\Application\UART_receive.h
+warehousec\usbd_cdc_if.o: ../Application/struct_typedef.h
+warehousec\usbd_cdc_if.o: ../Application/UART_receive.h
 warehousec\usbd_cdc_if.o: ../Core/Inc/stm32f4xx_it.h
 warehousec\usbd_cdc_if.o: ../Core/Inc/usart.h

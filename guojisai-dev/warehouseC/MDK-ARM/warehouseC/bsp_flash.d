@@ -1,6 +1,6 @@
 warehousec\bsp_flash.o: ..\Boards\bsp_flash.c
 warehousec\bsp_flash.o: ..\Boards\bsp_flash.h
-warehousec\bsp_flash.o: ..\Application\struct_typedef.h
+warehousec\bsp_flash.o: ../Application/struct_typedef.h
 warehousec\bsp_flash.o: ../Core/Inc/main.h
 warehousec\bsp_flash.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 warehousec\bsp_flash.o: ../Core/Inc/stm32f4xx_hal_conf.h

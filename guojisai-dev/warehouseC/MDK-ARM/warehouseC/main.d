@@ -65,8 +65,8 @@ warehousec\main.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
 warehousec\main.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
 warehousec\main.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
 warehousec\main.o: ../Core/Inc/gpio.h
-warehousec\main.o: ..\Boards\bsp_can.h
-warehousec\main.o: ..\Application\struct_typedef.h
-warehousec\main.o: ..\Tasks\INS_task.h
-warehousec\main.o: ..\Tasks\calibrate_task.h
-warehousec\main.o: ..\Boards\bsp_delay.h
+warehousec\main.o: ../Boards/bsp_can.h
+warehousec\main.o: ../Application/struct_typedef.h
+warehousec\main.o: ../Tasks/INS_task.h
+warehousec\main.o: ../Tasks/calibrate_task.h
+warehousec\main.o: ../Boards/bsp_delay.h

@@ -29,7 +29,6 @@ extern uint8_t gray_data[2];
 extern uint8_t arm_control_mode;
 extern bool_t arm_ctrl_signal;
 extern uint8_t arm_current_step;
-extern uint16_t claw_middle_pos;
 extern bool_t nan_error;
 
 //视觉有关参数
@@ -386,20 +385,18 @@ void flow_task(void const * argument)
 					else if(shijue_data.ball_y < 8 && shijue_data.ball_y > 0/*距离为中间一层*/)
 					{
 						arm_control_mode = 2;
-						claw_middle_pos = 450;
 						modeN_task_start = 1;
 					}
 					else if(shijue_data.ball_y > 9/*距离为最低一层*/)
 					{
 						arm_control_mode = 3;
-						claw_middle_pos = 450;
 						modeN_task_start = 1;
 					}
 				}
 				if(arm_control_mode == 0)
 				{
 					modeN_task_start = 0;
-					claw_middle_pos = 470;
+
 					currentTargIndex ++;
 				}
 			}	

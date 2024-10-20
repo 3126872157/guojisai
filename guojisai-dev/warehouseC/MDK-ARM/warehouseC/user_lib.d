@@ -1,7 +1,7 @@
 warehousec\user_lib.o: ..\Compoents\algorithm\user_lib.c
 warehousec\user_lib.o: ..\Compoents\algorithm\user_lib.h
-warehousec\user_lib.o: ..\Application\struct_typedef.h
-warehousec\user_lib.o: ..\Compoents\algorithm\Include\arm_math.h
+warehousec\user_lib.o: ../Application/struct_typedef.h
+warehousec\user_lib.o: ../Compoents/algorithm/Include/arm_math.h
 warehousec\user_lib.o: ../Drivers/CMSIS/Include/core_cm4.h
 warehousec\user_lib.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
 warehousec\user_lib.o: ../Drivers/CMSIS/Include/cmsis_version.h

@@ -39,3 +39,7 @@ warehousec\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd
 warehousec\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 warehousec\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
 warehousec\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h
+warehousec\stm32f4xx_it.o: ../Arm/unitree_a1.h
+warehousec\stm32f4xx_it.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+warehousec\stm32f4xx_it.o: ../Arm/A1_motor_msg.h
+warehousec\stm32f4xx_it.o: ../Arm/serial_servo.h

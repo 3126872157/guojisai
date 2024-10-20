@@ -1,6 +1,6 @@
 warehousec\bsp_can.o: ..\Boards\bsp_can.c
 warehousec\bsp_can.o: ..\Boards\bsp_can.h
-warehousec\bsp_can.o: ..\Application\struct_typedef.h
+warehousec\bsp_can.o: ../Application/struct_typedef.h
 warehousec\bsp_can.o: ../Core/Inc/main.h
 warehousec\bsp_can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 warehousec\bsp_can.o: ../Core/Inc/stm32f4xx_hal_conf.h

@@ -42,4 +42,4 @@ warehousec\bodanpan.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.
 warehousec\bodanpan.o: ..\Application\CAN_receive.h
 warehousec\bodanpan.o: ..\Application\struct_typedef.h
 warehousec\bodanpan.o: ..\Application\pid.h
-warehousec\bodanpan.o: ..\Compoents\algorithm\user_lib.h
+warehousec\bodanpan.o: ../Compoents/algorithm/user_lib.h

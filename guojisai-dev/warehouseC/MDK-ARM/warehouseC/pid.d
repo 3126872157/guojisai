@@ -1,7 +1,7 @@
 warehousec\pid.o: ..\Application\pid.c
 warehousec\pid.o: ..\Application\pid.h
 warehousec\pid.o: ..\Application\struct_typedef.h
-warehousec\pid.o: ..\Compoents\algorithm\user_lib.h
+warehousec\pid.o: ../Compoents/algorithm/user_lib.h
 warehousec\pid.o: ../Core/Inc/main.h
 warehousec\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 warehousec\pid.o: ../Core/Inc/stm32f4xx_hal_conf.h

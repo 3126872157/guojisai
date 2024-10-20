@@ -135,8 +135,8 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of Prepare_Task_ */
-//  osThreadDef(Prepare_Task_, Prepare_Task, osPriorityIdle, 0, 128);
-//  Prepare_Task_Handle = osThreadCreate(osThread(Prepare_Task_), NULL);
+  osThreadDef(Prepare_Task_, Prepare_Task, osPriorityIdle, 0, 128);
+  Prepare_Task_Handle = osThreadCreate(osThread(Prepare_Task_), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
 	osThreadDef(cali, calibrate_task, osPriorityNormal, 0, 512);
@@ -148,7 +148,7 @@ void MX_FREERTOS_Init(void) {
 	osThreadDef(ChassisTask, chassis_task, osPriorityAboveNormal, 0, 512);
     chassisTaskHandle = osThreadCreate(osThread(ChassisTask), NULL);
 		
-	osThreadDef(Bodanpan_Task_,Bodanpan_Task,osPriorityBelowNormal, 0, 512);
+	osThreadDef(Bodanpan_Task_,Bodanpan_Task,osPriorityBelowNormal, 0, 128);
     BodanpanTaskHandle = osThreadCreate(osThread(Bodanpan_Task_), NULL);
 	
 	osThreadDef(armTask, arm_task, osPriorityNormal, 0, 512);
@@ -157,7 +157,7 @@ void MX_FREERTOS_Init(void) {
 	osThreadDef(flowTask, flow_task, osPriorityNormal, 0, 512);
 	flowTaskHandle = osThreadCreate(osThread(flowTask), NULL);
 	
-	osThreadDef(armControlTask, arm_control_task, osPriorityNormal, 0, 512);
+	osThreadDef(armControlTask, arm_control_task, osPriorityNormal, 0, 256);
 	armControlTaskHandle = osThreadCreate(osThread(armControlTask), NULL);
 	
   /* USER CODE END RTOS_THREADS */

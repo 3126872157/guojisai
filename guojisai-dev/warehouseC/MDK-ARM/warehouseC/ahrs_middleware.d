@@ -1,7 +1,7 @@
 warehousec\ahrs_middleware.o: ..\Compoents\algorithm\AHRS_middleware.c
 warehousec\ahrs_middleware.o: ..\Compoents\algorithm\AHRS_MiddleWare.h
 warehousec\ahrs_middleware.o: ..\Compoents\algorithm\AHRS.h
-warehousec\ahrs_middleware.o: ..\Compoents\algorithm\Include\arm_math.h
+warehousec\ahrs_middleware.o: ../Compoents/algorithm/Include/arm_math.h
 warehousec\ahrs_middleware.o: ../Drivers/CMSIS/Include/core_cm4.h
 warehousec\ahrs_middleware.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
 warehousec\ahrs_middleware.o: ../Drivers/CMSIS/Include/cmsis_version.h

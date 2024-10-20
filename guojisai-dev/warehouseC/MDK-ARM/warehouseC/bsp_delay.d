@@ -1,6 +1,6 @@
 warehousec\bsp_delay.o: ..\Boards\bsp_delay.c
 warehousec\bsp_delay.o: ..\Boards\bsp_delay.h
-warehousec\bsp_delay.o: ..\Application\struct_typedef.h
+warehousec\bsp_delay.o: ../Application/struct_typedef.h
 warehousec\bsp_delay.o: ../Core/Inc/main.h
 warehousec\bsp_delay.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 warehousec\bsp_delay.o: ../Core/Inc/stm32f4xx_hal_conf.h
