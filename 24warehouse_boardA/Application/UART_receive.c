@@ -117,10 +117,10 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 		}
 	}
 	
-	if(huart == &huart4)
-	{
+//	if(huart == &huart4)
+//	{
 //		HAL_UARTEx_ReceiveToIdle_IT(&huart4, buff, SIZE);
-	}
+//	}
 	
 }
 

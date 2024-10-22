@@ -63,7 +63,7 @@ void jie_ti_ping_tai_take_dingceng(void)
 				arm_ctrl_signal = 1;
 				point.x = 500;		//阶梯的坐标
 				point.y = jie_ti_ping_tai[0];
-				claw_control(600);
+				claw_control(510);
 				point.total_angle = 90;
 				arm_current_step ++;
 				break;
@@ -463,7 +463,9 @@ void daoduo_put_diceng(void)
 		}
 }
 
-
+float pianzhi_test = 3.3;
+uint8_t lizhuang_ball_num = 0;
+bool_t lizhuang_success_flag = 0;
 void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 {
 	switch(arm_current_step)
@@ -476,18 +478,25 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				arm_current_step ++;
 				break;
 			case 1:
-				//如果识别到球
-				osDelay(100);
+				uint8_t num = 0;
+				float distance_total = 0;
+				while(num < 100)
+				{
+					distance_total += shijue_data.ball_y;
+					num ++;
+					osDelay(1);
+				}
 				if(fabs(shijue_data.ball_x - 666) > 2)
 				{
-					point.x += 10.0f + (shijue_data.ball_distance - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
+					point.x += (140.0f - distance_total / 100.0f * pianzhi_test) / tanf(lizhuang_angle) - 95.0f * cosf(lizhuang_angle);
+//					point.x += 10.0f + (distance_total/100.0f - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
 				}
 				else
 				{
 					arm_shijue_error ++;
 				}
 				//point.x = 590;b
-				point.y = 21;	//调高了一点点，原本220,原本的原本210
+				point.y = 210;	//调高了一点点，原本220,原本的原本210
 				arm_current_step ++;
 				break;
 			case 2:
@@ -503,6 +512,9 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 			case 4:
 				point.x = 300;
 				point.y = 300;
+				if(shijue_data.ball_distance < 180)
+					lizhuang_success_flag = 1;
+					lizhuang_ball_num ++;
 				arm_current_step ++;
 				break;
 			case 5:
@@ -515,7 +527,11 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				break;
 			case 7:
 				set_normal_pos();
-				a_new_ball_in = 1;
+				if(lizhuang_success_flag == 1)
+				{
+					a_new_ball_in = 1;
+					lizhuang_success_flag = 0;
+				}
 				arm_current_step ++;
 				break;
 			case 8:
@@ -527,6 +543,8 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 		}
 }
 
+
+extern bool_t zhuanpanji_finish_flag;//转盘机结束标志位
 void zhuanpanji_take(void)
 {
 	switch(arm_current_step)
@@ -551,9 +569,23 @@ void zhuanpanji_take(void)
 				point.x = 435;
 				point.y = 230;
 				point.total_angle = 85;
-				bogan_control(2);
+				arm_current_step ++;
 				break;
-			
+			case 3:
+				if(zhuanpanji_finish_flag == 1)
+				{
+					point.x = 445;
+					point.y = 280;
+					point.total_angle = 85;
+					bogan_control(2);
+					arm_current_step ++;
+					break;
+				}
+			case 4:
+				bogan_control(0);
+				arm_control_mode = 0;
+				arm_current_step = 0;
+				arm_ctrl_signal = 0;
 		}
 }
 

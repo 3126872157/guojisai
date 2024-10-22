@@ -70,3 +70,4 @@ warehousec\main.o: ../Application/struct_typedef.h
 warehousec\main.o: ../Tasks/INS_task.h
 warehousec\main.o: ../Tasks/calibrate_task.h
 warehousec\main.o: ../Boards/bsp_delay.h
+warehousec\main.o: ../Application/IO_Serial.h

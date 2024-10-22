@@ -243,8 +243,8 @@ void flow_task(void const * argument)
 {
 	while(1)
 	{
-		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, test_pos);//拨杆
-		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, test_pos_2);//滑道
+//		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_2, test_pos);//拨杆
+//		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_4, test_pos_2);//滑道
 //		__HAL_TIM_SetCompare(&htim5, TIM_CHANNEL_3, test_pos);
 		//判断所有步骤是否走完
 		if(currentTargIndex < sizeof(targ_point) / sizeof(TargetPoints))
@@ -536,7 +536,7 @@ void flow_task(void const * argument)
 					bogan_jiqiu_flag = 0;
 				}				
 				
-				if(zhuanpanji_ball_num == 6)
+				if(zhuanpanji_ball_num == 200)
 				{
 					osDelay(1000);//这里延迟一下，防止最后一次击球还没成功，机械臂就抬起来了
 					a_new_ball_in = 1;

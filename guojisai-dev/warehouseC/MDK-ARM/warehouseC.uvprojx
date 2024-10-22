@@ -697,81 +697,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Tasks</GroupName>
-          <Files>
-            <File>
-              <FileName>arm_control_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\arm_control_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>arm_control_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\arm_control_task.h</FilePath>
-            </File>
-            <File>
-              <FileName>arm_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\arm_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>arm_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\arm_task.h</FilePath>
-            </File>
-            <File>
-              <FileName>Bodanpan_Task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\Bodanpan_Task.c</FilePath>
-            </File>
-            <File>
-              <FileName>Bodanpan_Task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\Bodanpan_Task.h</FilePath>
-            </File>
-            <File>
-              <FileName>Chassis_Task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\Chassis_Task.c</FilePath>
-            </File>
-            <File>
-              <FileName>Chassis_Task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\Chassis_Task.h</FilePath>
-            </File>
-            <File>
-              <FileName>flow_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\flow_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>flow_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\flow_task.h</FilePath>
-            </File>
-            <File>
-              <FileName>INS_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\INS_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>INS_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\INS_task.h</FilePath>
-            </File>
-            <File>
-              <FileName>calibrate_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tasks\calibrate_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>calibrate_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tasks\calibrate_task.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>algorithm</GroupName>
           <Files>
             <File>
@@ -952,6 +877,56 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Arm</GroupName>
+          <Files>
+            <File>
+              <FileName>A1_motor_msg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\A1_motor_msg.h</FilePath>
+            </File>
+            <File>
+              <FileName>arm_ctrl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arm\arm_ctrl.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_ctrl.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\arm_ctrl.h</FilePath>
+            </File>
+            <File>
+              <FileName>arm_solver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arm\arm_solver.c</FilePath>
+            </File>
+            <File>
+              <FileName>arm_solver.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\arm_solver.h</FilePath>
+            </File>
+            <File>
+              <FileName>serial_servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arm\serial_servo.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial_servo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\serial_servo.h</FilePath>
+            </File>
+            <File>
+              <FileName>unitree_a1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Arm\unitree_a1.c</FilePath>
+            </File>
+            <File>
+              <FileName>unitree_a1.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Arm\unitree_a1.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Application</GroupName>
           <Files>
             <File>
@@ -1052,52 +1027,77 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Arm</GroupName>
+          <GroupName>Tasks</GroupName>
           <Files>
             <File>
-              <FileName>A1_motor_msg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Arm\A1_motor_msg.h</FilePath>
-            </File>
-            <File>
-              <FileName>arm_ctrl.c</FileName>
+              <FileName>arm_control_task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Arm\arm_ctrl.c</FilePath>
+              <FilePath>..\Tasks\arm_control_task.c</FilePath>
             </File>
             <File>
-              <FileName>arm_ctrl.h</FileName>
+              <FileName>arm_control_task.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Arm\arm_ctrl.h</FilePath>
+              <FilePath>..\Tasks\arm_control_task.h</FilePath>
             </File>
             <File>
-              <FileName>arm_solver.c</FileName>
+              <FileName>arm_task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Arm\arm_solver.c</FilePath>
+              <FilePath>..\Tasks\arm_task.c</FilePath>
             </File>
             <File>
-              <FileName>arm_solver.h</FileName>
+              <FileName>arm_task.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Arm\arm_solver.h</FilePath>
+              <FilePath>..\Tasks\arm_task.h</FilePath>
             </File>
             <File>
-              <FileName>serial_servo.c</FileName>
+              <FileName>Bodanpan_Task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Arm\serial_servo.c</FilePath>
+              <FilePath>..\Tasks\Bodanpan_Task.c</FilePath>
             </File>
             <File>
-              <FileName>serial_servo.h</FileName>
+              <FileName>Bodanpan_Task.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Arm\serial_servo.h</FilePath>
+              <FilePath>..\Tasks\Bodanpan_Task.h</FilePath>
             </File>
             <File>
-              <FileName>unitree_a1.c</FileName>
+              <FileName>Chassis_Task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Arm\unitree_a1.c</FilePath>
+              <FilePath>..\Tasks\Chassis_Task.c</FilePath>
             </File>
             <File>
-              <FileName>unitree_a1.h</FileName>
+              <FileName>Chassis_Task.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Arm\unitree_a1.h</FilePath>
+              <FilePath>..\Tasks\Chassis_Task.h</FilePath>
+            </File>
+            <File>
+              <FileName>flow_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\flow_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>flow_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tasks\flow_task.h</FilePath>
+            </File>
+            <File>
+              <FileName>INS_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\INS_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>INS_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tasks\INS_task.h</FilePath>
+            </File>
+            <File>
+              <FileName>calibrate_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\calibrate_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>calibrate_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tasks\calibrate_task.h</FilePath>
             </File>
           </Files>
         </Group>

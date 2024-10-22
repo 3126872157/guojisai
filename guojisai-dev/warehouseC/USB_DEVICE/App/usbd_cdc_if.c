@@ -325,7 +325,7 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 			}
 			shijue_data.obstacle_distance=shijue_msg.after;
 			
-			CDC_Transmit_FS(&TX_shijue_mode,1);
+//			CDC_Transmit_FS(&TX_shijue_mode,1);
 		}		
 	
   return (USBD_OK);

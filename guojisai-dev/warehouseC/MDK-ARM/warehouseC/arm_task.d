@@ -69,3 +69,12 @@ warehousec\arm_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdarg.h
 warehousec\arm_task.o: ../Core/Inc/usart.h
 warehousec\arm_task.o: ../Arm/arm_solver.h
 warehousec\arm_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\math.h
+warehousec\arm_task.o: ../USB_DEVICE/App/usbd_cdc_if.h
+warehousec\arm_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h
+warehousec\arm_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
+warehousec\arm_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
+warehousec\arm_task.o: ../USB_DEVICE/Target/usbd_conf.h
+warehousec\arm_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+warehousec\arm_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
+warehousec\arm_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
+warehousec\arm_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h

@@ -35,6 +35,7 @@
 #include "INS_task.h"
 #include "calibrate_task.h"
 #include "bsp_delay.h"
+#include "IO_Serial.h"
 
 /* USER CODE END Includes */
 
@@ -56,6 +57,16 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+//IC卡
+uint8_t ic_read_start = 0;
+uint8_t ic_buf_size = 0;
+uint8_t ic_buf[22] = {0};
+uint8_t X = 0;
+uint8_t IC_data;//当前识别到的IC卡内的数据(几行几列)
+uint8_t Data;
+uint8_t recvData = 0;  //接收数据
+uint8_t recvStat = COM_STOP_BIT;  //接收状态
 
 /* USER CODE END PV */
 
@@ -121,6 +132,8 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+	
+	HAL_TIM_Base_Start(&htim3);//IO串口延时定时器
 	
   /* USER CODE END 2 */
 
@@ -200,18 +213,18 @@ void SystemClock_Config(void)
   * @param  htim : TIM handle
   * @retval None
   */
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-//{
-//  /* USER CODE BEGIN Callback 0 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
 
-//  /* USER CODE END Callback 0 */
-//  if (htim->Instance == TIM6) {
-//    HAL_IncTick();
-//  }
-//  /* USER CODE BEGIN Callback 1 */
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM6) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
 
-//  /* USER CODE END Callback 1 */
-//}
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

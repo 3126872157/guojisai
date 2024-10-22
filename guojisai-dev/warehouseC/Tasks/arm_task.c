@@ -1,6 +1,7 @@
 #include "arm_task.h"
 #include "arm_solver.h"
 #include "pid.h"
+#include "usbd_cdc_if.h"
 
 //#define printf myprintf
 
@@ -15,6 +16,7 @@ uint8_t direction = 0; //1ÉÏ2ÏÂ
 extern unitree_ctrl_t unitree_Data;
 extern serial_servo_t servo_Data;
 extern struct arm_solver solver;
+extern uint8_t TX_shijue_mode;
 
 arm_ctrl_point point;
 
@@ -26,11 +28,6 @@ uint16_t servo_start_flag = 99;//Ã¿Êıµ½100£¬×ÜÏß¶æ»ú·¢ËÍĞÅºÅÖ´ĞĞÒ»´Î(¼´1sÖ´ĞĞÒ»´
 
 uint8_t task_flag;
 bool_t claw_flag;
-
-void Task_1(void);
-void Task_2(void);
-void Task_3(void);
-void Task_4(void);
 
 void arm_task(void const * argument)
 {
@@ -80,6 +77,10 @@ void arm_task(void const * argument)
 					getServosAngle(3,1,2,3);
 				}
 				servo_start_flag = 0;
+				
+				//½èÓÃÒ»ÏÂµØ·½·¢ËÍÊÓ¾õÄ£Ê½
+				CDC_Transmit_FS(&TX_shijue_mode,1);
+				
 			}
 /***********************************************/	
 		}
@@ -88,7 +89,6 @@ void arm_task(void const * argument)
 		unitree_pos_pid_ctrl(ramp_targ_pos);
 		unitree_save_check();
 		real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
-		
 		osDelay(1);
 	}
 }
