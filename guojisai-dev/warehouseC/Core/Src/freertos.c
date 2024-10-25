@@ -59,11 +59,12 @@ osThreadId BodanpanTaskHandle;
 osThreadId armTaskHandle;
 osThreadId flowTaskHandle;
 osThreadId armControlTaskHandle;
-osThreadId calibrate_tast_handle;
+osThreadId calibrateTaskHandle;
 osThreadId imuTaskHandle;
 
 /* USER CODE END Variables */
 osThreadId Prepare_Task_Handle;
+uint8_t my_cali_flag = 0;  //这个可以放到其他地方去，原来在calibrate task，但是任务删除之后就可能消失了，故放在这先
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -139,26 +140,26 @@ void MX_FREERTOS_Init(void) {
   Prepare_Task_Handle = osThreadCreate(osThread(Prepare_Task_), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
-	osThreadDef(cali, calibrate_task, osPriorityNormal, 0, 512);
-    calibrate_tast_handle = osThreadCreate(osThread(cali), NULL);
-	
-	osThreadDef(imuTask, INS_task, osPriorityRealtime, 0, 512);
-    imuTaskHandle = osThreadCreate(osThread(imuTask), NULL);
+//	osThreadDef(cali, calibrate_task, osPriorityNormal, 0, 512);
+//    calibrateTaskHandle = osThreadCreate(osThread(cali), NULL);
+//
+//	osThreadDef(imuTask, INS_task, osPriorityRealtime, 0, 512);
+//    imuTaskHandle = osThreadCreate(osThread(imuTask), NULL);
     	
-	osThreadDef(ChassisTask, chassis_task, osPriorityAboveNormal, 0, 512);
-    chassisTaskHandle = osThreadCreate(osThread(ChassisTask), NULL);
-		
-	osThreadDef(Bodanpan_Task_,Bodanpan_Task,osPriorityBelowNormal, 0, 128);
-    BodanpanTaskHandle = osThreadCreate(osThread(Bodanpan_Task_), NULL);
-	
-	osThreadDef(armTask, arm_task, osPriorityNormal, 0, 512);
-	armTaskHandle = osThreadCreate(osThread(armTask), NULL);
-	
-	osThreadDef(flowTask, flow_task, osPriorityNormal, 0, 512);
-	flowTaskHandle = osThreadCreate(osThread(flowTask), NULL);
-	
-	osThreadDef(armControlTask, arm_control_task, osPriorityNormal, 0, 256);
-	armControlTaskHandle = osThreadCreate(osThread(armControlTask), NULL);
+//	osThreadDef(ChassisTask, chassis_task, osPriorityAboveNormal, 0, 512);
+//    chassisTaskHandle = osThreadCreate(osThread(ChassisTask), NULL);
+//
+//	osThreadDef(Bodanpan_Task_,Bodanpan_Task,osPriorityBelowNormal, 0, 128);
+//    BodanpanTaskHandle = osThreadCreate(osThread(Bodanpan_Task_), NULL);
+//
+//	osThreadDef(armTask, arm_task, osPriorityNormal, 0, 512);
+//	armTaskHandle = osThreadCreate(osThread(armTask), NULL);
+//
+//	osThreadDef(flowTask, flow_task, osPriorityNormal, 0, 512);
+//	flowTaskHandle = osThreadCreate(osThread(flowTask), NULL);
+//
+//	osThreadDef(armControlTask, arm_control_task, osPriorityNormal, 0, 256);
+//	armControlTaskHandle = osThreadCreate(osThread(armControlTask), NULL);
 	
   /* USER CODE END RTOS_THREADS */
 
@@ -176,9 +177,42 @@ __weak void Prepare_Task(void const * argument)
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN Prepare_Task */
+
+  osThreadDef(cali, calibrate_task, osPriorityNormal, 0, 512);
+  calibrateTaskHandle = osThreadCreate(osThread(cali), NULL);
+
+  osThreadDef(imuTask, INS_task, osPriorityRealtime, 0, 512);
+  imuTaskHandle = osThreadCreate(osThread(imuTask), NULL);
+
   /* Infinite loop */
   for(;;)
   {
+    if(my_cali_flag == 1)
+    {
+      vTaskDelay(100);
+      vTaskDelete(calibrateTaskHandle);
+      vTaskDelay(100);
+
+      osThreadDef(ChassisTask, chassis_task, osPriorityAboveNormal, 0, 512);
+      chassisTaskHandle = osThreadCreate(osThread(ChassisTask), NULL);
+
+      osThreadDef(Bodanpan_Task_,Bodanpan_Task,osPriorityBelowNormal, 0, 128);
+      BodanpanTaskHandle = osThreadCreate(osThread(Bodanpan_Task_), NULL);
+
+      osThreadDef(armTask, arm_task, osPriorityNormal, 0, 512);
+      armTaskHandle = osThreadCreate(osThread(armTask), NULL);
+
+      osThreadDef(flowTask, flow_task, osPriorityNormal, 0, 512);
+      flowTaskHandle = osThreadCreate(osThread(flowTask), NULL);
+
+      osThreadDef(armControlTask, arm_control_task, osPriorityNormal, 0, 256);
+      armControlTaskHandle = osThreadCreate(osThread(armControlTask), NULL);
+
+      vTaskDelay(100);
+      vTaskDelete(NULL);
+    }
+
+
     osDelay(1);
   }
   /* USER CODE END Prepare_Task */

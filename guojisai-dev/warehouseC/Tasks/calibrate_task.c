@@ -1,16 +1,16 @@
 /**
   ****************************(C) COPYRIGHT 2019 DJI****************************
   * @file       calibrate_task.c/h
-  * @brief      calibrate these device£¬include gimbal, gyro, accel, magnetometer,
+  * @brief      calibrate these deviceï¿½ï¿½include gimbal, gyro, accel, magnetometer,
   *             chassis. gimbal calibration is to calc the midpoint, max/min 
   *             relative angle. gyro calibration is to calc the zero drift.
   *             accel and mag calibration have not been implemented yet, because
   *             accel is not necessary to calibrate, mag is not used. chassis 
   *             calibration is to make motor 3508 enter quick reset ID mode.
-  *             Ğ£×¼Éè±¸£¬°üÀ¨ÔÆÌ¨,ÍÓÂİÒÇ,¼ÓËÙ¶È¼Æ,´ÅÁ¦¼Æ,µ×ÅÌ.ÔÆÌ¨Ğ£×¼ÊÇÖ÷Òª¼ÆËãÁãµã
-  *             ºÍ×î´ó×îĞ¡Ïà¶Ô½Ç¶È.ÔÆÌ¨Ğ£×¼ÊÇÖ÷Òª¼ÆËãÁãÆ¯.¼ÓËÙ¶È¼ÆºÍ´ÅÁ¦¼ÆĞ£×¼»¹Ã»ÓĞÊµÏÖ
-  *             ÒòÎª¼ÓËÙ¶È¼Æ»¹Ã»ÓĞ±ØÒªÈ¥Ğ£×¼,¶ø´ÅÁ¦¼Æ»¹Ã»ÓĞÓÃ.µ×ÅÌĞ£×¼ÊÇÊ¹M3508½øÈë¿ìËÙ
-  *             ÉèÖÃIDÄ£Ê½.
+  *             Ğ£×¼ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Ù¶È¼ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½.ï¿½ï¿½Ì¨Ğ£×¼ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  *             ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¡ï¿½ï¿½Ô½Ç¶ï¿½.ï¿½ï¿½Ì¨Ğ£×¼ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¯.ï¿½ï¿½ï¿½Ù¶È¼ÆºÍ´ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£×¼ï¿½ï¿½Ã»ï¿½ï¿½Êµï¿½ï¿½
+  *             ï¿½ï¿½Îªï¿½ï¿½ï¿½Ù¶È¼Æ»ï¿½Ã»ï¿½Ğ±ï¿½ÒªÈ¥Ğ£×¼,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ»ï¿½Ã»ï¿½ï¿½ï¿½ï¿½.ï¿½ï¿½ï¿½ï¿½Ğ£×¼ï¿½ï¿½Ê¹M3508ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  *             ï¿½ï¿½ï¿½ï¿½IDÄ£Ê½.
   * @note       
   * @history
   *  Version    Date            Author          Modification
@@ -19,22 +19,22 @@
   *
   @verbatim
   ==============================================================================
-  *             Ê¹ÓÃÒ£¿ØÆ÷½øĞĞ¿ªÊ¼Ğ£×¼
-  *             µÚÒ»²½:Ò£¿ØÆ÷µÄÁ½¸ö¿ª¹Ø¶¼´òµ½ÏÂ
-  *             µÚ¶ş²½:Á½¸öÒ¡¸Ë´ò³É\../,±£´æÁ½Ãë.\.´ú±í×óÒ¡¸ËÏòÓÒÏÂ´ò.
-  *             µÚÈı²½:Ò¡¸Ë´ò³É./\. ¿ªÊ¼ÍÓÂİÒÇĞ£×¼
-  *                    »òÕßÒ¡¸Ë´ò³É'\/' ¿ªÊ¼ÔÆÌ¨Ğ£×¼
-  *                    »òÕßÒ¡¸Ë´ò³É/''\ ¿ªÊ¼µ×ÅÌĞ£×¼
+  *             Ê¹ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¿ï¿½Ê¼Ğ£×¼
+  *             ï¿½ï¿½Ò»ï¿½ï¿½:Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½ï¿½
+  *             ï¿½Ú¶ï¿½ï¿½ï¿½:ï¿½ï¿½ï¿½ï¿½Ò¡ï¿½Ë´ï¿½ï¿½\../,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.\.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½.
+  *             ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:Ò¡ï¿½Ë´ï¿½ï¿½./\. ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£×¼
+  *                    ï¿½ï¿½ï¿½ï¿½Ò¡ï¿½Ë´ï¿½ï¿½'\/' ï¿½ï¿½Ê¼ï¿½ï¿½Ì¨Ğ£×¼
+  *                    ï¿½ï¿½ï¿½ï¿½Ò¡ï¿½Ë´ï¿½ï¿½/''\ ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ğ£×¼
   *
-  *             Êı¾İÔÚflashÖĞ£¬°üÀ¨Ğ£×¼Êı¾İºÍÃû×Ö name[3] ºÍ Ğ£×¼±êÖ¾Î» cali_flag
-  *             ÀıÈçhead_caliÓĞ°Ë¸ö×Ö½Ú,µ«ËüĞèÒª12×Ö½ÚÔÚflash,Èç¹ûËü´Ó0x080A0000¿ªÊ¼
-  *             0x080A0000-0x080A0007: head_caliÊı¾İ
-  *             0x080A0008: Ãû×Öname[0]
-  *             0x080A0009: Ãû×Öname[1]
-  *             0x080A000A: Ãû×Öname[2]
-  *             0x080A000B: Ğ£×¼±êÖ¾Î» cali_flag,µ±Ğ£×¼±êÖ¾Î»Îª0x55,ÒâÎ¶×Åhead_caliÒÑ¾­Ğ£×¼ÁË
-  *             Ìí¼ÓĞÂÉè±¸
-  *             1.Ìí¼ÓÉè±¸ÃûÔÚcalibrate_task.hµÄcali_id_e, Ïñ
+  *             ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½flashï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£×¼ï¿½ï¿½ï¿½İºï¿½ï¿½ï¿½ï¿½ï¿½ name[3] ï¿½ï¿½ Ğ£×¼ï¿½ï¿½Ö¾Î» cali_flag
+  *             ï¿½ï¿½ï¿½ï¿½head_caliï¿½Ğ°Ë¸ï¿½ï¿½Ö½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª12ï¿½Ö½ï¿½ï¿½ï¿½flash,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0x080A0000ï¿½ï¿½Ê¼
+  *             0x080A0000-0x080A0007: head_caliï¿½ï¿½ï¿½ï¿½
+  *             0x080A0008: ï¿½ï¿½ï¿½ï¿½name[0]
+  *             0x080A0009: ï¿½ï¿½ï¿½ï¿½name[1]
+  *             0x080A000A: ï¿½ï¿½ï¿½ï¿½name[2]
+  *             0x080A000B: Ğ£×¼ï¿½ï¿½Ö¾Î» cali_flag,ï¿½ï¿½Ğ£×¼ï¿½ï¿½Ö¾Î»Îª0x55,ï¿½ï¿½Î¶ï¿½ï¿½head_caliï¿½Ñ¾ï¿½Ğ£×¼ï¿½ï¿½
+  *             ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸
+  *             1.ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½calibrate_task.hï¿½ï¿½cali_id_e, ï¿½ï¿½
   *             typedef enum
   *             {
   *                 ...
@@ -42,18 +42,18 @@
   *                 CALI_XXX,
   *                 CALI_LIST_LENGHT,
   *             } cali_id_e;
-  *             2. Ìí¼ÓÊı¾İ½á¹¹ÔÚ calibrate_task.h, ±ØĞë4×Ö½Ú±¶Êı£¬Ïñ
+  *             2. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ½á¹¹ï¿½ï¿½ calibrate_task.h, ï¿½ï¿½ï¿½ï¿½4ï¿½Ö½Ú±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   *
   *             typedef struct
   *             {
   *                 uint16_t xxx;
   *                 uint16_t yyy;
   *                 fp32 zzz;
-  *             } xxx_cali_t; //³¤¶È:8×Ö½Ú 8 bytes, ±ØĞëÊÇ 4, 8, 12, 16...
-  *             3.ÔÚ "FLASH_WRITE_BUF_LENGHT",Ìí¼Ó"sizeof(xxx_cali_t)", ºÍÊµÏÖĞÂº¯Êı
-  *             bool_t cali_xxx_hook(uint32_t *cali, bool_t cmd), Ìí¼ÓĞÂÃû×ÖÔÚ "cali_name[CALI_LIST_LENGHT][3]"
-  *             ºÍÉêÃ÷±äÁ¿ xxx_cali_t xxx_cail, Ìí¼Ó±äÁ¿µØÖ·ÔÚcali_sensor_buf[CALI_LIST_LENGHT]
-  *             ÔÚcali_sensor_size[CALI_LIST_LENGHT]Ìí¼ÓÊı¾İ³¤¶È, ×îºóÔÚcali_hook_fun[CALI_LIST_LENGHT]Ìí¼Óº¯Êı
+  *             } xxx_cali_t; //ï¿½ï¿½ï¿½ï¿½:8ï¿½Ö½ï¿½ 8 bytes, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 4, 8, 12, 16...
+  *             3.ï¿½ï¿½ "FLASH_WRITE_BUF_LENGHT",ï¿½ï¿½ï¿½"sizeof(xxx_cali_t)", ï¿½ï¿½Êµï¿½ï¿½ï¿½Âºï¿½ï¿½ï¿½
+  *             bool_t cali_xxx_hook(uint32_t *cali, bool_t cmd), ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ "cali_name[CALI_LIST_LENGHT][3]"
+  *             ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ xxx_cali_t xxx_cail, ï¿½ï¿½Ó±ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½cali_sensor_buf[CALI_LIST_LENGHT]
+  *             ï¿½ï¿½cali_sensor_size[CALI_LIST_LENGHT]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ³ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½cali_hook_fun[CALI_LIST_LENGHT]ï¿½ï¿½Óºï¿½ï¿½ï¿½
   *
   ==============================================================================
   @endverbatim
@@ -75,8 +75,8 @@
 //#define FLASH_WRITE_BUF_LENGHT  (sizeof(head_cali_t) + sizeof(gimbal_cali_t) + sizeof(imu_cali_t) * 3  + CALI_LIST_LENGHT * 4)
 #define FLASH_WRITE_BUF_LENGHT  (sizeof(imu_cali_t) * 3  + CALI_LIST_LENGHT * 4)
 
-uint8_t my_cali_flag = 0;
-uint8_t my_cnt_flag = 0;	//Ê¹ÓÃß@‚€í×Ô„ÓĞ£œÊ£¬²»ÓÃßb¿ØÆ÷£¬0éé_Ê¼Ğ£œÊ
+extern uint8_t my_cali_flag;
+uint8_t my_cnt_flag = 0;	//Ê¹ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½Ô„ï¿½Ğ£ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½ï¿½_Ê¼Ğ£ï¿½ï¿½
 uint8_t my_head_flag = 0;
 uint8_t my_gyro_flag = 0;
 
@@ -86,7 +86,7 @@ uint8_t my_gyro_flag = 0;
   * @retval         none
   */
 /**
-  * @brief          Ê¹ÓÃÒ£¿ØÆ÷¿ªÊ¼Ğ£×¼£¬ÀıÈçÍÓÂİÒÇ£¬ÔÆÌ¨£¬µ×ÅÌ
+  * @brief          Ê¹ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Ğ£×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param[in]      none
   * @retval         none
   */
@@ -98,7 +98,7 @@ static void RC_cmd_to_calibrate(void);
   * @retval         none
   */
 /**
-  * @brief          ´Óflash¶ÁÈ¡Ğ£×¼Êı¾İ
+  * @brief          ï¿½ï¿½flashï¿½ï¿½È¡Ğ£×¼ï¿½ï¿½ï¿½ï¿½
   * @param[in]      none
   * @retval         none
   */
@@ -110,7 +110,7 @@ static void cali_data_read(void);
   * @retval         none
   */
 /**
-  * @brief          ÍùflashĞ´ÈëĞ£×¼Êı¾İ
+  * @brief          ï¿½ï¿½flashĞ´ï¿½ï¿½Ğ£×¼ï¿½ï¿½ï¿½ï¿½
   * @param[in]      none
   * @retval         none
   */
@@ -127,13 +127,13 @@ static void cali_data_write(void);
                     1:means cali task has been done
   */
 /**
-  * @brief          "head"Éè±¸Ğ£×¼
-  * @param[in][out] cali:Ö¸ÕëÖ¸ÏòheadÊı¾İ,µ±cmdÎªCALI_FUNC_CMD_INIT, ²ÎÊıÊÇÊäÈë,CALI_FUNC_CMD_ON,²ÎÊıÊÇÊä³ö
+  * @brief          "head"ï¿½è±¸Ğ£×¼
+  * @param[in][out] cali:Ö¸ï¿½ï¿½Ö¸ï¿½ï¿½headï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½cmdÎªCALI_FUNC_CMD_INIT, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,CALI_FUNC_CMD_ON,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param[in]      cmd: 
-                    CALI_FUNC_CMD_INIT: ´ú±íÓÃĞ£×¼Êı¾İ³õÊ¼»¯Ô­Ê¼Êı¾İ
-                    CALI_FUNC_CMD_ON: ´ú±íĞèÒªĞ£×¼
-  * @retval         0:Ğ£×¼ÈÎÎñ»¹Ã»ÓĞÍê
-                    1:Ğ£×¼ÈÎÎñÒÑ¾­Íê³É
+                    CALI_FUNC_CMD_INIT: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£×¼ï¿½ï¿½ï¿½İ³ï¿½Ê¼ï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½
+                    CALI_FUNC_CMD_ON: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªĞ£×¼
+  * @retval         0:Ğ£×¼ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
+                    1:Ğ£×¼ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½
   */
 static bool_t cali_head_hook(uint32_t *cali, bool_t cmd);   //header device cali function
 
@@ -147,13 +147,13 @@ static bool_t cali_head_hook(uint32_t *cali, bool_t cmd);   //header device cali
                     1:means cali task has been done
   */
 /**
-  * @brief          ÍÓÂİÒÇÉè±¸Ğ£×¼
-  * @param[in][out] cali:Ö¸ÕëÖ¸ÏòÍÓÂİÒÇÊı¾İ,µ±cmdÎªCALI_FUNC_CMD_INIT, ²ÎÊıÊÇÊäÈë,CALI_FUNC_CMD_ON,²ÎÊıÊÇÊä³ö
+  * @brief          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸Ğ£×¼
+  * @param[in][out] cali:Ö¸ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½cmdÎªCALI_FUNC_CMD_INIT, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,CALI_FUNC_CMD_ON,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param[in]      cmd: 
-                    CALI_FUNC_CMD_INIT: ´ú±íÓÃĞ£×¼Êı¾İ³õÊ¼»¯Ô­Ê¼Êı¾İ
-                    CALI_FUNC_CMD_ON: ´ú±íĞèÒªĞ£×¼
-  * @retval         0:Ğ£×¼ÈÎÎñ»¹Ã»ÓĞÍê
-                    1:Ğ£×¼ÈÎÎñÒÑ¾­Íê³É
+                    CALI_FUNC_CMD_INIT: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£×¼ï¿½ï¿½ï¿½İ³ï¿½Ê¼ï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½
+                    CALI_FUNC_CMD_ON: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªĞ£×¼
+  * @retval         0:Ğ£×¼ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
+                    1:Ğ£×¼ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½
   */
 static bool_t cali_gyro_hook(uint32_t *cali, bool_t cmd);   //gyro device cali function
 
@@ -167,13 +167,13 @@ static bool_t cali_gyro_hook(uint32_t *cali, bool_t cmd);   //gyro device cali f
                     1:means cali task has been done
   */
 /**
-  * @brief          ÔÆÌ¨Éè±¸Ğ£×¼
-  * @param[in][out] cali:Ö¸ÕëÖ¸ÏòÔÆÌ¨Êı¾İ,µ±cmdÎªCALI_FUNC_CMD_INIT, ²ÎÊıÊÇÊäÈë,CALI_FUNC_CMD_ON,²ÎÊıÊÇÊä³ö
+  * @brief          ï¿½ï¿½Ì¨ï¿½è±¸Ğ£×¼
+  * @param[in][out] cali:Ö¸ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½cmdÎªCALI_FUNC_CMD_INIT, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,CALI_FUNC_CMD_ON,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param[in]      cmd: 
-                    CALI_FUNC_CMD_INIT: ´ú±íÓÃĞ£×¼Êı¾İ³õÊ¼»¯Ô­Ê¼Êı¾İ
-                    CALI_FUNC_CMD_ON: ´ú±íĞèÒªĞ£×¼
-  * @retval         0:Ğ£×¼ÈÎÎñ»¹Ã»ÓĞÍê
-                    1:Ğ£×¼ÈÎÎñÒÑ¾­Íê³É
+                    CALI_FUNC_CMD_INIT: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£×¼ï¿½ï¿½ï¿½İ³ï¿½Ê¼ï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½
+                    CALI_FUNC_CMD_ON: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªĞ£×¼
+  * @retval         0:Ğ£×¼ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
+                    1:Ğ£×¼ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½
   */
 //static bool_t cali_gimbal_hook(uint32_t *cali, bool_t cmd); //gimbal device cali function
 
@@ -221,8 +221,8 @@ static uint32_t calibrate_systemTick;
   * @retval         none
   */
 /**
-  * @brief          Ğ£×¼ÈÎÎñ£¬ÓÉmainº¯Êı´´½¨
-  * @param[in]      pvParameters: ¿Õ
+  * @brief          Ğ£×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mainï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  * @param[in]      pvParameters: ï¿½ï¿½
   * @retval         none
   */
 void calibrate_task(void const *pvParameters)
@@ -270,14 +270,14 @@ void calibrate_task(void const *pvParameters)
 }
 
 /**
-  * @brief          get imu control temperature, unit ¡æ
+  * @brief          get imu control temperature, unit ï¿½ï¿½
   * @param[in]      none
   * @retval         imu control temperature
   */
 /**
-  * @brief          »ñÈ¡imu¿ØÖÆÎÂ¶È, µ¥Î»¡æ
+  * @brief          ï¿½ï¿½È¡imuï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½, ï¿½ï¿½Î»ï¿½ï¿½
   * @param[in]      none
-  * @retval         imu¿ØÖÆÎÂ¶È
+  * @retval         imuï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½
   */
 int8_t get_control_temperature(void)
 {
@@ -291,8 +291,8 @@ int8_t get_control_temperature(void)
   * @retval         none
   */
 /**
-  * @brief          »ñÈ¡Î³¶È,Ä¬ÈÏ22.0f
-  * @param[out]     latitude:fp32Ö¸Õë 
+  * @brief          ï¿½ï¿½È¡Î³ï¿½ï¿½,Ä¬ï¿½ï¿½22.0f
+  * @param[out]     latitude:fp32Ö¸ï¿½ï¿½ 
   * @retval         none
   */
 void get_flash_latitude(float *latitude)
@@ -319,7 +319,7 @@ void get_flash_latitude(float *latitude)
   * @retval         none
   */
 /**
-  * @brief          Ê¹ÓÃÒ£¿ØÆ÷¿ªÊ¼Ğ£×¼£¬ÀıÈçÍÓÂİÒÇ£¬ÔÆÌ¨£¬µ×ÅÌ
+  * @brief          Ê¹ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Ğ£×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param[in]      none
   * @retval         none
   */
@@ -337,7 +337,7 @@ static void RC_cmd_to_calibrate(void)
     static uint8_t  rc_action_flag    = 0;
 
     //if something is calibrating, return
-    //Èç¹ûÒÑ¾­ÔÚĞ£×¼£¬¾Í·µ»Ø
+    //ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½Ğ£×¼ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½
     for (i = 0; i < CALI_LIST_LENGHT; i++)
     {
         if (cali_sensor[i].cali_cmd)
@@ -350,7 +350,7 @@ static void RC_cmd_to_calibrate(void)
         }
     }
 	
-//	if(my_cali_flag == 1)	//È«²¿Ğ£œÊÍê³É£¬ÍË³ö£¬²»ÒªËÀÑ­­h
+//	if(my_cali_flag == 1)	//È«ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ñ­ï¿½h
 //	{
 //		return;
 //	}
@@ -361,7 +361,7 @@ static void RC_cmd_to_calibrate(void)
         rc_action_flag = BEGIN_FLAG;
         rc_cmd_time = 0;
 		
-		my_cnt_flag = 1;	//1éœÊ‚äĞ£œÊÍÓÂİƒx
+		my_cnt_flag = 1;	//1ï¿½ï¿½Ê‚ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½İƒx
 		
     }
 //    else if (rc_action_flag == GIMBAL_FLAG && rc_cmd_time > RC_CMD_LONG_TIME)
@@ -386,7 +386,7 @@ static void RC_cmd_to_calibrate(void)
         }
         cali_buzzer_off();
 		
-		my_cnt_flag = 2;	//µ½2¾ÍĞ£œÊÍê³ÉÁË
+		my_cnt_flag = 2;	//ï¿½ï¿½2ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
     }
 //    else if (rc_action_flag == CHASSIS_FLAG && rc_cmd_time > RC_CMD_LONG_TIME)
@@ -394,7 +394,7 @@ static void RC_cmd_to_calibrate(void)
 //        rc_action_flag = 0;
 //        rc_cmd_time = 0;
 //        //send CAN reset ID cmd to M3508
-//        //·¢ËÍCANÖØÉèIDÃüÁîµ½3508
+//        //ï¿½ï¿½ï¿½ï¿½CANï¿½ï¿½ï¿½ï¿½IDï¿½ï¿½ï¿½îµ½3508
 //        CAN_cmd_chassis_reset_ID();
 //        CAN_cmd_chassis_reset_ID();
 //        CAN_cmd_chassis_reset_ID();
@@ -404,27 +404,27 @@ static void RC_cmd_to_calibrate(void)
     if (my_cnt_flag == 0 && rc_action_flag == 0)
     {
         //two rockers set to  \../, hold for 2 seconds,
-        //Á½¸öÒ¡¸Ë´ò³É \../,±£³Ö2s
+        //ï¿½ï¿½ï¿½ï¿½Ò¡ï¿½Ë´ï¿½ï¿½ \../,ï¿½ï¿½ï¿½ï¿½2s
         rc_cmd_time++;
     }
 //    else if (calibrate_RC->rc.ch[0] > RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[1] > RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[2] < -RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[3] > RC_CALI_VALUE_HOLE && switch_is_down(calibrate_RC->rc.s[0]) && switch_is_down(calibrate_RC->rc.s[1]) && rc_action_flag != 0)
 //    {
 //        //two rockers set '\/', hold for 2 seconds
-//        //Á½¸öÒ¡¸Ë´ò³É'\/',±£³Ö2s
+//        //ï¿½ï¿½ï¿½ï¿½Ò¡ï¿½Ë´ï¿½ï¿½'\/',ï¿½ï¿½ï¿½ï¿½2s
 //        rc_cmd_time++;
 //        rc_action_flag = GIMBAL_FLAG;
 //    }
     else if (my_cnt_flag == 1 && rc_action_flag != 0)
     {
         //two rocker set to ./\., hold for 2 seconds
-        //Á½¸öÒ¡¸Ë´ò³É./\.,±£³Ö2s
+        //ï¿½ï¿½ï¿½ï¿½Ò¡ï¿½Ë´ï¿½ï¿½./\.,ï¿½ï¿½ï¿½ï¿½2s
         rc_cmd_time++;
         rc_action_flag = GYRO_FLAG;
     }
 //    else if (calibrate_RC->rc.ch[0] < -RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[1] > RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[2] > RC_CALI_VALUE_HOLE && calibrate_RC->rc.ch[3] > RC_CALI_VALUE_HOLE && switch_is_down(calibrate_RC->rc.s[0]) && switch_is_down(calibrate_RC->rc.s[1]) && rc_action_flag != 0)
 //    {
 //        //two rocker set to /''\, hold for 2 seconds
-//        //Á½¸öÒ¡¸Ë´ò³É/''\,±£³Ö2s
+//        //ï¿½ï¿½ï¿½ï¿½Ò¡ï¿½Ë´ï¿½ï¿½/''\,ï¿½ï¿½ï¿½ï¿½2s
 //        rc_cmd_time++;
 //        rc_action_flag = CHASSIS_FLAG;
 //    }
@@ -438,10 +438,10 @@ static void RC_cmd_to_calibrate(void)
     if (calibrate_systemTick - rc_cmd_systemTick > CALIBRATE_END_TIME)
     {
         //over 20 seconds, end
-        //³¬¹ı20s,Í£Ö¹
+        //ï¿½ï¿½ï¿½ï¿½20s,Í£Ö¹
         rc_action_flag = 0;
 		
-		my_cali_flag = 6;	//´Ë ‘³¬ß^20Ãë
+		my_cali_flag = 6;	//ï¿½Ë ï¿½ï¿½ï¿½ï¿½^20ï¿½ï¿½
 		
         return;
     }
@@ -475,7 +475,7 @@ static void RC_cmd_to_calibrate(void)
   * @retval         none
   */
 /**
-  * @brief          Ê¹ÓÃÒ£¿ØÆ÷¿ªÊ¼Ğ£×¼£¬ÀıÈçÍÓÂİÒÇ£¬ÔÆÌ¨£¬µ×ÅÌ
+  * @brief          Ê¹ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Ğ£×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param[in]      none
   * @retval         none
   */
@@ -511,7 +511,7 @@ void cali_param_init(void)
   * @retval         none
   */
 /**
-  * @brief          ´Óflash¶ÁÈ¡Ğ£×¼Êı¾İ
+  * @brief          ï¿½ï¿½flashï¿½ï¿½È¡Ğ£×¼ï¿½ï¿½ï¿½ï¿½
   * @param[in]      none
   * @retval         none
   */
@@ -552,7 +552,7 @@ static void cali_data_read(void)
   * @retval         none
   */
 /**
-  * @brief          ÍùflashĞ´ÈëĞ£×¼Êı¾İ
+  * @brief          ï¿½ï¿½flashĞ´ï¿½ï¿½Ğ£×¼ï¿½ï¿½ï¿½ï¿½
   * @param[in]      none
   * @retval         none
   */
@@ -590,13 +590,13 @@ static void cali_data_write(void)
                     1:means cali task has been done
   */
 /**
-  * @brief          "head"Éè±¸Ğ£×¼
-  * @param[in][out] cali:Ö¸ÕëÖ¸ÏòheadÊı¾İ,µ±cmdÎªCALI_FUNC_CMD_INIT, ²ÎÊıÊÇÊäÈë,CALI_FUNC_CMD_ON,²ÎÊıÊÇÊä³ö
+  * @brief          "head"ï¿½è±¸Ğ£×¼
+  * @param[in][out] cali:Ö¸ï¿½ï¿½Ö¸ï¿½ï¿½headï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½cmdÎªCALI_FUNC_CMD_INIT, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,CALI_FUNC_CMD_ON,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param[in]      cmd: 
-                    CALI_FUNC_CMD_INIT: ´ú±íÓÃĞ£×¼Êı¾İ³õÊ¼»¯Ô­Ê¼Êı¾İ
-                    CALI_FUNC_CMD_ON: ´ú±íĞèÒªĞ£×¼
-  * @retval         0:Ğ£×¼ÈÎÎñ»¹Ã»ÓĞÍê
-                    1:Ğ£×¼ÈÎÎñÒÑ¾­Íê³É
+                    CALI_FUNC_CMD_INIT: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£×¼ï¿½ï¿½ï¿½İ³ï¿½Ê¼ï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½
+                    CALI_FUNC_CMD_ON: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªĞ£×¼
+  * @retval         0:Ğ£×¼ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
+                    1:Ğ£×¼ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½
   */
 static bool_t cali_head_hook(uint32_t *cali, bool_t cmd)
 {
@@ -636,13 +636,13 @@ static bool_t cali_head_hook(uint32_t *cali, bool_t cmd)
                     1:means cali task has been done
   */
 /**
-  * @brief          ÍÓÂİÒÇÉè±¸Ğ£×¼
-  * @param[in][out] cali:Ö¸ÕëÖ¸ÏòÍÓÂİÒÇÊı¾İ,µ±cmdÎªCALI_FUNC_CMD_INIT, ²ÎÊıÊÇÊäÈë,CALI_FUNC_CMD_ON,²ÎÊıÊÇÊä³ö
+  * @brief          ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸Ğ£×¼
+  * @param[in][out] cali:Ö¸ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½cmdÎªCALI_FUNC_CMD_INIT, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,CALI_FUNC_CMD_ON,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param[in]      cmd: 
-                    CALI_FUNC_CMD_INIT: ´ú±íÓÃĞ£×¼Êı¾İ³õÊ¼»¯Ô­Ê¼Êı¾İ
-                    CALI_FUNC_CMD_ON: ´ú±íĞèÒªĞ£×¼
-  * @retval         0:Ğ£×¼ÈÎÎñ»¹Ã»ÓĞÍê
-                    1:Ğ£×¼ÈÎÎñÒÑ¾­Íê³É
+                    CALI_FUNC_CMD_INIT: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£×¼ï¿½ï¿½ï¿½İ³ï¿½Ê¼ï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½
+                    CALI_FUNC_CMD_ON: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªĞ£×¼
+  * @retval         0:Ğ£×¼ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
+                    1:Ğ£×¼ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½
   */
 static bool_t cali_gyro_hook(uint32_t *cali, bool_t cmd)
 {
@@ -662,14 +662,14 @@ static bool_t cali_gyro_hook(uint32_t *cali, bool_t cmd)
             count_time = 0;
             cali_buzzer_off();
             //gyro_cali_enable_control();
-			my_cali_flag = 1;	//™z²éß@‚€¿´Ğ£œÊÊÇ·ñÍê³É
+			my_cali_flag = 1;	//ï¿½zï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
             return 1;
         }
         else
         {
             //gyro_cali_disable_control(); //disable the remote control to make robot no move
             imu_start_buzzer();
-			my_cali_flag = 9;	//ß@‚€´ú±íÍÓÂİƒxĞ£œÊÎ´Íê³É
+			my_cali_flag = 9;	//ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İƒxĞ£ï¿½ï¿½Î´ï¿½ï¿½ï¿½
             return 0;
         }
     }
@@ -687,13 +687,13 @@ static bool_t cali_gyro_hook(uint32_t *cali, bool_t cmd)
                     1:means cali task has been done
   */
 /**
-  * @brief          ÔÆÌ¨Éè±¸Ğ£×¼
-  * @param[in][out] cali:Ö¸ÕëÖ¸ÏòÔÆÌ¨Êı¾İ,µ±cmdÎªCALI_FUNC_CMD_INIT, ²ÎÊıÊÇÊäÈë,CALI_FUNC_CMD_ON,²ÎÊıÊÇÊä³ö
+  * @brief          ï¿½ï¿½Ì¨ï¿½è±¸Ğ£×¼
+  * @param[in][out] cali:Ö¸ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½cmdÎªCALI_FUNC_CMD_INIT, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,CALI_FUNC_CMD_ON,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   * @param[in]      cmd: 
-                    CALI_FUNC_CMD_INIT: ´ú±íÓÃĞ£×¼Êı¾İ³õÊ¼»¯Ô­Ê¼Êı¾İ
-                    CALI_FUNC_CMD_ON: ´ú±íĞèÒªĞ£×¼
-  * @retval         0:Ğ£×¼ÈÎÎñ»¹Ã»ÓĞÍê
-                    1:Ğ£×¼ÈÎÎñÒÑ¾­Íê³É
+                    CALI_FUNC_CMD_INIT: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£×¼ï¿½ï¿½ï¿½İ³ï¿½Ê¼ï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½
+                    CALI_FUNC_CMD_ON: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªĞ£×¼
+  * @retval         0:Ğ£×¼ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
+                    1:Ğ£×¼ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½
   */
 //static bool_t cali_gimbal_hook(uint32_t *cali, bool_t cmd)
 //{
