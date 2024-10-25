@@ -613,8 +613,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   */
 static void imu_cmd_spi_dma(void)
 {
-//    UBaseType_t uxSavedInterruptStatus;
-//    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+    UBaseType_t uxSavedInterruptStatus;
+    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
 
     //���������ǵ�DMA����
     if( (gyro_update_flag & (1 << IMU_DR_SHFITS) ) && !(hspi1.hdmatx->Instance->CR & DMA_SxCR_EN) && !(hspi1.hdmarx->Instance->CR & DMA_SxCR_EN)
@@ -625,7 +625,7 @@ static void imu_cmd_spi_dma(void)
 
         HAL_GPIO_WritePin(CS1_GYRO_GPIO_Port, CS1_GYRO_Pin, GPIO_PIN_RESET);
         SPI1_DMA_enable((uint32_t)gyro_dma_tx_buf, (uint32_t)gyro_dma_rx_buf, SPI_DMA_GYRO_LENGHT);
-//        taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
+        taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
         return;
     }
     //�������ٶȼƵ�DMA����
@@ -637,7 +637,7 @@ static void imu_cmd_spi_dma(void)
 
         HAL_GPIO_WritePin(CS1_ACCEL_GPIO_Port, CS1_ACCEL_Pin, GPIO_PIN_RESET);
         SPI1_DMA_enable((uint32_t)accel_dma_tx_buf, (uint32_t)accel_dma_rx_buf, SPI_DMA_ACCEL_LENGHT);
-//        taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
+        taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
         return;
     }
     
@@ -652,10 +652,10 @@ static void imu_cmd_spi_dma(void)
 
         HAL_GPIO_WritePin(CS1_ACCEL_GPIO_Port, CS1_ACCEL_Pin, GPIO_PIN_RESET);
         SPI1_DMA_enable((uint32_t)accel_temp_dma_tx_buf, (uint32_t)accel_temp_dma_rx_buf, SPI_DMA_ACCEL_TEMP_LENGHT);
-//        taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
+        taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
         return;
     }
-//    taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
+    taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
 }
 
 
@@ -706,4 +706,3 @@ void DMA2_Stream2_IRQHandler(void)
         }
     }
 }
-

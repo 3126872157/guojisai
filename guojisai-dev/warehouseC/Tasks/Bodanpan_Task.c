@@ -25,13 +25,13 @@ void Bodanpan_Task(void const * argument)
 		if(a_new_ball_in)
 		{
 			bodanpan_position_set(1,1);
-			osDelay(300);
+			osDelay(1500);
 			//如果检测到的还是上一个球的数据或者没有检测到,来回动一下，防止IC卡读不到
 			if(IC_data == bodanpan.IC_date_pan[ball_num-1] || IC_data == 0)
 			{
 				bodanpan.angle_set += 1.0f * ANGLE_PER_BOX;
 				bodanpan.code_set = bodanpan.angle_set * 819.2;
-				osDelay(100);
+				osDelay(200);
 				bodanpan.angle_set -= 1.0f * ANGLE_PER_BOX;
 				bodanpan.code_set = bodanpan.angle_set * 819.2;
 				osDelay(200);

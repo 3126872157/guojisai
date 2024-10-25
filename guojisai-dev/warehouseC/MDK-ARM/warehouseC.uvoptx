@@ -168,52 +168,57 @@
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\warehouseC\../Tasks/calibrate_task.c\my_cali_flag</ItemText>
+          <ItemText>\\warehouseC\../Tasks/Chassis_Task.c\chassis_move</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\warehouseC\../Tasks/Chassis_Task.c\chassis_move</ItemText>
+          <ItemText>my_angle[0]</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>my_angle[0]</ItemText>
+          <ItemText>shijue_data</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>shijue_data</ItemText>
+          <ItemText>IC_data</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>IC_data</ItemText>
+          <ItemText>TX_shijue_mode,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
-          <ItemText>TX_shijue_mode,0x0A</ItemText>
+          <ItemText>bodanpan</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>1</WinNumber>
-          <ItemText>bodanpan</ItemText>
+          <ItemText>a_new_ball_in</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
           <WinNumber>1</WinNumber>
-          <ItemText>a_new_ball_in</ItemText>
+          <ItemText>QR_code</ItemText>
         </Ww>
         <Ww>
           <count>10</count>
           <WinNumber>1</WinNumber>
-          <ItemText>QR_code</ItemText>
+          <ItemText>\\warehouseC\../USB_DEVICE/App/usbd_cdc_if.c\shijue_data.ball_x</ItemText>
         </Ww>
         <Ww>
           <count>11</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\warehouseC\../USB_DEVICE/App/usbd_cdc_if.c\shijue_data.ball_x</ItemText>
+          <ItemText>\\warehouseC\../Core/Src/freertos.c\my_cali_flag</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>point</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -266,6 +271,31 @@
           <count>9</count>
           <WinNumber>2</WinNumber>
           <ItemText>ball_find_error,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>10</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>ic_buf</ItemText>
+        </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>\\warehouseC\../Core/Src/main.c\ic_buf</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>\\warehouseC\../Core/Src/main.c\ic_buf[15]</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>lizhuang_angle</ItemText>
+        </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>pianzhi_x</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>
@@ -342,7 +372,7 @@
 
   <Group>
     <GroupName>Application/User/Core</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -377,8 +407,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/freertos.c</PathWithFileName>
-      <FilenameWithoutPath>freertos.c</FilenameWithoutPath>
+      <PathWithFileName>../Core/Src/can.c</PathWithFileName>
+      <FilenameWithoutPath>can.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -389,8 +419,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/can.c</PathWithFileName>
-      <FilenameWithoutPath>can.c</FilenameWithoutPath>
+      <PathWithFileName>../Core/Src/freertos.c</PathWithFileName>
+      <FilenameWithoutPath>freertos.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1582,7 +1612,7 @@
 
   <Group>
     <GroupName>Application</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
