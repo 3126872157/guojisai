@@ -19,7 +19,7 @@ float piancha = 75;//摄像头到夹爪的距离偏差
 
 
 //从高往低0,1,2
-float jie_ti_ping_tai[3] = {260, 220, 160};
+float jie_ti_ping_tai[3] = {270, 230, 160};
 //从高往低0,1,2
 float li_cang[3] = {330, 210, 90};//{355, 235, 115}
 float jieti_x = 490;//阶梯平台x

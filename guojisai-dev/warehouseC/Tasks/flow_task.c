@@ -43,7 +43,7 @@ uint8_t shijue_error = 0;
 extern uint8_t TX_shijue_mode;
 uint8_t licang_current_line;//仓库层数记录
 
-float shijue_suoqiu_tolerance = 10;//视觉一次锁球忍耐值mode3
+float shijue_suoqiu_tolerance = 20;//视觉一次锁球忍耐值mode3
 float shijue_suoqiu_tolerance2 = 5;//视觉二次锁球忍耐值mode21
 float shijue_suoqiu_tolerance3 = 2;//视觉三次锁球忍耐值mode13
 
@@ -128,9 +128,9 @@ TargetPoints targ_point[] = {
 		{2,		 100,	     0,			-90,		5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 
 		//阶梯平台
-/*15*/	{3,		 0,		  	100,		0,			6,				CHASSIS_MOVE_AND_ROTATE},//视觉横移锁球
-		{21,	 0,		  	100,		0,			3,				CHASSIS_MOVE_AND_ROTATE},//横移视觉二次锁球
-		{13,	 0,		  	100,		0,			1.5,			CHASSIS_MOVE_AND_ROTATE},//横移视觉三次锁球
+/*15*/	{3,		 0,		  	100,		0,			3,				CHASSIS_MOVE_AND_ROTATE},//视觉横移锁球
+		{21,	 0,		  	100,		0,			2,				CHASSIS_MOVE_AND_ROTATE},//横移视觉二次锁球
+		{13,	 0,		  	100,		0,			1,				CHASSIS_MOVE_AND_ROTATE},//横移视觉三次锁球
 		{4,		 non,	    non,	    non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第一个
 	
 /*19*/	{3,		 0,		  	100,		0,			6,				CHASSIS_MOVE_AND_ROTATE},//视觉横移锁球
