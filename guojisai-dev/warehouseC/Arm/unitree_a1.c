@@ -135,11 +135,15 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == UNITREE_MOTOR_UART)
 	{
-		static int unitree_cnt = 0;
+//		UBaseType_t uxSavedInterruptStatus;
+//		uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+//		taskENTER_CRITICAL_FROM_ISR();
+		
 		// 发送完成进入tx中断回调，拉低RE电平，使能485转ttl模块接收状态
-		//HAL_GPIO_WritePin(A1Motor_DE_GPIO_Port, A1Motor_DE_Pin, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_RESET);
-		unitree_cnt++;
+		
+//		UNITREE_MOTOR_HUART.gState = HAL_UART_STATE_READY;
+//		taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
 	}
 }
 
@@ -147,10 +151,14 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 void UnitreeSend(motor_send_t *motor)
 {
     // 拉高DE电平，使能485转ttl模块的发送模式，失能接受模式；此模块不能同时处于两种模式中
-    //HAL_GPIO_WritePin(A1Motor_DE_GPIO_Port, A1Motor_DE_Pin, GPIO_PIN_SET);
     HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_SET);
-	//这里不需要延时
-    while (HAL_UART_Transmit_IT(&UNITREE_MOTOR_HUART, (uint8_t *)&(motor->motor_send_data), 34) != HAL_OK);
+
+	//这改为DMA
+	
+//	taskENTER_CRITICAL();
+	//这里不需要延时，用IT发送会因为INS_TASK抢占而卡住
+    HAL_UART_Transmit_DMA(&UNITREE_MOTOR_HUART, (uint8_t *)&(motor->motor_send_data), 34);
+//	taskEXIT_CRITICAL();
 }
 
 // 解包电机返回数据

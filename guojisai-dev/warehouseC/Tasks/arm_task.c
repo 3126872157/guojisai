@@ -29,6 +29,8 @@ uint16_t servo_start_flag = 99;//Ã¿Êýµ½100£¬×ÜÏß¶æ»ú·¢ËÍÐÅºÅÖ´ÐÐÒ»´Î(¼´1sÖ´ÐÐÒ»´
 uint8_t task_flag;
 bool_t claw_flag;
 
+uint8_t TX_shijue_flag = 99;
+
 void arm_task(void const * argument)
 {
 	osDelay(10);
@@ -64,7 +66,7 @@ void arm_task(void const * argument)
 		else
 		{
 			servo_start_flag++;
-			if(servo_start_flag == servo_Data.serial_servo_Time)	//100ms·¢ËÍÒ»´Î¶æ»ú¿ØÖÆÐÅºÅ£¬²é¿´¶æ»ú½Ç¶È
+			if(servo_start_flag >= servo_Data.serial_servo_Time)	//100ms·¢ËÍÒ»´Î¶æ»ú¿ØÖÆÐÅºÅ£¬²é¿´¶æ»ú½Ç¶È
 			{
 				if(arm_ctrl_signal)	//²»ÄÜÍ¬Ê±·¢ËÍ
 				{
@@ -84,6 +86,14 @@ void arm_task(void const * argument)
 			}
 /***********************************************/	
 		}
+		
+//		if(TX_shijue_flag >= 100)
+//		{
+//			CDC_Transmit_FS(&TX_shijue_mode,1);
+//			TX_shijue_flag = 0;
+//		}
+//		TX_shijue_flag ++;
+		
 		//´ó±Ûµç»úÎ»ÖÃ¿ØÖÆ
 		ramp_function(&ramp_targ_pos, targ_pos, arm_slow_start_k); 
 		unitree_pos_pid_ctrl(ramp_targ_pos);

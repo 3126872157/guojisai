@@ -47,7 +47,7 @@ void my_delay_us(volatile uint32_t nTime)
 //	}
 //}
 
-//main.cÒÆµ½Õâ
+//ÒÆµ½main.c
 //void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //{
 //	if (htim->Instance == TIM6)

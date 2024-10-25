@@ -22,6 +22,7 @@ float kw = 4.0;
 float up_w = 1.2;
 float down_w = -0.2;
 uint8_t dangerous_count = 0;	//超出最大力矩次数
+uint8_t id = 0;
 
 //--------------------------------总线舵机变量--------------------------------
 serial_servo_t servo_Data;
@@ -42,9 +43,9 @@ uint16_t huadao_slope_out_pwm = 900;
 uint16_t huadao_slope_in_pwm = 1150;
 uint16_t tulun_up_pwm = 1250;//1250升起250落下(范围250-1250)
 uint16_t tulun_down_pwm = 250;
-uint16_t bogan_zhunbei_pos = 1000;
-uint16_t bogan_jiqiu_pos = 800;
-uint16_t bogan_shouqi_pos = 350;
+uint16_t bogan_zhunbei_pos = 950;
+uint16_t bogan_jiqiu_pos = 750;
+uint16_t bogan_shouqi_pos = 270;
 
 //--------------------------------机械臂与解算变量----------------------------
 // 逆运动学解算结构体
@@ -55,7 +56,7 @@ uint8_t error;
 // 封装力矩控制的函数
 void unitree_torque_ctrl(unitree_ctrl_t *ctrl, float torque)
 {
-	modfiy_torque_cmd(&ctrl->unitree_send, 0, torque);
+	modfiy_torque_cmd(&ctrl->unitree_send, id, torque);
 	UnitreeSend(&ctrl->unitree_send);
 	ExtractData(&ctrl->unitree_recv, &motor_rx_temp);
 }
@@ -63,7 +64,7 @@ void unitree_torque_ctrl(unitree_ctrl_t *ctrl, float torque)
 // 封装速度控制的函数
 void unitree_speed_ctrl(unitree_ctrl_t *ctrl, float speed, float kw)
 {
-	modfiy_speed_cmd(&ctrl->unitree_send, 0, speed, kw);
+	modfiy_speed_cmd(&ctrl->unitree_send, id, speed, kw);
 	UnitreeSend(&ctrl->unitree_send);
 	ExtractData(&ctrl->unitree_recv, &motor_rx_temp);
 }
@@ -89,20 +90,20 @@ void unitree_w_pid_ctrl(float w)
 	if (unitree_pos_pid.error[0] > 0.01f)	//在0.01误差外
 	{
 //		unitree_torque_ctrl(&unitree_Data, tff + PID_calc(&unitree_w_pid, unitree_Data.unitree_recv.LW, w));
-		modfiy_mix_cmd(&unitree_Data.unitree_send, 0, Tf_up, 0, w, 0, kw);
+		modfiy_mix_cmd(&unitree_Data.unitree_send, id, Tf_up, 0, w, 0, kw);
 		UnitreeSend(&unitree_Data.unitree_send);
 		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
 	}
 	if (unitree_pos_pid.error[0] < -0.01f)
 	{
 //		unitree_torque_ctrl(&unitree_Data, tff + PID_calc(&unitree_w_pid, unitree_Data.unitree_recv.LW, w));
-		modfiy_mix_cmd(&unitree_Data.unitree_send, 0, Tf_down, 0, w, 0, kw);
+		modfiy_mix_cmd(&unitree_Data.unitree_send, id, Tf_down, 0, w, 0, kw);
 		UnitreeSend(&unitree_Data.unitree_send);
 		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
 	}
 	else
 	{
-		modfiy_mix_cmd(&unitree_Data.unitree_send, 0, +Tf, 0, w, 0, kw);
+		modfiy_mix_cmd(&unitree_Data.unitree_send, id, +Tf, 0, w, 0, kw);
 		UnitreeSend(&unitree_Data.unitree_send);
 		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
 	}

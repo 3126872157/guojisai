@@ -19,9 +19,10 @@ float piancha = 75;//摄像头到夹爪的距离偏差
 
 
 //从高往低0,1,2
-float jie_ti_ping_tai[3] = {240, 195, 130};
+float jie_ti_ping_tai[3] = {260, 220, 160};
 //从高往低0,1,2
 float li_cang[3] = {330, 210, 90};//{355, 235, 115}
+float jieti_x = 490;//阶梯平台x
 float lizhuang_x =  250.0f;
 float lizhuang_angle = 20.0f * D2R;
 
@@ -61,44 +62,62 @@ void jie_ti_ping_tai_take_dingceng(void)
 		{
 			case 0:
 				arm_ctrl_signal = 1;
-				point.x = 500;		//阶梯的坐标
-				point.y = jie_ti_ping_tai[0];
-				claw_control(510);
-				point.total_angle = 90;
+				extra_time = 1000;
+				claw_control(490);
 				arm_current_step ++;
 				break;
 			case 1:
+//				uint8_t num = 0;
+//				float distance_total = 0;
+//				while(num < 100)
+//				{
+//					distance_total += shijue_data.ball_y;
+//					num ++;
+//					osDelay(1);
+//				}
+//				if(fabs(shijue_data.ball_x - 666) > 2)
+//				{
+//					point.x += 10.0f + (distance_total/100.0f - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
+//				}
+				
+				point.x = jieti_x;		//阶梯的坐标
+				point.y = jie_ti_ping_tai[0];
+				point.total_angle = 95;
+				arm_current_step ++;
+				break;
+			case 2:
 				claw_control(410);	//claw夹取
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
-			case 2:					//缓冲
+			case 3:					//缓冲
 				set_jieti_middle_pos();
 				arm_current_step ++;
 				break;
-			case 3:					//缓冲
+			case 4:					//缓冲
 				point.x = 300;
 				point.y = 300;
 				point.total_angle = 110;
 				arm_current_step ++;
 				break;
-			case 4:					//对准拨蛋盘
+			case 5:					//对准拨蛋盘
 				set_bodanpan_pos();
 				arm_current_step ++;
 				break;
-			case 5:					//放球
+			case 6:					//放球
 				claw_control(470);	
 				arm_current_step ++;
 				break;
-			case 6:					//回归
+			case 7:					//回归
 				set_normal_pos();
 				arm_current_step ++;
 				a_new_ball_in = 1;
 				break;
-			case 7:
+			case 8:
 				arm_control_mode = 0;
 				arm_current_step = 0;
 				arm_ctrl_signal = 0;
+				extra_time = 1000;
 				break;
 		}
 }
@@ -110,16 +129,30 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 		{
 			case 0:
 				arm_ctrl_signal = 1;
-				point.x = 500;		//阶梯的坐标
+				extra_time = 800;
+//				uint8_t num = 0;
+//				float distance_total = 0;
+//				while(num < 100)
+//				{
+//					distance_total += shijue_data.ball_y;
+//					num ++;
+//					osDelay(1);
+//				}
+//				if(fabs(shijue_data.ball_x - 666) > 2)
+//				{
+//					point.x += 10.0f + (distance_total/100.0f - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
+//				}
+			
+				point.x = jieti_x;		//阶梯的坐标
 				point.y = jie_ti_ping_tai[0] - 20;
 				claw_control(400);	//担心碰到边沿，先关闭夹爪
-				point.total_angle = 90;
+				point.total_angle = 95;
 				arm_current_step ++;
 				break;
 				
 			case 1:
 				point.y = jie_ti_ping_tai[jie_ti_num];
-				claw_control(480);	//张开夹爪
+				claw_control(520);	//张开夹爪
 				arm_current_step ++;
 				break;
 				
@@ -155,6 +188,7 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 				arm_control_mode = 0;
 				arm_current_step = 0;
 				arm_ctrl_signal = 0;
+				extra_time = 1000;
 				break;
 		}
 }
@@ -472,8 +506,8 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 		{
 			case 0:
 				arm_ctrl_signal = 1;
-				extra_time = 1000;
-				claw_control(470);
+				extra_time = 800;
+				claw_control(490);
 				huadao_control(0);
 				arm_current_step ++;
 				break;
@@ -527,11 +561,11 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				break;
 			case 7:
 				set_normal_pos();
-				if(lizhuang_success_flag == 1)
-				{
+//				if(lizhuang_success_flag == 1)
+//				{
 					a_new_ball_in = 1;
-					lizhuang_success_flag = 0;
-				}
+//					lizhuang_success_flag = 0;
+//				}
 				arm_current_step ++;
 				break;
 			case 8:
@@ -559,7 +593,7 @@ void zhuanpanji_take(void)
 				arm_current_step ++;
 				break;
 			case 1:
-				point.x = 445;
+				point.x = 420;
 				point.y = 280;
 				point.total_angle = 85;
 				bogan_control(2);
@@ -581,11 +615,17 @@ void zhuanpanji_take(void)
 					arm_current_step ++;
 					break;
 				}
+				break;
 			case 4:
 				bogan_control(0);
+				set_normal_pos();
+				arm_current_step ++;
+				break;
+			case 5:
 				arm_control_mode = 0;
 				arm_current_step = 0;
 				arm_ctrl_signal = 0;
+				break;
 		}
 }
 

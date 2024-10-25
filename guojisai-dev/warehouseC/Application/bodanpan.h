@@ -26,7 +26,7 @@ extern Pan_t bodanpan;
 
 void bodanpan_init(void);
 void bodanpan_position_set(int8_t direction, uint8_t num);//向direction方向转动num个格子
-bool_t bodanpan_find_ball(uint8_t x,uint8_t y);//根据行列号旋转拨蛋盘到对应球的位置，便于后续取出该球
+uint8_t bodanpan_find_ball(uint8_t x,uint8_t y);//根据行列号旋转拨蛋盘到对应球的位置，便于后续取出该球
 
 
 
