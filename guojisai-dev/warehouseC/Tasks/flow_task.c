@@ -48,7 +48,7 @@ float shijue_suoqiu_tolerance2 = 5;//视觉二次锁球忍耐值mode21
 float shijue_suoqiu_tolerance3 = 2;//视觉三次锁球忍耐值mode13
 
 float shijue_suozhang_tolerance = 10;//视觉锁障忍耐值(用于避障前的精准中心定位)
-float obstacle_x_tol = 10;//用于大幅度横移过程中的锁定障碍
+float obstacle_x_tol = 30;//用于大幅度横移过程中的锁定障碍
 float QR_x_tol = 50;//锁定二维码忍耐值
 float obstacle_distance_tol = 250;//在障碍物前多少距离停下
 
@@ -509,7 +509,7 @@ void flow_task(void const * argument)
 				{
 					arm_control_mode = 11;
 					mode9_task_start = 1;
-					osDelay(1000);
+					osDelay(4000);
 				}
 				
 				if(bogan_jiqiu_flag == 0 && shijue_data.ball_distance == 1)
@@ -533,7 +533,7 @@ void flow_task(void const * argument)
 					bogan_jiqiu_flag = 0;
 				}				
 				
-				if(zhuanpanji_ball_num == 6)
+				if(zhuanpanji_ball_num == 250)
 				{
 					bogan_control(2);
 					osDelay(500);//这里延迟一下，防止最后一次击球还没成功，机械臂就抬起来了

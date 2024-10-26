@@ -6,8 +6,10 @@
 #define PI 3.1415926f
 #define MAX_TORQUE 2.0f
 
-uint8_t unitree_rx_buf[2][Unitree_RX_BUF_NUM]; // dma接收缓冲
+uint8_t unitree_rx_buf[2][Unitree_RX_BUF_NUM * 2]; // dma接收缓冲，给数组预留位置，避免溢出
 ServoComdDataV3 motor_rx_temp;					// 解包缓冲，从dma缓冲中复制出来，再导入接收的结构体中
+
+uint8_t unitree_reinit_cnt = 0;
 
 //与本文件无关，串口1dma发送标志位
 extern volatile uint8_t usart_dma_tx_over;
@@ -84,12 +86,39 @@ void unitree_Uart_Init(uint8_t *rx1_buf, uint8_t *rx2_buf, uint16_t dma_buf_num)
     __HAL_DMA_ENABLE(&UNITREE_MOTOR_HDMA_RX);
 }
 
+void unitree_Uart_RE_Init(uint8_t *rx1_buf, uint8_t *rx2_buf, uint16_t dma_buf_num)
+{
+	unitree_reinit_cnt ++;
+	// 使能DMA串口接收
+	SET_BIT(UNITREE_MOTOR_HUART.Instance->CR3, USART_CR3_DMAR);
+	// 使能空闲中断
+    __HAL_UART_ENABLE_IT(&UNITREE_MOTOR_HUART, UART_IT_IDLE);
+	//DMA控制寄存器使能
+	while (UNITREE_MOTOR_HDMA_RX.Instance->CR & DMA_SxCR_EN)
+    {
+        __HAL_DMA_DISABLE(&UNITREE_MOTOR_HDMA_RX);
+    }
+	// 数据长度
+    UNITREE_MOTOR_HDMA_RX.Instance->NDTR = 2 * dma_buf_num;
+	// 使能双缓冲区
+    SET_BIT(UNITREE_MOTOR_HDMA_RX.Instance->CR, DMA_SxCR_DBM);
+    // 使能DMA
+    __HAL_DMA_ENABLE(&UNITREE_MOTOR_HDMA_RX);
+	//清空rx_buf
+	memset(rx1_buf, 0, Unitree_RX_BUF_NUM);
+	memset(rx2_buf, 0, Unitree_RX_BUF_NUM);
+}
+
 // 空闲中断执行双缓冲交换（乒乓缓冲），弱定义在it.h
 void USER_Unitree_A1_Motor_UART_IDLECallback(UART_HandleTypeDef *huart)
 {
     if (huart == &UNITREE_MOTOR_HUART)
     {
         static uint16_t this_time_rx_len = 0;
+		
+		UBaseType_t uxSavedInterruptStatus;
+		uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+		taskENTER_CRITICAL_FROM_ISR();
 
         if ((UNITREE_MOTOR_HDMA_RX.Instance->CR & DMA_SxCR_CT) == RESET)
         {
@@ -100,7 +129,7 @@ void USER_Unitree_A1_Motor_UART_IDLECallback(UART_HandleTypeDef *huart)
             // 重新设定剩余数据长度
             UNITREE_MOTOR_HDMA_RX.Instance->NDTR = 2 * Unitree_RX_BUF_NUM;
             // 设定缓冲区1
-            DMA2_Stream1->CR |= DMA_SxCR_CT;
+            UNITREE_MOTOR_HDMA_RX.Instance->CR |= DMA_SxCR_CT;
             // 使能DMA
             __HAL_DMA_ENABLE(&UNITREE_MOTOR_HDMA_RX);
             // 若实际接收长度与理论接受长度一致
@@ -118,7 +147,7 @@ void USER_Unitree_A1_Motor_UART_IDLECallback(UART_HandleTypeDef *huart)
             // 重新设定数据长度
             UNITREE_MOTOR_HDMA_RX.Instance->NDTR = 2 * Unitree_RX_BUF_NUM;
             // 设定缓冲区0
-            DMA2_Stream1->CR &= ~(DMA_SxCR_CT);
+            UNITREE_MOTOR_HDMA_RX.Instance->CR &= ~(DMA_SxCR_CT);
             // 使能DMA
             __HAL_DMA_ENABLE(&UNITREE_MOTOR_HDMA_RX);
 
@@ -127,6 +156,8 @@ void USER_Unitree_A1_Motor_UART_IDLECallback(UART_HandleTypeDef *huart)
                 data_rx_copy(&motor_rx_temp, unitree_rx_buf[1]);
             }
         }
+//		HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_SET);
+		taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
     }
 }
 
@@ -150,14 +181,13 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 // 发送电机指令
 void UnitreeSend(motor_send_t *motor)
 {
+	//这里的写电平是原子操作，不能被打断，要不然放在接收中断里也行
+//	taskENTER_CRITICAL();
     // 拉高DE电平，使能485转ttl模块的发送模式，失能接受模式；此模块不能同时处于两种模式中
     HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_SET);
-
-	//这改为DMA
 	
-//	taskENTER_CRITICAL();
 	//这里不需要延时，用IT发送会因为INS_TASK抢占而卡住
-    HAL_UART_Transmit_DMA(&UNITREE_MOTOR_HUART, (uint8_t *)&(motor->motor_send_data), 34);
+    HAL_UART_Transmit_DMA(&UNITREE_MOTOR_HUART, (uint8_t *)&(motor->motor_send_data), 34);	//DMA发送注意不要使用circular模式
 //	taskEXIT_CRITICAL();
 }
 

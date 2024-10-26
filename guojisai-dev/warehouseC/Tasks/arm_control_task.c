@@ -19,10 +19,10 @@ float piancha = 75;//摄像头到夹爪的距离偏差
 
 
 //从高往低0,1,2
-float jie_ti_ping_tai[3] = {270, 230, 160};
+float jie_ti_ping_tai[3] = {260, 200, 150};	//阶梯平台y，改了第二个中间的y值
 //从高往低0,1,2
 float li_cang[3] = {330, 210, 90};//{355, 235, 115}
-float jieti_x = 490;//阶梯平台x
+float jieti_x = 500;//阶梯平台x，490
 float lizhuang_x =  250.0f;
 float lizhuang_angle = 20.65f * D2R;
 
@@ -64,7 +64,7 @@ void jie_ti_ping_tai_take_dingceng(void)
 			case 0:
 				arm_ctrl_signal = 1;
 				extra_time = 1000;
-				claw_control(490);
+				claw_control(470);
 				arm_current_step ++;
 				break;
 			case 1:
@@ -87,7 +87,7 @@ void jie_ti_ping_tai_take_dingceng(void)
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(410);	//claw夹取
+				claw_control(400);	//claw夹取
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
@@ -145,9 +145,9 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 //				}
 			
 				point.x = jieti_x;		//阶梯的坐标
-				point.y = jie_ti_ping_tai[0] - 20;
-				claw_control(400);	//担心碰到边沿，先关闭夹爪
-				point.total_angle = 95;
+				point.y = jie_ti_ping_tai[jie_ti_num] + 70;
+				claw_control(430);	//担心碰到边沿，先关闭夹爪,400
+				point.total_angle = 100;//阶梯平台末端角度,95
 				arm_current_step ++;
 				break;
 				
@@ -158,7 +158,7 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 				break;
 				
 			case 2:
-				claw_control(410);	//claw夹取
+				claw_control(400);	//claw夹取，410
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
@@ -220,7 +220,7 @@ void li_cang_take(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 4:
-				claw_control(410);	
+				claw_control(400);	
 				arm_current_step ++;
 				break;
 			case 5:
@@ -232,7 +232,6 @@ void li_cang_take(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 7:
-				claw_control(410);
 				point.x = 300;
 				point.y = 300;
 				point.total_angle = 110;
@@ -274,7 +273,7 @@ void li_cang_take_diceng(void)
 				arm_current_step ++;
 				break;
 			case 4:
-				claw_control(410);	
+				claw_control(400);	
 				arm_current_step ++;
 				break;
 			case 5:
@@ -288,7 +287,6 @@ void li_cang_take_diceng(void)
 				arm_current_step ++;
 				break;
 			case 7:
-				claw_control(410);
 				point.x = 300;
 				point.y = 300;
 				point.total_angle = 110;
@@ -319,12 +317,14 @@ void li_cang_put(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(410);	//claw夹取
+				claw_control(400);	//claw夹取
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
 			case 3:
-				set_normal_pos();
+				point.x = 300;
+			    point.y = 300;
+				point.total_angle = 110;
 				tulun_control(0);
 				arm_current_step ++;
 				break;
@@ -347,7 +347,7 @@ void li_cang_put(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 8:
-				set_normal_pos();
+				set_normal_pos();//回归
 				arm_current_step ++;
 				break;
 			case 9:
@@ -384,7 +384,7 @@ void daoduo_put(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 4:
-				set_normal_pos();
+				set_normal_pos();//回归
 				arm_current_step ++;
 				break;
 			case 5:
@@ -413,12 +413,14 @@ void li_cang_put_diceng(void)
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(410);	//claw夹取
+				claw_control(400);	//claw夹取
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
 			case 3:
-				set_normal_pos();
+				point.x = 300;
+			    point.y = 300;
+				point.total_angle = 110;
 				tulun_control(0);
 				arm_current_step ++;
 				break;
@@ -552,8 +554,10 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				point.x = 300;
 				point.y = 300;
 				if(shijue_data.ball_distance < 180)
+				{
 					lizhuang_success_flag = 1;
 					lizhuang_ball_num ++;
+				}
 				arm_current_step ++;
 				break;
 			case 5:
@@ -598,15 +602,15 @@ void zhuanpanji_take(void)
 				arm_current_step ++;
 				break;
 			case 1:
-				point.x = 420;
-				point.y = 280;
+				point.x = 405;	//圆盘机伸出的x调整，420
+				point.y = 290;
 				point.total_angle = 85;
 				bogan_control(2);
 				arm_current_step ++;
 				break;
 			case 2:
-				point.x = 435;
-				point.y = 230;
+				point.x = 420;	//圆盘机x调整,435
+				point.y = 240;
 				point.total_angle = 85;
 				arm_current_step ++;
 				break;
@@ -656,7 +660,9 @@ void gan_rao_qiu(void)//干扰球去阶梯平台
 				//这可以加是否夹到球的判断
 				break;
 			case 3:
-				set_normal_pos();
+				point.x = 300;
+				point.y = 300;
+				point.total_angle = 110;
 				tulun_control(0);
 				arm_current_step ++;
 				break;

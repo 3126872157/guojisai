@@ -428,7 +428,12 @@ __weak void USER_Unitree_A1_Motor_UART_IDLECallback(UART_HandleTypeDef* huart)
 
 void USER_Unitree_A1_Motor_UART_IRQHandler(void)
 {
-	if(UNITREE_MOTOR_HUART.Instance->SR & UART_FLAG_RXNE)//接收到数据：状态寄存器里的接受寄存器非空为1（非空了）
+	//接收到数据：状态寄存器里的接受寄存器非空为1（非空了），或处理错误情况：ORE（over run error）等
+	if(UNITREE_MOTOR_HUART.Instance->SR & UART_FLAG_RXNE || 
+	   UNITREE_MOTOR_HUART.Instance->SR & UART_FLAG_ORE  ||
+	   UNITREE_MOTOR_HUART.Instance->SR & UART_FLAG_NE   ||
+	   UNITREE_MOTOR_HUART.Instance->SR & UART_FLAG_FE   ||
+	   UNITREE_MOTOR_HUART.Instance->SR & UART_FLAG_PE)
 	{
 		__HAL_UART_CLEAR_PEFLAG(&UNITREE_MOTOR_HUART);	//此函数用来清除IDLE标志位
 	}

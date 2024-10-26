@@ -208,17 +208,32 @@
         <Ww>
           <count>10</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\warehouseC\../USB_DEVICE/App/usbd_cdc_if.c\shijue_data.ball_x</ItemText>
+          <ItemText>\\warehouseC\../Core/Src/freertos.c\my_cali_flag</ItemText>
         </Ww>
         <Ww>
           <count>11</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\warehouseC\../Core/Src/freertos.c\my_cali_flag</ItemText>
+          <ItemText>point</ItemText>
         </Ww>
         <Ww>
           <count>12</count>
           <WinNumber>1</WinNumber>
-          <ItemText>point</ItemText>
+          <ItemText>id</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>hdma_usart1_rx</ItemText>
+        </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>unitree_rx_buf</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>huart1</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -265,7 +280,7 @@
         <Ww>
           <count>8</count>
           <WinNumber>2</WinNumber>
-          <ItemText>zhuanpanji_ball_num</ItemText>
+          <ItemText>zhuanpanji_ball_num,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
@@ -296,6 +311,16 @@
           <count>14</count>
           <WinNumber>2</WinNumber>
           <ItemText>pianzhi_x</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>jie_ti_ping_tai</ItemText>
+        </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>zhuanpanji_ball_num,0x0A</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>
@@ -340,6 +365,16 @@
       <pszMrulep></pszMrulep>
       <pSingCmdsp></pSingCmdsp>
       <pMultCmdsp></pMultCmdsp>
+      <SystemViewers>
+        <Entry>
+          <Name>OS Support\System and Thread Viewer</Name>
+          <WinId>35904</WinId>
+        </Entry>
+        <Entry>
+          <Name>System Viewer\USART1</Name>
+          <WinId>35905</WinId>
+        </Entry>
+      </SystemViewers>
       <DebugDescription>
         <Enable>1</Enable>
         <EnableFlashSeq>0</EnableFlashSeq>
@@ -407,8 +442,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/can.c</PathWithFileName>
-      <FilenameWithoutPath>can.c</FilenameWithoutPath>
+      <PathWithFileName>../Core/Src/freertos.c</PathWithFileName>
+      <FilenameWithoutPath>freertos.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -419,8 +454,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>../Core/Src/freertos.c</PathWithFileName>
-      <FilenameWithoutPath>freertos.c</FilenameWithoutPath>
+      <PathWithFileName>../Core/Src/can.c</PathWithFileName>
+      <FilenameWithoutPath>can.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

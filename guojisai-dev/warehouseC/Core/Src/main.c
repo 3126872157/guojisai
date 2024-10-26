@@ -257,7 +257,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 							if(ic_buf[i+15] != ic_buf[15])
 								return;
 						}
-						if(((ic_buf[15] % 16) < 4) || ((ic_buf[15] % 16) > 1) || ((ic_buf[15] / 16) > 1) || ((ic_buf[15] / 16) < 4))
+						if(((ic_buf[15] % 16) < 4) && ((ic_buf[15] % 16) > 0) && ((ic_buf[15] / 16) > 0) && ((ic_buf[15] / 16) < 4))
 							IC_data = ic_buf[15];				//将球的数据存入IC_Data
 					}
 					X = 0;

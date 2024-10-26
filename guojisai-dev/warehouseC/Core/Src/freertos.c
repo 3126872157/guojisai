@@ -54,6 +54,8 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 
+uint8_t my_cali_flag = 0;	//从Caliberate_Task移到这里
+
 osThreadId chassisTaskHandle;
 osThreadId BodanpanTaskHandle;
 osThreadId armTaskHandle;
@@ -64,7 +66,7 @@ osThreadId imuTaskHandle;
 
 /* USER CODE END Variables */
 osThreadId Prepare_Task_Handle;
-uint8_t my_cali_flag = 0;  //这个可以放到其他地方去，原来在calibrate task，但是任务删除之后就可能消失了，故放在这先
+
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
@@ -175,7 +177,7 @@ __weak void Prepare_Task(void const * argument)
 {
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();
-//  /* USER CODE BEGIN Prepare_Task */
+  /* USER CODE BEGIN Prepare_Task */
 
   osThreadDef(cali, calibrate_task, osPriorityNormal, 0, 512);
   calibrateTaskHandle = osThreadCreate(osThread(cali), NULL);
@@ -214,7 +216,7 @@ __weak void Prepare_Task(void const * argument)
 
     osDelay(1);
   }
-//  /* USER CODE END Prepare_Task */
+  /* USER CODE END Prepare_Task */
 }
 
 /* Private application code --------------------------------------------------*/
