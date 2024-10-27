@@ -499,7 +499,7 @@ void li_cang_put_diceng(void)//arm_control_mode = 4
 				arm_current_step ++;
 				break;
 			case 2:
-				extra_time = 0;
+				extra_time = 300;
 			
 				claw_control(400);	//claw¼ÐÈ¡
 				arm_current_step ++;
