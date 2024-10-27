@@ -14,7 +14,7 @@ const static fp32 unitree_pos_pid_K[3] = {UNITREE_POS_PID_KP, UNITREE_POS_PID_KI
 // 控制相关
 float K_tff = 0.01; // 前馈力矩因子，想着是前馈力矩跟角速度有关
 float K_set_w = 5;
-float Tf = 0.08;	//分情况讨论前馈力矩0.08,0.145
+float Tf = 0;	//分情况讨论前馈力矩0.08
 float Tf_up = 1.0;//0.1
 float Tf_down = 0;
 float set_w = 0;
@@ -87,26 +87,26 @@ void unitree_w_pid_ctrl(float w)
 	float real_pos = unitree_Data.unitree_recv.Pos - unitree_Data.zero_pose;
 
 	// 往正方向转
-	if (unitree_pos_pid.error[0] > 0.01f)	//在0.01误差外
-	{
-//		unitree_torque_ctrl(&unitree_Data, tff + PID_calc(&unitree_w_pid, unitree_Data.unitree_recv.LW, w));
-		modfiy_mix_cmd(&unitree_Data.unitree_send, id, Tf_up, 0, w, 0, kw);
-		UnitreeSend(&unitree_Data.unitree_send);
-		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
-	}
-	if (unitree_pos_pid.error[0] < -0.01f)
-	{
-//		unitree_torque_ctrl(&unitree_Data, tff + PID_calc(&unitree_w_pid, unitree_Data.unitree_recv.LW, w));
-		modfiy_mix_cmd(&unitree_Data.unitree_send, id, Tf_down, 0, w, 0, kw);
-		UnitreeSend(&unitree_Data.unitree_send);
-		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
-	}
-	else
-	{
+//	if (unitree_pos_pid.error[0] > 0.01f)	//在0.01误差外
+//	{
+////		unitree_torque_ctrl(&unitree_Data, tff + PID_calc(&unitree_w_pid, unitree_Data.unitree_recv.LW, w));
+//		modfiy_mix_cmd(&unitree_Data.unitree_send, id, Tf_up, 0, w, 0, kw);
+//		UnitreeSend(&unitree_Data.unitree_send);
+//		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
+//	}
+//	if (unitree_pos_pid.error[0] < -0.01f)
+//	{
+////		unitree_torque_ctrl(&unitree_Data, tff + PID_calc(&unitree_w_pid, unitree_Data.unitree_recv.LW, w));
+//		modfiy_mix_cmd(&unitree_Data.unitree_send, id, Tf_down, 0, w, 0, kw);
+//		UnitreeSend(&unitree_Data.unitree_send);
+//		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
+//	}
+//	else
+//	{
 		modfiy_mix_cmd(&unitree_Data.unitree_send, id, +Tf, 0, w, 0, kw);
 		UnitreeSend(&unitree_Data.unitree_send);
 		ExtractData(&unitree_Data.unitree_recv, &motor_rx_temp);
-	}
+//	}
 }
 
 // 位置pid控制

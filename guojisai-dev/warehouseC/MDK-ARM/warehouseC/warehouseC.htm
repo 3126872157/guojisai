@@ -3,7 +3,7 @@
 <title>Static Call Graph - [warehouseC\warehouseC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image warehouseC\warehouseC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Sun Oct 27 17:52:05 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Sun Oct 27 17:55:07 2024
 <BR><P>
 <H3>Maximum Stack Usage =        464 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -806,10 +806,10 @@ Global Symbols
 <P><STRONG><a name="[bb]"></a>AHRS_update</STRONG> (Thumb, 314 bytes, Stack size 136 bytes, ahrs.o(i.AHRS_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 280<LI>Call Chain = AHRS_update &rArr; accel_comple_filter &rArr; accel_update_kp_ki &rArr; AHRS_invSqrt &rArr; __hardfp_sqrtf &rArr; __set_errno
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_w
+<BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_w
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quat_normalization
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;accel_comple_filter
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;INS_task
 </UL>
@@ -955,12 +955,12 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
-<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
-<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bodanpan_position_set
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bodanpan_motor_init
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IC_story
+<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> freertos.o(.constdata)
 </UL>
@@ -3454,11 +3454,11 @@ Global Symbols
 <LI><a href="#[244]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;servo_arm_move
 <LI><a href="#[23c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arm_solve
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Arm_Init
+<LI><a href="#[246]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ramp_function
+<LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;unitree_Uart_RE_Init
 <LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_fabs
 <LI><a href="#[23e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[23f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdcmple
-<LI><a href="#[246]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ramp_function
-<LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;unitree_Uart_RE_Init
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> freertos.o(.constdata)
 </UL>
@@ -3734,6 +3734,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[1cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelete
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
 <LI><a href="#[270]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bogan_control
+<LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gray_sensor_read
+<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bodanpan_find_ball
 <LI><a href="#[22d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_sqrt
 <LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
 <LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_fabs
@@ -3744,8 +3746,6 @@ Global Symbols
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
 <LI><a href="#[21e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dneg
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
-<LI><a href="#[26f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gray_sensor_read
-<LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bodanpan_find_ball
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> freertos.o(.constdata)
 </UL>
@@ -3940,12 +3940,12 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
 <LI><a href="#[26a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;huadao_control
 <LI><a href="#[269]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;claw_control
+<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_normal_pos
 <LI><a href="#[22c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_sinf
 <LI><a href="#[240]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_fabs
 <LI><a href="#[219]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_cosf
 <LI><a href="#[23e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[229]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
-<LI><a href="#[231]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_normal_pos
 </UL>
 <BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arm_control_task
 </UL>
@@ -4198,7 +4198,7 @@ Global Symbols
 <LI><a href="#[248]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;unitree_save_check
 </UL>
 
-<P><STRONG><a name="[2b2]"></a>unitree_w_pid_ctrl</STRONG> (Thumb, 244 bytes, Stack size 16 bytes, arm_ctrl.o(i.unitree_w_pid_ctrl))
+<P><STRONG><a name="[2b2]"></a>unitree_w_pid_ctrl</STRONG> (Thumb, 94 bytes, Stack size 16 bytes, arm_ctrl.o(i.unitree_w_pid_ctrl))
 <BR><BR>[Stack]<UL><LI>Max Depth = 100<LI>Call Chain = unitree_w_pid_ctrl &rArr; UnitreeSend &rArr; HAL_UART_Transmit_DMA &rArr; HAL_DMA_Start_IT &rArr; DMA_SetConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[281]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;modfiy_mix_cmd
@@ -4740,8 +4740,8 @@ Global Symbols
 <P><STRONG><a name="[de]"></a>__aeabi_i2d</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, dflt_clz.o(x$fpl$dflt))
 <BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Bodanpan_Task
 <LI><a href="#[209]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USER_SERIAL_SERVO_UART_IDLECallback
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bodanpan_position_set
+<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
 </UL>
 
 <P><STRONG><a name="[322]"></a>_dflt</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, dflt_clz.o(x$fpl$dflt), UNUSED)
@@ -4773,11 +4773,11 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Bodanpan_Task
 <LI><a href="#[209]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USER_SERIAL_SERVO_UART_IDLECallback
+<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bodanpan_position_set
 <LI><a href="#[228]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__kernel_poly
 <LI><a href="#[224]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__mathlib_dbl_underflow
 <LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__mathlib_dbl_overflow
 <LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
-<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bodanpan_position_set
 </UL>
 
 <P><STRONG><a name="[2d9]"></a>_dmul</STRONG> (Thumb, 440 bytes, Stack size 32 bytes, dmul_clz.o(x$fpl$dmul), UNUSED)
@@ -4826,8 +4826,8 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;flow_task
 <LI><a href="#[23d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;arm_solver_analyze
-<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
 <LI><a href="#[238]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lizhuang_shijue_take
+<LI><a href="#[21b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_pow
 </UL>
 
 <P><STRONG><a name="[2db]"></a>_drcmple</STRONG> (Thumb, 98 bytes, Stack size 16 bytes, drleqf.o(x$fpl$drleqf), UNUSED)
