@@ -30,6 +30,7 @@ uint16_t servo_start_flag = 99;//Ã¿Êıµ½100£¬×ÜÏß¶æ»ú·¢ËÍĞÅºÅÖ´ĞĞÒ»´Î(¼´1sÖ´ĞĞÒ»´
 
 bool_t A1_die_flag = 0;
 
+uint8_t arm_protect_flag = 0;
 uint8_t TX_shijue_flag = 99;
 
 void arm_task(void const * argument)
@@ -88,6 +89,11 @@ void arm_task(void const * argument)
 					getServosAngle(3,1,2,3);
 				}
 				servo_start_flag = 0;
+				
+				//Ã¿1ÃëÖØÖÃ¹Ø½Úµç»ú£¬·ÀÖ¹³ª¸è
+				arm_protect_flag ++;
+				if(arm_protect_flag >= 10)
+					A1_die_flag = 1;
 				
 				//½èÓÃÒ»ÏÂµØ·½·¢ËÍÊÓ¾õÄ£Ê½
 				CDC_Transmit_FS(&TX_shijue_mode,1);
