@@ -2,6 +2,7 @@
 #include "arm_solver.h"
 #include "pid.h"
 #include "usbd_cdc_if.h"
+#include "unitree_a1.h"
 
 //#define printf myprintf
 
@@ -17,6 +18,7 @@ extern unitree_ctrl_t unitree_Data;
 extern serial_servo_t servo_Data;
 extern struct arm_solver solver;
 extern uint8_t TX_shijue_mode;
+extern uint8_t unitree_rx_buf[2][Unitree_RX_BUF_NUM * 2];
 
 arm_ctrl_point point;
 
@@ -26,8 +28,7 @@ bool_t arm_ctrl_signal = 0;
 
 uint16_t servo_start_flag = 99;//每数到100，总线舵机发送信号执行一次(即1s执行一次)
 
-uint8_t task_flag;
-bool_t claw_flag;
+bool_t A1_die_flag = 0;
 
 uint8_t TX_shijue_flag = 99;
 
@@ -45,6 +46,14 @@ void arm_task(void const * argument)
 			unitree_torque_ctrl(&unitree_Data, 0);
 			ramp_targ_pos = unitree_Data.unitree_recv.Pos;
 			osDelay(10);
+		}
+		
+		if(A1_die_flag == 1)
+		{
+			unitree_torque_ctrl(&unitree_Data, 0);
+			unitree_Uart_RE_Init(unitree_rx_buf[0], unitree_rx_buf[1], Unitree_RX_BUF_NUM);
+			__HAL_UART_CLEAR_PEFLAG(&UNITREE_MOTOR_HUART);
+			A1_die_flag = 0;
 		}
 		
 		//初始转到大臂数值位置

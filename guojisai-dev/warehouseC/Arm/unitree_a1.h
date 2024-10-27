@@ -30,5 +30,8 @@ void modfiy_mix_cmd(motor_send_t *send, uint8_t ID, float Torque, float POS, flo
 void UnitreeSend(motor_send_t *motor);
 // 解包电机返回数据
 void ExtractData(motor_recv_t *recv, ServoComdDataV3 *rx_temp);
+// 电机串口重新初始化
+void unitree_Uart_RE_Init(uint8_t *rx1_buf, uint8_t *rx2_buf, uint16_t dma_buf_num);
+
 
 #endif

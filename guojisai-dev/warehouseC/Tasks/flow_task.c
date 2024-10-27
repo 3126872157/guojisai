@@ -326,6 +326,7 @@ void flow_task(void const * argument)
 						{
 							chassis_code_reset_flag = 1;
 							V_mode_x_speed = 0;
+							modeN_task_start = 0;
 							currentTargIndex ++;
 						}
 					}
@@ -515,9 +516,8 @@ void flow_task(void const * argument)
 				if(bogan_jiqiu_flag == 0 && shijue_data.ball_distance == 1)
 				{
 					bogan_control(1);
-					
 					osDelay(bogan_delay);
-					
+					bogan_control(2);
 					bogan_jiqiu_flag = 1;
 					bogan_zhunbei_flag = 0;
 					zhuanpanji_ball_num++;
@@ -533,7 +533,7 @@ void flow_task(void const * argument)
 					bogan_jiqiu_flag = 0;
 				}				
 				
-				if(zhuanpanji_ball_num == 250)
+				if(zhuanpanji_ball_num == 6)
 				{
 					bogan_control(2);
 					osDelay(500);//这里延迟一下，防止最后一次击球还没成功，机械臂就抬起来了
@@ -543,6 +543,7 @@ void flow_task(void const * argument)
 				if(arm_control_mode == 0)
 				{
 					mode9_task_start = 0;
+					
 					currentTargIndex ++;
 				}
 

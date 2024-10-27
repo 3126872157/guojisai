@@ -31,7 +31,7 @@ extern uint8_t Servo_Rx_Data[20];	//生的数据
 //	    2号舵机为第三关节，增大为往下按
 //		3号舵机为夹爪，增大为张开
 //		4号舵机为拨蛋板，增大为归位
-uint16_t claw_pos = 470;
+uint16_t claw_pos = 600;
 //uint16_t claw_catch_pos = 410;
 //uint16_t claw_loose_pos = 510;
 //uint16_t claw_middle_pos = 470;

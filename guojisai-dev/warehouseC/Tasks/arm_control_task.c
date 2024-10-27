@@ -82,7 +82,7 @@ void jie_ti_ping_tai_take_dingceng(void)
 				
 				point.x = jieti_x;		//阶梯的坐标
 				point.y = jie_ti_ping_tai[0];
-				point.total_angle = 95;
+				point.total_angle = 100;
 				arm_current_step ++;
 				break;
 			case 2:
@@ -94,27 +94,27 @@ void jie_ti_ping_tai_take_dingceng(void)
 				set_jieti_middle_pos();
 				arm_current_step ++;
 				break;
-			case 4:					//缓冲
-				point.x = 300;
-				point.y = 300;
+//			case 5:					//对准拨蛋盘
+//				set_bodanpan_pos();
+//				arm_current_step ++;
+//				break;
+			case 4:					//对准滑道
+				point.x = 380;
+				point.y = 200;
 				point.total_angle = 110;
 				arm_current_step ++;
 				break;
-			case 5:					//对准拨蛋盘
-				set_bodanpan_pos();
-				arm_current_step ++;
-				break;
-			case 6:					//放球
+			case 5:					//放球
 				claw_control(470);	
 				arm_current_step ++;
 				break;
-			case 7:					//回归
+			case 6:					//回归
 				set_normal_pos();
 				claw_control(600);
 				arm_current_step ++;
 				a_new_ball_in = 1;
 				break;
-			case 8:
+			case 7:
 				arm_control_mode = 0;
 				arm_current_step = 0;
 				arm_ctrl_signal = 0;
@@ -145,15 +145,15 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 //				}
 			
 				point.x = jieti_x;		//阶梯的坐标
-				point.y = jie_ti_ping_tai[jie_ti_num] + 70;
+				point.y = jie_ti_ping_tai[jie_ti_num] + 80;
 				claw_control(430);	//担心碰到边沿，先关闭夹爪,400
-				point.total_angle = 100;//阶梯平台末端角度,95
+				point.total_angle = 110;//阶梯平台末端角度,100
 				arm_current_step ++;
 				break;
 				
 			case 1:
 				point.y = jie_ti_ping_tai[jie_ti_num];
-				claw_control(520);	//张开夹爪
+				claw_control(490);	//张开夹爪
 				arm_current_step ++;
 				break;
 				
@@ -172,10 +172,16 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 				point.total_angle = 110;
 				arm_current_step ++;
 				break;
-			case 5:					//对准拨蛋盘
-				set_bodanpan_pos();
+			case 5:					//对准滑道
+				point.x = 380;
+				point.y = 200;
+				point.total_angle = 110;
 				arm_current_step ++;
 				break;
+//			case 5:					//对准拨蛋盘
+//				set_bodanpan_pos();
+//				arm_current_step ++;
+//				break;
 			case 6:					//放球
 				claw_control(470);	
 				arm_current_step ++;
@@ -201,7 +207,7 @@ void li_cang_take(uint8_t li_cang_num)
 		{
 			case 0:
 				arm_ctrl_signal = 1;
-				extra_time = 300;
+				extra_time = 700;
 				point.x = 380;		//立仓的坐标
 				point.y = li_cang[li_cang_num];
 				point.total_angle = 100;
@@ -218,7 +224,7 @@ void li_cang_take(uint8_t li_cang_num)
 				break;
 			case 3:		
 				claw_control(540);	
-				point.y = li_cang[li_cang_num] - 40;
+				point.y = li_cang[li_cang_num] - 50;
 				arm_current_step ++;
 				break;
 			case 4:
@@ -503,7 +509,8 @@ void daoduo_put_diceng(void)
 				break;
 			case 3:
 				point.x = 410;
-				point.total_angle = 130;
+				point.y = li_cang[2]-20;
+				point.total_angle = 110;
 				point.y = 80;
 				arm_current_step ++;
 				break;
@@ -582,8 +589,14 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				}
 				arm_current_step ++;
 				break;
-			case 5:
-				set_bodanpan_pos();
+//			case 5:
+//				set_bodanpan_pos();
+//				arm_current_step ++;
+//				break;
+			case 5:					//对准滑道
+				point.x = 380;
+				point.y = 200;
+				point.total_angle = 110;
 				arm_current_step ++;
 				break;
 			case 6:
@@ -625,8 +638,8 @@ void zhuanpanji_take(void)
 				arm_current_step ++;
 				break;
 			case 1:
-				point.x = 400;	//圆盘机伸出的x调整，420
-				point.y = 290;
+				point.x = 420;	//圆盘机伸出的x调整，420
+				point.y = 350;
 				point.total_angle = 85;
 				bogan_control(2);
 				arm_current_step ++;

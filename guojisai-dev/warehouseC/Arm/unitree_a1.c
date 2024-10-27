@@ -116,9 +116,9 @@ void USER_Unitree_A1_Motor_UART_IDLECallback(UART_HandleTypeDef *huart)
     {
         static uint16_t this_time_rx_len = 0;
 		
-		UBaseType_t uxSavedInterruptStatus;
-		uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-		taskENTER_CRITICAL_FROM_ISR();
+//		UBaseType_t uxSavedInterruptStatus;
+//		uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+//		taskENTER_CRITICAL_FROM_ISR();
 
         if ((UNITREE_MOTOR_HDMA_RX.Instance->CR & DMA_SxCR_CT) == RESET)
         {
@@ -157,7 +157,7 @@ void USER_Unitree_A1_Motor_UART_IDLECallback(UART_HandleTypeDef *huart)
             }
         }
 //		HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_SET);
-		taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
+//		taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
     }
 }
 
@@ -166,29 +166,29 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == UNITREE_MOTOR_UART)
 	{
-//		UBaseType_t uxSavedInterruptStatus;
-//		uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-//		taskENTER_CRITICAL_FROM_ISR();
+		UBaseType_t uxSavedInterruptStatus;
+		uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+		taskENTER_CRITICAL_FROM_ISR();
 		
 		// 发送完成进入tx中断回调，拉低RE电平，使能485转ttl模块接收状态
 		HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_RESET);
 		
-//		UNITREE_MOTOR_HUART.gState = HAL_UART_STATE_READY;
-//		taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
+		taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
 	}
 }
 
+HAL_StatusTypeDef A1_transimit_check;
 // 发送电机指令
 void UnitreeSend(motor_send_t *motor)
 {
 	//这里的写电平是原子操作，不能被打断，要不然放在接收中断里也行
-//	taskENTER_CRITICAL();
+	taskENTER_CRITICAL();
     // 拉高DE电平，使能485转ttl模块的发送模式，失能接受模式；此模块不能同时处于两种模式中
     HAL_GPIO_WritePin(A1Motor_RE_GPIO_Port, A1Motor_RE_Pin, GPIO_PIN_SET);
 	
 	//这里不需要延时，用IT发送会因为INS_TASK抢占而卡住
-    HAL_UART_Transmit_DMA(&UNITREE_MOTOR_HUART, (uint8_t *)&(motor->motor_send_data), 34);	//DMA发送注意不要使用circular模式
-//	taskEXIT_CRITICAL();
+    A1_transimit_check = HAL_UART_Transmit_DMA(&UNITREE_MOTOR_HUART, (uint8_t *)&(motor->motor_send_data), 34);	//DMA发送注意不要使用circular模式
+	taskEXIT_CRITICAL();
 }
 
 // 解包电机返回数据
