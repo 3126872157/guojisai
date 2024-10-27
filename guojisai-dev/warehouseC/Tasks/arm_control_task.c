@@ -21,7 +21,7 @@ float piancha = 75;//摄像头到夹爪的距离偏差
 //从高往低0,1,2
 float jie_ti_ping_tai[3] = {260, 200, 150};	//阶梯平台y，改了第二个中间的y值
 //从高往低0,1,2
-float li_cang[3] = {330, 210, 90};//{355, 235, 115}
+float li_cang[3] = {350, 230, 100};//{355, 235, 115}
 float jieti_x = 500;//阶梯平台x，490
 float lizhuang_x =  250.0f;
 float lizhuang_angle = 20.65f * D2R;
@@ -43,7 +43,6 @@ void set_normal_pos(void)
 	point.x = 300;
 	point.y = 300;
 	point.total_angle = 110;
-	claw_control(600);
 	tulun_control(0);
 	bogan_control(0);
 }
@@ -111,6 +110,7 @@ void jie_ti_ping_tai_take_dingceng(void)
 				break;
 			case 7:					//回归
 				set_normal_pos();
+				claw_control(600);
 				arm_current_step ++;
 				a_new_ball_in = 1;
 				break;
@@ -182,6 +182,7 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)
 				break;
 			case 7:					//回归
 				set_normal_pos();
+				claw_control(600);
 				arm_current_step ++;
 				a_new_ball_in = 1;
 				break;
@@ -203,7 +204,8 @@ void li_cang_take(uint8_t li_cang_num)
 				extra_time = 300;
 				point.x = 380;		//立仓的坐标
 				point.y = li_cang[li_cang_num];
-				point.total_angle = 90;
+				point.total_angle = 100;
+				claw_control(470);
 				arm_current_step ++;
 				break;
 			case 1:
@@ -215,8 +217,8 @@ void li_cang_take(uint8_t li_cang_num)
 				arm_current_step ++;
 				break;
 			case 3:		
-				claw_control(510);	
-				point.y = li_cang[li_cang_num] - 50;
+				claw_control(540);	
+				point.y = li_cang[li_cang_num] - 40;
 				arm_current_step ++;
 				break;
 			case 4:
@@ -257,6 +259,7 @@ void li_cang_take_diceng(void)
 				point.x = 380;		//立仓的坐标
 				point.y = li_cang[2];
 				point.total_angle = 110;
+				claw_control(470);
 				arm_current_step ++;
 				break;
 			case 1:
@@ -264,12 +267,12 @@ void li_cang_take_diceng(void)
 				arm_current_step ++;
 				break;
 			case 2:
-				claw_control(510);	
+				claw_control(540);	
 				arm_current_step ++;
 				break;
 			case 3:	
 				point.y = li_cang[2] - 40;
-				point.total_angle = 90;
+				point.total_angle = 100;
 				arm_current_step ++;
 				break;
 			case 4:
@@ -297,7 +300,7 @@ void li_cang_take_diceng(void)
 				extra_time = 1000;
 				arm_current_step = 0;
 				arm_ctrl_signal = 0;
-				huadao_control(0);
+				huadao_control(1);
 				break;
 		}}
 
@@ -310,6 +313,7 @@ void li_cang_put(uint8_t li_cang_num)
 				extra_time = 700;
 				claw_control(510);
 				tulun_control(1);
+				huadao_control(0);//立仓放球滑道角度
 				arm_current_step ++;
 				break;
 			case 1:
@@ -321,36 +325,45 @@ void li_cang_put(uint8_t li_cang_num)
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
-			case 3:
+			case 3://新添加，待测试
+				point.x = 275;
+			    point.y = 180;
+				point.total_angle = 180;
+				arm_current_step ++;
+				break;
+			case 4:
 				point.x = 300;
 			    point.y = 300;
 				point.total_angle = 110;
 				tulun_control(0);
 				arm_current_step ++;
 				break;
-			case 4:	
+			case 5:	
 				point.x = 380;		//立仓的坐标
 				point.y = li_cang[li_cang_num];
 				point.total_angle = 90;
 				arm_current_step ++;
 				break;
-			case 5:
-				point.x = 480;
-				arm_current_step ++;
-				break;
 			case 6:
-				claw_control(470);
+				point.x = 450;
 				arm_current_step ++;
 				break;
 			case 7:
-				point.x = 380;
+				claw_control(470);
 				arm_current_step ++;
 				break;
 			case 8:
-				set_normal_pos();//回归
+				point.x = 380;
 				arm_current_step ++;
 				break;
 			case 9:
+				set_normal_pos();//回归
+				claw_control(600);
+				huadao_control(1);
+				arm_current_step ++;
+				break;
+			case 10:
+				huadao_control(1);
 				arm_control_mode = 0;
 				extra_time = 1000;
 				arm_current_step = 0;
@@ -385,6 +398,7 @@ void daoduo_put(uint8_t li_cang_num)
 				break;
 			case 4:
 				set_normal_pos();//回归
+				claw_control(600);
 				arm_current_step ++;
 				break;
 			case 5:
@@ -417,40 +431,47 @@ void li_cang_put_diceng(void)
 				arm_current_step ++;
 				//这可以加是否夹到球的判断
 				break;
-			case 3:
+			case 3://新添加，待测试
+				point.x = 275;
+			    point.y = 180;
+				point.total_angle = 180;
+				arm_current_step ++;
+				break;
+			case 4:
 				point.x = 300;
 			    point.y = 300;
 				point.total_angle = 110;
 				tulun_control(0);
 				arm_current_step ++;
 				break;
-			case 4:
+			case 5:
 				huadao_control(2);
 				point.x = 380;		//立仓的坐标
 				point.y = li_cang[2];
 				point.total_angle = 110;
 				arm_current_step ++;
 				break;
-			case 5:
-				point.x = 480;
-				arm_current_step ++;
-				break;
 			case 6:
-				claw_control(470);	
+				point.x = 450;
 				arm_current_step ++;
 				break;
 			case 7:
-				point.x = 410;
-				point.total_angle = 130;
-				point.y = 80;
+				claw_control(470);	
 				arm_current_step ++;
 				break;
 			case 8:
-				set_normal_pos();
+				point.x = 380;
+				point.total_angle = 110;
+				point.y = li_cang[2];
 				arm_current_step ++;
 				break;
 			case 9:
-				huadao_control(0);
+				set_normal_pos();
+				claw_control(600);
+				arm_current_step ++;
+				break;
+			case 10:
+				huadao_control(1);
 				arm_control_mode = 0;
 				extra_time = 1000;
 				arm_current_step = 0;
@@ -488,10 +509,11 @@ void daoduo_put_diceng(void)
 				break;
 			case 4:
 				set_normal_pos();
+				claw_control(600);
 				arm_current_step ++;
 				break;
 			case 5:
-				huadao_control(0);
+				huadao_control(1);
 				arm_control_mode = 0;
 				extra_time = 1000;
 				arm_current_step = 0;
@@ -513,7 +535,7 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 				arm_ctrl_signal = 1;
 				extra_time = 800;
 				claw_control(490);
-				huadao_control(0);
+				huadao_control(1);
 				arm_current_step ++;
 				break;
 			case 1:
@@ -575,6 +597,7 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球
 					a_new_ball_in = 1;
 //					lizhuang_success_flag = 0;
 //				}
+				claw_control(600);
 				arm_current_step ++;
 				break;
 			case 8:
@@ -602,14 +625,14 @@ void zhuanpanji_take(void)
 				arm_current_step ++;
 				break;
 			case 1:
-				point.x = 405;	//圆盘机伸出的x调整，420
+				point.x = 400;	//圆盘机伸出的x调整，420
 				point.y = 290;
 				point.total_angle = 85;
 				bogan_control(2);
 				arm_current_step ++;
 				break;
 			case 2:
-				point.x = 420;	//圆盘机x调整,435
+				point.x = 415;	//圆盘机x调整,435
 				point.y = 240;
 				point.total_angle = 85;
 				arm_current_step ++;
@@ -628,6 +651,7 @@ void zhuanpanji_take(void)
 			case 4:
 				bogan_control(0);
 				set_normal_pos();
+				claw_control(600);
 				arm_current_step ++;
 				break;
 			case 5:
@@ -647,7 +671,7 @@ void gan_rao_qiu(void)//干扰球去阶梯平台
 				extra_time = 500;
 				claw_control(490);
 				tulun_control(1);
-				huadao_control(0);
+				huadao_control(1);
 				arm_current_step ++;
 				break;
 			case 1:
@@ -678,10 +702,11 @@ void gan_rao_qiu(void)//干扰球去阶梯平台
 				break;
 			case 6:
 				set_normal_pos();
+				claw_control(600);
 				arm_current_step ++;
 				break;
 			case 7:
-				huadao_control(0);
+				huadao_control(1);
 				arm_control_mode = 0;
 				extra_time = 1000;
 				arm_current_step = 0;

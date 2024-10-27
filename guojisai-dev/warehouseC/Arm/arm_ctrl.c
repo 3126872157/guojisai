@@ -38,9 +38,9 @@ uint16_t claw_pos = 470;
 //uint16_t paidanban_pos = 500;
 
 //--------------------------------滑道、凸轮舵机变量----------------------------
-uint16_t huadao_vertical_pwm = 900;//900垂直600放球(范围250-1250)
-uint16_t huadao_slope_out_pwm = 900;
-uint16_t huadao_slope_in_pwm = 1150;
+uint16_t huadao_licang_pwm = 800;
+uint16_t huadao_slope_out_pwm = 900;//平常的位置，转盘机也放这里
+uint16_t huadao_slope_in_pwm = 1200;
 uint16_t tulun_up_pwm = 1250;//1250升起250落下(范围250-1250)
 uint16_t tulun_down_pwm = 250;
 uint16_t bogan_zhunbei_pos = 950;
@@ -194,7 +194,7 @@ void claw_control(uint16_t pos)
 }
 
 
-//滑道斜率调整，2为向内扣，1为放球，0为垂直
+//滑道斜率调整，2为向内扣，1为放球和平常情况，0为立仓角度
 void huadao_control(bool_t is_put_ball)
 {
 	if(is_put_ball == 1)
@@ -203,7 +203,7 @@ void huadao_control(bool_t is_put_ball)
 	}
 	else if(is_put_ball == 0)
 	{
-		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_vertical_pwm);//900垂直
+		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_licang_pwm);//750立仓放球
 	}
 	else
 	{
