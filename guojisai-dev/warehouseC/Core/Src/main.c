@@ -36,6 +36,8 @@
 #include "calibrate_task.h"
 #include "bsp_delay.h"
 #include "IO_Serial.h"
+#include "oled.h"
+
 
 /* USER CODE END Includes */
 
@@ -122,8 +124,10 @@ int main(void)
   MX_USART6_UART_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_Delay(20);
+  OLED_Init();
 	can_filter_init();
 	delay_init();
     cali_param_init();

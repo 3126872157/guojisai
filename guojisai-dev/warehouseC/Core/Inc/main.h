@@ -67,8 +67,12 @@ void Error_Handler(void);
 #define gray_D1_GPIO_Port GPIOI
 #define servo_RX_Pin GPIO_PIN_9
 #define servo_RX_GPIO_Port GPIOG
+#define OLED_SDA_Pin GPIO_PIN_0
+#define OLED_SDA_GPIO_Port GPIOF
 #define unitree_TX_Pin GPIO_PIN_9
 #define unitree_TX_GPIO_Port GPIOA
+#define OLED_SCL_Pin GPIO_PIN_1
+#define OLED_SCL_GPIO_Port GPIOF
 #define A1Motor_RE_Pin GPIO_PIN_6
 #define A1Motor_RE_GPIO_Port GPIOC
 #define RSTN_IST8310_Pin GPIO_PIN_6

@@ -1024,6 +1024,21 @@
               <FileType>5</FileType>
               <FilePath>..\Application\IO_Serial.h</FilePath>
             </File>
+            <File>
+              <FileName>oled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\oled.c</FilePath>
+            </File>
+            <File>
+              <FileName>OLED_Font.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\OLED_Font.h</FilePath>
+            </File>
+            <File>
+              <FileName>oled.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Application\oled.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1098,6 +1113,16 @@
               <FileName>calibrate_task.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Tasks\calibrate_task.h</FilePath>
+            </File>
+            <File>
+              <FileName>oled_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\oled_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>oled_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tasks\oled_task.h</FilePath>
             </File>
           </Files>
         </Group>

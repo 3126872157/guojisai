@@ -83,3 +83,5 @@ warehousec\freertos.o: ../Application/Gray_sensor.h
 warehousec\freertos.o: ../Tasks/arm_control_task.h
 warehousec\freertos.o: ../Tasks/calibrate_task.h
 warehousec\freertos.o: ../Tasks/INS_task.h
+warehousec\freertos.o: ../Tasks/oled_task.h
+warehousec\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h

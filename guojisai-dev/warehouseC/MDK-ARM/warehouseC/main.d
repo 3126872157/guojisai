@@ -71,3 +71,5 @@ warehousec\main.o: ../Tasks/INS_task.h
 warehousec\main.o: ../Tasks/calibrate_task.h
 warehousec\main.o: ../Boards/bsp_delay.h
 warehousec\main.o: ../Application/IO_Serial.h
+warehousec\main.o: ../Application/oled.h
+warehousec\main.o: D:\keil5\ARM\ARMCC\Bin\..\include\math.h

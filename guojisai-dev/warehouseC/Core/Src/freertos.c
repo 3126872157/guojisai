@@ -33,7 +33,7 @@
 #include "arm_control_task.h"
 #include "calibrate_task.h"
 #include "INS_task.h"
-
+#include "oled_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,6 +64,7 @@ osThreadId armControlTaskHandle;
 osThreadId calibrateTaskHandle;
 osThreadId imuTaskHandle;
 
+osThreadId oledTaskHandle;
 /* USER CODE END Variables */
 osThreadId Prepare_Task_Handle;
 
@@ -184,6 +185,9 @@ __weak void Prepare_Task(void const * argument)
 
   osThreadDef(imuTask, INS_task, osPriorityRealtime, 0, 512);
   imuTaskHandle = osThreadCreate(osThread(imuTask), NULL);
+	
+  osThreadDef(oledTask, oled_task, osPriorityRealtime, 0, 128);
+  oledTaskHandle = osThreadCreate(osThread(oledTask), NULL);
 
 //  /* Infinite loop */
   for(;;)

@@ -81,6 +81,7 @@
 "warehousec\uart_receive.o"
 "warehousec\vofa.o"
 "warehousec\io_serial.o"
+"warehousec\oled.o"
 "warehousec\arm_control_task.o"
 "warehousec\arm_task.o"
 "warehousec\bodanpan_task.o"
@@ -88,6 +89,7 @@
 "warehousec\flow_task.o"
 "warehousec\ins_task.o"
 "warehousec\calibrate_task.o"
+"warehousec\oled_task.o"
 --strict --scatter "warehouseC\warehouseC.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
