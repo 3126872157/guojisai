@@ -81,7 +81,17 @@ void MX_FREERTOS_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+//{
+//    if(GPIO_Pin == KEY_Pin)
+//    {
+//        if(exit_flag == 0)
+//        {
+//            exit_flag = 1;
+//            rising_falling_flag = HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin);
+//        }
+//    }
+//}
 /* USER CODE END 0 */
 
 /**
@@ -138,6 +148,8 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
 	
 	HAL_TIM_Base_Start(&htim3);//IO串口延时定时器
+	
+    HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET);
 	
   /* USER CODE END 2 */
 

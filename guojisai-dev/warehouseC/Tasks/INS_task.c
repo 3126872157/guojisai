@@ -544,9 +544,20 @@ extern const fp32 *get_mag_data_point(void)
     return INS_mag;
 }
 
+//uint8_t exit_flag = 0;
+//uint8_t rising_falling_flag;
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+//    if(GPIO_Pin == KEY_Pin)//按键外部中断
+//    {
+//        if(exit_flag == 0)
+//        {
+//            exit_flag = 1;
+//            rising_falling_flag = HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin);
+//        }
+//    }
+	
     if(GPIO_Pin == INT1_ACCEL_Pin)
     {
         //detect_hook(BOARD_ACCEL_TOE);

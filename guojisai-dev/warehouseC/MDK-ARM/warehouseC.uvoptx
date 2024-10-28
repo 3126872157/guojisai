@@ -280,6 +280,21 @@
         <Ww>
           <count>10</count>
           <WinNumber>2</WinNumber>
+          <ItemText>exit_flag</ItemText>
+        </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>safe_flag</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>liucheng_start_flag</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>2</WinNumber>
           <ItemText>(int)(my_angle[0] * 1000) % 1000,0x0A</ItemText>
         </Ww>
       </WatchWindow2>
