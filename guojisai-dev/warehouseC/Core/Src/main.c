@@ -239,64 +239,64 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   }
   /* USER CODE BEGIN Callback 1 */
 
-  if(htim == &Serial_TIM)    //如果是TIM1 触发中断
-	{
-		recvStat++;
-		if(recvStat == COM_STOP_BIT)
-		{
-			HAL_TIM_Base_Stop(&Serial_TIM);
-			__HAL_TIM_SetCounter(&Serial_TIM, 0);
-			
-			//到这就接收到完整的1个字节数据
-			if(ic_read_start == 1)
-			{
-				if(ic_buf_size == 1 && recvData != 0x16)	//第二帧对不上
-				{
-					ic_read_start = 0;
-					ic_buf_size = -1;
-				}
-				ic_buf[ic_buf_size++] = recvData;
-				
-				if(ic_buf_size == 22)						//接收完毕
-				{
-					ic_read_start = 0;
-					ic_buf_size = 0;						//计数归零
-					for(uint8_t i = 0;i < 21 ; i++)
-					{
-						X^=ic_buf[i];
-					}
-					X=~X;
-					if(X == ic_buf[21])						//校验成功
-					{
-						for(int i = 1;i <= 5;i++)
-						{
-							if(ic_buf[i+15] != ic_buf[15])
-								return;
-						}
-						if(((ic_buf[15] % 16) < 4) && ((ic_buf[15] % 16) > 0) && ((ic_buf[15] / 16) > 0) && ((ic_buf[15] / 16) < 4))
-							IC_data = ic_buf[15];				//将球的数据存入IC_Data
-					}
-					X = 0;
-				}
-			}
-		
-			if(ic_read_start == 0 && recvData == 0x04)		//检测到帧头
-			{
-				ic_read_start = 1;
-				ic_buf[ic_buf_size++] = recvData;
-			}
-			return;
-		}
-		
-		if(IO_SERIAL_RX)
-		{
-			recvData |= (1 << (recvStat - 1));
-		}
-		else
-		{
-			recvData &= ~(1 << (recvStat - 1));
-		}
-	}
+//  if(htim == &Serial_TIM)    //如果是TIM1 触发中断
+//	{
+//		recvStat++;
+//		if(recvStat == COM_STOP_BIT)
+//		{
+//			HAL_TIM_Base_Stop(&Serial_TIM);
+//			__HAL_TIM_SetCounter(&Serial_TIM, 0);
+//			
+//			//到这就接收到完整的1个字节数据
+//			if(ic_read_start == 1)
+//			{
+//				if(ic_buf_size == 1 && recvData != 0x16)	//第二帧对不上
+//				{
+//					ic_read_start = 0;
+//					ic_buf_size = -1;
+//				}
+//				ic_buf[ic_buf_size++] = recvData;
+//				
+//				if(ic_buf_size == 22)						//接收完毕
+//				{
+//					ic_read_start = 0;
+//					ic_buf_size = 0;						//计数归零
+//					for(uint8_t i = 0;i < 21 ; i++)
+//					{
+//						X^=ic_buf[i];
+//					}
+//					X=~X;
+//					if(X == ic_buf[21])						//校验成功
+//					{
+//						for(int i = 1;i <= 5;i++)
+//						{
+//							if(ic_buf[i+15] != ic_buf[15])
+//								return;
+//						}
+//						if(((ic_buf[15] % 16) < 4) && ((ic_buf[15] % 16) > 0) && ((ic_buf[15] / 16) > 0) && ((ic_buf[15] / 16) < 4))
+//							IC_data = ic_buf[15];				//将球的数据存入IC_Data
+//					}
+//					X = 0;
+//				}
+//			}
+//		
+//			if(ic_read_start == 0 && recvData == 0x04)		//检测到帧头
+//			{
+//				ic_read_start = 1;
+//				ic_buf[ic_buf_size++] = recvData;
+//			}
+//			return;
+//		}
+//		
+//		if(IO_SERIAL_RX)
+//		{
+//			recvData |= (1 << (recvStat - 1));
+//		}
+//		else
+//		{
+//			recvData &= ~(1 << (recvStat - 1));
+//		}
+//	}
   
   /* USER CODE END Callback 1 */
 }

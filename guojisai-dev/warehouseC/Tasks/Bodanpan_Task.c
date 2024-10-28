@@ -12,7 +12,16 @@ uint8_t err_IC_data = 0xFF;//取球错误标识
 extern Pan_t bodanpan;
 extern motor_measure_t motor_chassis[5];
 
+//按键有关参数
+extern uint8_t exit_flag;
+extern uint8_t rising_falling_flag;
+extern uint8_t safe_flag;
+extern uint8_t arm_safe;
+bool_t liucheng_start_flag = 0;
+
+//函数声明
 void IC_story(uint8_t data);
+
 
 void Bodanpan_Task(void const * argument)
 {
@@ -22,10 +31,12 @@ void Bodanpan_Task(void const * argument)
 	bodanpan_motor_init();
 	while(1)
 	{
+		
+		/*****************************拨蛋盘task*******************************/
 		if(a_new_ball_in)
 		{
 			bodanpan_position_set(1,1);
-			osDelay(1500);
+			osDelay(1000);
 			//如果检测到的还是上一个球的数据或者没有检测到,来回动一下，防止IC卡读不到
 			if(IC_data == bodanpan.IC_date_pan[ball_num-1] || IC_data == 0)
 			{
@@ -45,10 +56,31 @@ void Bodanpan_Task(void const * argument)
 			
 			a_new_ball_in = 0;
 		}
-
+		
+		
+		/*****************************按键和IC_task*****************************/
+		
+		//按键启动
+		if(liucheng_start_flag == 0)
+		{
+			if(HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) == GPIO_PIN_RESET)
+			{
+				HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_SET);
+				arm_safe = 0;
+				osDelay(2500);
+				HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET);
+				safe_flag = 0;
+				liucheng_start_flag = 1;
+			}
+		}
+		
+		
 		osDelay(5);
 	}
 }
+
+
+
 void bodanpan_motor_init(void)
 {
 	bodanpan_init();

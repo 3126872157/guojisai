@@ -114,7 +114,14 @@ void chassis_reset(chassis_move_t *chassis_move_reset)
 	}
 }
 
+//函数声明
+uint8_t read_code(void);
+uint8_t decode(uint8_t code);
 
+
+extern uint8_t IC_data; //Uart_Task中接收到的，当前位置扭蛋球的IC卡数据
+uint32_t ms_Timercount = 0;
+uint16_t Time_s = 0;//显示帧数
 //���̿�������
 void chassis_task(void const * argument)
 {
@@ -163,10 +170,65 @@ void chassis_task(void const * argument)
 //			
 //			my_vofa_printf(5);
 		}
+		
+		ms_Timercount ++;
+		if (ms_Timercount >= 1000)
+		{
+		  Time_s ++; 
+		  ms_Timercount = 0;
+		}
+		//IC卡读取
+		IC_data = decode(read_code());
 		//ϵͳ��ʱ
         vTaskDelay(CHASSIS_CONTROL_TIME_MS);
+		
 	}
 }
+
+uint8_t read_code(void)
+{
+	uint8_t a = 0;
+	uint8_t b = 0;
+	uint8_t c = 0;
+	uint8_t d = 0;
+	a = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_12);
+	b = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13);
+	c = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_14);
+	d = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15);
+	
+	return d*8 + c*4 + b*2 + a;
+}
+
+uint8_t decode(uint8_t code)
+{
+	switch(code)
+	{
+		case 1:
+			return 0x11;
+		case 2:
+			return 0x12;
+		case 3:
+			return 0x13;
+		case 4:
+			return 0x14;
+		case 5:
+			return 0x21;
+		case 6:
+			return 0x22;
+		case 7:
+			return 0x23;
+		case 8:
+			return 0x31;
+		case 9:
+			return 0x32;
+		case 10:
+			return 0x33;
+		default:
+			break;
+	}
+}
+
+
 
 /**
   * @brief          ��ʼ��"chassis_move"����������pid��ʼ����2006���̵��ָ���ʼ������̨�����ʼ���������ǽǶ�ָ���ʼ��

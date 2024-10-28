@@ -40,12 +40,13 @@ uint16_t claw_pos = 600;
 //--------------------------------滑道、凸轮舵机变量----------------------------
 uint16_t huadao_licang_pwm = 800;
 uint16_t huadao_slope_out_pwm = 900;//平常的位置，转盘机也放这里
+uint16_t huadao_zhuanpanji_pwm = 800;//平常的位置，转盘机也放这里
 uint16_t huadao_slope_in_pwm = 1200;
 uint16_t tulun_up_pwm = 1250;//1250升起250落下(范围250-1250)
 uint16_t tulun_down_pwm = 250;
-uint16_t bogan_zhunbei_pos = 950;
-uint16_t bogan_jiqiu_pos = 750;
-uint16_t bogan_shouqi_pos = 270;
+uint16_t bogan_zhunbei_pos = 1000;
+uint16_t bogan_jiqiu_pos = 850;//800
+uint16_t bogan_shouqi_pos = 400;
 
 //--------------------------------机械臂与解算变量----------------------------
 // 逆运动学解算结构体
@@ -205,10 +206,15 @@ void huadao_control(bool_t is_put_ball)
 	{
 		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_licang_pwm);//750立仓放球
 	}
-	else
+	else if(is_put_ball == 2)
 	{
 		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_slope_in_pwm);//1150
 	}
+	else if(is_put_ball == 3)
+	{
+		__HAL_TIM_SetCompare(&PWM_SERVO_TIM, HUADAO_CHANNEL, huadao_zhuanpanji_pwm);//800
+	}
+	
 }	
 //顶球，凸轮调整
 void tulun_control(bool_t is_up)

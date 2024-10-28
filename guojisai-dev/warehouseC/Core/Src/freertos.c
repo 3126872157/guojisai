@@ -197,6 +197,8 @@ __weak void Prepare_Task(void const * argument)
       vTaskDelay(100);
       vTaskDelete(calibrateTaskHandle);
       vTaskDelay(100);
+	  vTaskDelete(oledTaskHandle);
+	  vTaskDelay(100);
 
       osThreadDef(ChassisTask, chassis_task, osPriorityAboveNormal, 0, 512);
       chassisTaskHandle = osThreadCreate(osThread(ChassisTask), NULL);

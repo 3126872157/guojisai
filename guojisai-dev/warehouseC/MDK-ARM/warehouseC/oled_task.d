@@ -82,3 +82,12 @@ warehousec\oled_task.o: ../Arm/A1_motor_msg.h
 warehousec\oled_task.o: ../Arm/serial_servo.h
 warehousec\oled_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 warehousec\oled_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+warehousec\oled_task.o: ../USB_DEVICE/App/usbd_cdc_if.h
+warehousec\oled_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h
+warehousec\oled_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
+warehousec\oled_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
+warehousec\oled_task.o: ../USB_DEVICE/Target/usbd_conf.h
+warehousec\oled_task.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+warehousec\oled_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
+warehousec\oled_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
+warehousec\oled_task.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h

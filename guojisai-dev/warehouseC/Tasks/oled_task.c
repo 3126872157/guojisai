@@ -4,6 +4,7 @@
 #include "INS_task.h"
 #include "chassis_task.h"
 #include "arm_task.h"
+#include "usbd_cdc_if.h"
 
 uint32_t ms_Timercount1 = 0;
 uint16_t time_s = 0;//显示帧数
@@ -11,13 +12,10 @@ uint16_t time_s = 0;//显示帧数
 //显示数据
 extern uint8_t my_cali_flag;
 extern fp32 my_angle[3];
+extern shijue_Data shijue_data;//视觉数据帧：球x,y,distance, 二维码x,y,
 
-//按键有关
-extern uint8_t exit_flag;
-extern uint8_t rising_falling_flag;
-extern uint8_t safe_flag;
-extern uint8_t arm_safe;
-bool_t liucheng_start_flag = 0;
+extern uint8_t IC_data;
+
 
 void oled_task(void const * argument)
 {
@@ -26,11 +24,9 @@ void oled_task(void const * argument)
 	while(1)
 	{
 		ms_Timercount1 ++;
-		if (ms_Timercount1 >= 1000)
+		if (ms_Timercount1 >= 50)
 		{
 		  time_s ++; 
-		  if(arm_safe == 0 && safe_flag == 0)
-			  time_s = 0;
 		  ms_Timercount1 = 0;
 		}
 				
@@ -45,23 +41,17 @@ void oled_task(void const * argument)
 		OLED_ShowChar(24, 30 , '.', OLED_6X8);
 		OLED_ShowNum(32, 30, (int)(my_angle[0] * 1000) % 1000, 3, OLED_6X8);
 		
+//		OLED_ShowChar(0, 47 , 'A', OLED_6X8);
+//		OLED_ShowString(0, 55, "Red", OLED_6X8);
+//		
+//		OLED_ShowString(12, 47, "shijue:", OLED_6X8);
+//		
+//		OLED_ShowNum(56, 47, shijue_data.ball_x, 3, OLED_6X8);
+		
 		OLED_Gram_Refreash();
 		
-		//按键启动
-		if(liucheng_start_flag == 0)
-		{
-			if(HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) == GPIO_PIN_RESET)
-			{
-				HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_SET);
-				arm_safe = 0;
-				osDelay(2500);
-				HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET);
-				safe_flag = 0;
-				liucheng_start_flag = 1;
-			}
-		}
 	
-		osDelay(1);
+		osDelay(20);
 	}
 }
 
