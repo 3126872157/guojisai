@@ -40,9 +40,6 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-SPI_HandleTypeDef hspi2;
-DMA_HandleTypeDef hdma_spi2_tx;
-
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 
@@ -52,7 +49,7 @@ uint8_t IC_Data_buff[2][22];
 uint8_t IC_Data_now[2] = {0};
 uint8_t IC_Data_last[2] = {0};
 uint8_t IC_Data_SPI;
-uint8_t IC_Data_rubbish = 0;
+uint8_t IC_Data_mode = 0;	//制一重置
 uint8_t IC_Data_valid[10] = {0x11,0x12,0x13,0x14,0x21,0x22,0x23,0x31,0x32,0x33};
 uint8_t IC_Data_recorded[10] = {0};
 HAL_StatusTypeDef h;
@@ -62,10 +59,8 @@ HAL_StatusTypeDef h;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
-static void MX_SPI2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -141,7 +136,7 @@ uint8_t a;
 uint8_t b;
 uint8_t c;
 uint8_t d;
-
+uint8_t last_code = 0;
 void write_code(uint8_t code)
 {
 	a = GET_BIT(code,0);
@@ -185,13 +180,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
-  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   
-  HAL_UARTEx_ReceiveToIdle_IT(&huart1, IC_Data_buff[0], 22);
+//  HAL_UARTEx_ReceiveToIdle_IT(&huart1, IC_Data_buff[0], 22);
   HAL_UARTEx_ReceiveToIdle_IT(&huart2, IC_Data_buff[0], 22);
   
   
@@ -203,15 +196,17 @@ int main(void)
   while (1)
   {
 	  
-	IC_Data_record(IC_Data_now[0]);
-	IC_Data_record(IC_Data_now[1]);
-	if(now_cnt >= 1)
-	{
-		IC_Data_SPI = IC_Data_recorded[now_cnt-1];
-//		h = HAL_SPI_TransmitReceive(&hspi2, &IC_Data_SPI, &IC_Data_rubbish, 1, 100);
-//		HAL_SPI_Transmit(&hspi2, &IC_Data_SPI, 1, 100);
-		write_code(encode(IC_Data_SPI));
-	}
+//	IC_Data_record(IC_Data_now[0]);
+//	IC_Data_record(IC_Data_now[1]);
+	  write_code(encode(IC_Data_now[1]));
+	  HAL_Delay(1);
+//	if(now_cnt >= 1)
+//	{
+//		IC_Data_SPI = IC_Data_recorded[now_cnt-1];
+//		h = HAL_SPI_TransmitReceive(&hspi1, &IC_Data_SPI, &IC_Data_mode, 1, 100);
+//		HAL_SPI_Transmit(&hspi1, &IC_Data_SPI, 1, 10);
+//		write_code(encode(IC_Data_SPI));
+//	}
 	  
     /* USER CODE END WHILE */
 
@@ -257,44 +252,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-}
-
-/**
-  * @brief SPI2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_SPI2_Init(void)
-{
-
-  /* USER CODE BEGIN SPI2_Init 0 */
-
-  /* USER CODE END SPI2_Init 0 */
-
-  /* USER CODE BEGIN SPI2_Init 1 */
-
-  /* USER CODE END SPI2_Init 1 */
-  /* SPI2 parameter configuration*/
-  hspi2.Instance = SPI2;
-  hspi2.Init.Mode = SPI_MODE_MASTER;
-  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi2.Init.NSS = SPI_NSS_SOFT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
-  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi2.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN SPI2_Init 2 */
-
-  /* USER CODE END SPI2_Init 2 */
-
 }
 
 /**
@@ -364,22 +321,6 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void)
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Channel5_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
-
-}
-
-/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -396,13 +337,16 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
+                          |GPIO_PIN_7, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PB3 PB4 PB5 PB6 */
-  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6;
+  /*Configure GPIO pins : PB3 PB4 PB5 PB6
+                           PB7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
+                          |GPIO_PIN_7;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
@@ -413,21 +357,21 @@ static void MX_GPIO_Init(void)
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
-	if(huart == &huart1)//IC卡数据接收中断
-	{
-		HAL_UARTEx_ReceiveToIdle_IT(&huart1, IC_Data_buff[0], 22);
-		if(IC_Data_buff[0][0] == 0x04 && IC_Data_buff[0][1] == 0x16)
-		{
-			uint8_t X = 0;
-			for(uint8_t i = 0;i < 21 ; i++) X^=IC_Data_buff[0][i];//数据校验
-			X=~X;//数据校验
-			if(X == IC_Data_buff[0][21])
-			{
-				IC_Data_last[0] = IC_Data_now[0];
-				IC_Data_now[0] = IC_Data_buff[0][15];//校验成功
-			}
-		}
-	}
+//	if(huart == &huart1)//IC卡数据接收中断
+//	{
+//		HAL_UARTEx_ReceiveToIdle_IT(&huart1, IC_Data_buff[0], 22);
+//		if(IC_Data_buff[0][0] == 0x04 && IC_Data_buff[0][1] == 0x16)
+//		{
+//			uint8_t X = 0;
+//			for(uint8_t i = 0;i < 21 ; i++) X^=IC_Data_buff[0][i];//数据校验
+//			X=~X;//数据校验
+//			if(X == IC_Data_buff[0][21])
+//			{
+//				IC_Data_last[0] = IC_Data_now[0];
+//				IC_Data_now[0] = IC_Data_buff[0][15];//校验成功
+//			}
+//		}
+//	}
 	
 	if(huart == &huart2)//IC卡数据接收中断
 	{
@@ -439,7 +383,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 			X=~X;//数据校验
 			if(X == IC_Data_buff[1][21])
 			{
-				IC_Data_last[1] = IC_Data_now[1];
+//				IC_Data_last[1] = IC_Data_now[1];
 				IC_Data_now[1] = IC_Data_buff[1][15];//校验成功
 			}
 		}
