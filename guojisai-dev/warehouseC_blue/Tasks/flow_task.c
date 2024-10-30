@@ -88,6 +88,7 @@ bool_t y_home_finish = 0;
 //IC数据一次性存参数
 extern uint8_t record_num_remain;
 bool_t IC_store_start = 0;
+extern bool_t record_start_flag1;
 
 
 /*******************流程控制模式总览********************
@@ -1091,7 +1092,7 @@ void flow_task(void const * argument)
 			
 			if(currentTargIndex == 32 && IC_store_start == 0) 
 			{
-				record_num_remain = 10;
+				record_start_flag1 = 1;
 				IC_store_start = 1;
 			}
 			
