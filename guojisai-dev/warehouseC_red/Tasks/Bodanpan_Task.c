@@ -14,7 +14,6 @@ extern motor_measure_t motor_chassis[5];
 
 uint8_t IC_date_test1[BOX_NUM] = {0x00};  //储球数据
 uint8_t IC_date_test2[BOX_NUM] = {0x00};  //储球数据
-uint8_t IC_date_test3[BOX_NUM] = {0x00};  //储球数据
 
 //按键有关参数
 extern uint8_t exit_flag;

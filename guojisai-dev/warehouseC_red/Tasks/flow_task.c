@@ -1,3 +1,14 @@
+/*******************************红色场地**********************************/
+/*******************************红色场地**********************************/
+/*******************************蓝色场地**********************************/
+/*******************************红色场地**********************************/
+/*******************************红色场地**********************************/
+/*******************************红色场地**********************************/
+/*******************************红色场地**********************************/
+/*******************************红色场地**********************************/
+/*******************************红色场地**********************************/
+
+
 #include "flow_task.h"
 #include "chassis_task.h"
 #include "chassis_behaviour.h"
@@ -210,43 +221,43 @@ TargetPoints targ_point[] = {
 		{18,	 1,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 2,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 3,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
-//		{18,	 1,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
-//		{18,	 2,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
-//		{18,	 3,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+		{18,	 1,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+		{18,	 2,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+		{18,	 3,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		
 		
-/*69*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，锁二维码
+/*72*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，锁二维码
 		
-/*70*/	{16,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//从最右边往左走，锁列2二维码
+/*73*/	{16,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//从最右边往左走，锁列2二维码
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{18,	 1,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 2,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 3,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
-//		{18,	 1,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
-//		{18,	 2,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
-//		{18,	 3,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+		{18,	 1,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+		{18,	 2,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+		{18,	 3,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		
 		
 		{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，锁二维码
 		
-/*76*/	{17,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//从最右边往左走，锁列1二维码
+/*82*/	{17,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//从最右边往左走，锁列1二维码
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{18,	 1,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 2,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 3,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
-//		{18,	 1,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
-//		{18,	 2,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
-//		{18,	 3,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+		{18,	 1,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+		{18,	 2,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+		{18,	 3,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		
-/*81*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退
+/*90*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退
 
 		//干扰球去阶梯平台
-/*82*/	{1,		 0,	 		0,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},//旋转180
+/*91*/	{1,		 0,	 		0,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},//旋转180
 		{1,		 0,	 		-20,		-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},
 		{1,		 120,	 	0,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},
 		{1,		 0,	 		50,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},
-/*86*/	{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
-/*87*/	{20,	 1,/*行号*/	4,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
+/*96*/	{20,	 1,/*行号*/	4,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 
 		//回家
 		{1,		 -20,	 	0,			-90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退
@@ -255,7 +266,7 @@ TargetPoints targ_point[] = {
 		{22,	   -50,	 	50,			0,				5,				CHASSIS_MOVE_AND_ROTATE},//横向回家
 		{23,	   10,	 	-10,		0,				5,				CHASSIS_MOVE_AND_ROTATE},//纵向回家
 		{1,		  -3,	 	3,			0,				5,				CHASSIS_MOVE_AND_ROTATE},
-/*93*/	{66,	non,	 	non,		non,		non,			CHASSIS_V}
+/*103*/	{66,	non,	 	non,		non,		non,			CHASSIS_V}
 	
 	
 };
@@ -570,7 +581,7 @@ void flow_task(void const * argument)
 					bogan_jiqiu_flag = 0;
 				}				
 				
-				if(/*zhuanpanji_ball_num == 6*/Time_s - start_time > 20)
+				if(/*zhuanpanji_ball_num == 6*/Time_s - start_time > 15)
 				{
 					bogan_control(2);
 //					osDelay(500);//这里延迟一下，防止最后一次击球还没成功，机械臂就抬起来了
@@ -975,7 +986,7 @@ void flow_task(void const * argument)
 					chassis_move.x_set = 0;
 					chassis_move.x = 0;
 				}
-				if(gray_data[0] == 1 && y_home_finish == 0)//车右灰度
+				if(gray_data[0] == 0 && y_home_finish == 0)//车右灰度
 				{
 					y_home_finish = 1;
 					chassis_move.y_set = 0;
@@ -1013,7 +1024,7 @@ void flow_task(void const * argument)
 					chassis_move.x_set = 0;
 					chassis_move.x = 0;
 				}
-				if(gray_data[0] == 0 && y_home_finish == 0)//车右灰度
+				if(gray_data[0] == 1 && y_home_finish == 0)//车右灰度
 				{
 					y_home_finish = 1;
 					chassis_move.y_set = 0;
@@ -1092,7 +1103,7 @@ void flow_task(void const * argument)
 				TX_shijue_mode = 1;
 			else if(currentTargIndex == 31)
 				TX_shijue_mode = 2;
-			else if(currentTargIndex <= 100)
+			else if(currentTargIndex <= 130)
 				TX_shijue_mode = 3;
 		}
 		
