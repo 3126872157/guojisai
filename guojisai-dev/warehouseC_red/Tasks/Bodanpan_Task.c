@@ -102,12 +102,13 @@ void Bodanpan_Task(void const * argument)
 					ball_num = 0;
 					bodanpan.position = 0;
 					record_start_flag1 = 1;
-					bodanpan_angle_pid.Ki = 0.1;
+					bodanpan_angle_pid.Ki = 10;
+					bodanpan_angle_pid.max_iout = 1000;
 				}
 				
 				record_last = IC_data;
 				bodanpan_position_set(1,1);	//转一格
-				osDelay(2000);
+				osDelay(3000);
 				
 				//防止第一个是空的
 				if(IC_data != record_last && IC_data != 0)
@@ -122,6 +123,7 @@ void Bodanpan_Task(void const * argument)
 			}
 			record_start_flag1 = 0;
 			bodanpan_angle_pid.Ki = 0;
+			bodanpan_angle_pid.max_iout = 0;
 			record_start_flag2 = 1;
 		}
 		
@@ -138,11 +140,12 @@ void Bodanpan_Task(void const * argument)
 					ball_num = 0;
 					bodanpan.position = 0;
 					record_start_flag2 = 1;
-					bodanpan_angle_pid.Ki = 0.1;
+					bodanpan_angle_pid.Ki = 10;
+					bodanpan_angle_pid.max_iout = 1000;
 				}
 				record_last = IC_data;
 				bodanpan_position_set(1,1);	//转一格
-				osDelay(2000);
+				osDelay(3000);
 				
 				if(IC_data != record_last)
 				{
@@ -157,6 +160,7 @@ void Bodanpan_Task(void const * argument)
 			}
 			record_start_flag2 = 0;
 			bodanpan_angle_pid.Ki = 0;
+			bodanpan_angle_pid.max_iout = 0;
 		}
 		
 		if(IC_date_test1[0] != 0x00 && IC_date_test2[0] != 0x00 && IC_data_mix_flag == 0)
