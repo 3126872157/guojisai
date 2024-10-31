@@ -21,6 +21,18 @@
 
 #define distance_tol 2
 #define gyro_tol 0.2f
+
+/******************需要调试的值*********************/
+
+float jieti_y_L = 5.0;//阶梯平台视觉的y阈值，调节要使用哪个高度的夹球方案
+float jieti_y_H = 15.0;
+
+
+
+
+
+/******************需要调试的值*********************/
+
 //控制底盘运动
 extern chassis_move_t chassis_move;
 extern chassis_mode_e chassis_behaviour_mode;
@@ -133,10 +145,10 @@ float test_v_max = 5;
 TargetPoints targ_point[] = {
 	
 		//起点到立桩
-/*0*/	{1,		 182,	 		-35,			0,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//走到立桩前
+/*0*/	{1,		 180,	 		-20,			0,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//走到立桩前
 
 		//立桩拿球
-/*1*/		{3,		 0,		  	100,		0,			6,				CHASSIS_MOVE_AND_ROTATE},//横移视觉锁球
+/*1*/{3,		 0,		  	100,		0,			6,				CHASSIS_MOVE_AND_ROTATE},//横移视觉锁球
 				{21,	 0,		  	100,		0,			3,				CHASSIS_MOVE_AND_ROTATE},//横移视觉二次锁球
 				{13,	 0,		  	100,		0,			1.5,			CHASSIS_MOVE_AND_ROTATE},//横移视觉三次锁球
 				{5,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//测距模式夹球
@@ -264,8 +276,8 @@ TargetPoints targ_point[] = {
 				{1,		    0,	 	  0,			0,			  50.0f,			CHASSIS_MOVE_AND_ROTATE},
 				{1,		 -200,	 	-55,			0,				50.0f,			CHASSIS_MOVE_AND_ROTATE},
 				{22,	  -50,	 	-50,			0,				5,					CHASSIS_MOVE_AND_ROTATE},//横向回家
-				{23,	   10,	 	 10,		  0,				5,					CHASSIS_MOVE_AND_ROTATE},//纵向回家
-				{1,		  -3,	 	    -3,			0,				5,					CHASSIS_MOVE_AND_ROTATE},
+//				{23,	   10,	 	 10,		  0,				5,					CHASSIS_MOVE_AND_ROTATE},//纵向回家
+				{1,		  -5,	 	    5,			0,				5,					CHASSIS_MOVE_AND_ROTATE},
 /*102*/	{66,	non,	 	non,		non,		non,			CHASSIS_V}
 	
 	
@@ -424,18 +436,18 @@ void flow_task(void const * argument)
 				chassis_behaviour_mode = target.chassis_mode;
 				if(modeN_task_start == 0)
 				{
-					if(shijue_data.ball_y < 5)/*距离为最高一层*/
+					if(shijue_data.ball_y < jieti_y_L)/*距离为最高一层*/
 					{
 						arm_control_mode = 1;
 						modeN_task_start = 1;
 					}
 					
-					else if(shijue_data.ball_y < 15 && shijue_data.ball_y > 5/*距离为中间一层*/)
+					else if(shijue_data.ball_y < jieti_y_H && shijue_data.ball_y > jieti_y_L/*距离为中间一层*/)
 					{
 						arm_control_mode = 2;
 						modeN_task_start = 1;
 					}
-					else if(shijue_data.ball_y > 15/*距离为最低一层*/)
+					else if(shijue_data.ball_y > jieti_y_H/*距离为最低一层*/)
 					{
 						arm_control_mode = 3;
 						modeN_task_start = 1;
@@ -557,6 +569,7 @@ void flow_task(void const * argument)
 				{
 					arm_control_mode = 11;
 					mode9_task_start = 1;
+					a_new_ball_in = 1;
 					osDelay(4000);
 					start_time = Time_s;
 				}
@@ -581,7 +594,7 @@ void flow_task(void const * argument)
 					bogan_jiqiu_flag = 0;
 				}				
 				
-				if(/*zhuanpanji_ball_num == 6*/Time_s - start_time > 15)
+				if(/*zhuanpanji_ball_num == 6*/Time_s - start_time > 2000)
 				{
 					bogan_control(2);
 //					osDelay(500);//这里延迟一下，防止最后一次击球还没成功，机械臂就抬起来了
@@ -986,7 +999,7 @@ void flow_task(void const * argument)
 					chassis_move.x_set = 0;
 					chassis_move.x = 0;
 				}
-				if(gray_data[0] == 0 && y_home_finish == 0)//车右灰度
+				if(gray_data[0] == 1 && y_home_finish == 0)//车右灰度
 				{
 					y_home_finish = 1;
 					chassis_move.y_set = 0;
