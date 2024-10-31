@@ -7,7 +7,7 @@
 /*******************************红色场地**********************************/
 /*******************************红色场地**********************************/
 /*******************************红色场地**********************************/
-
+//尝试新方案ing
 
 #include "flow_task.h"
 #include "chassis_task.h"
@@ -177,12 +177,12 @@ TargetPoints targ_point[] = {
 		{13,	 0,		  	100,		0,			1.5,			CHASSIS_MOVE_AND_ROTATE},//横移视觉三次锁球
 		{4,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第二个
 
-		//阶梯平台到圆盘机过渡
-/*22*/	{1,		 -20,	 	0,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},//阶梯平台完成，后退20
+		//避障，阶梯平台到圆盘机过渡
+/*22*/	{1,		 -20,	 	0,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},//阶梯平台完成，后退25，为了灰度读十字，原本20
 		{1,		 0,	 		0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//逆时针旋转180，以便视觉锁障
 		{1,		 0,		  	-120,		90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//锁障前
-		{6,		 0,		  	-200,		0,			10,				CHASSIS_MOVE_AND_ROTATE},//缓慢平移锁障
-		{7,		 200,		 0,			0,			5,				CHASSIS_MOVE_AND_ROTATE},//锁障后向前，待距离小于给定值，作避障动作
+		{2,		 0,		  	-50,		90,			20.0f,			CHASSIS_MOVE_AND_ROTATE},//锁障前，识别到十字停
+		{6,		 180,		 0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//缓慢前进锁障
 		{1,		 0,	 		40,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//避障动作
 		{1,		 90,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//避障动作
 		{1,		 0,	 		-45,		90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//避障动作，这里会偏一点，加一点补偿，误识别十字当做白线要处理一下
@@ -206,7 +206,7 @@ TargetPoints targ_point[] = {
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{15,	 non,	    non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		
-/*43*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，来锁球和二维码，防止偷窥注意距离
+/*45*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，来锁球和二维码，防止偷窥注意距离
 		{16,	 0,	 		100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//左移，锁列2二维码
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{19,	 0,			100,		0,			2,				CHASSIS_MOVE_AND_ROTATE},//立仓改版视觉横移锁球
@@ -375,7 +375,7 @@ void flow_task(void const * argument)
 				//逻辑待完善！！！！！！！！！！！！！！！！！
 				if(gray_data[1] == 0)
 				{
-					if(currentTargIndex != 30)
+					if(currentTargIndex != 30)	//关联的
 					{
 						chassis_code_reset_flag = 1;
 						modeN_task_start = 0;
@@ -496,9 +496,21 @@ void flow_task(void const * argument)
 					chassis_move.vy_min_speed = -target.V_max;
 					modeN_task_start = 1;
 				}
-				if(fabs(shijue_data.obstacle_x) < obstacle_x_tol)
+				if(shijue_data.obstacle_x < 0)
+					chassis_move.y_set = 100;
+				//球在右边，反方向动
+				else if(shijue_data.ball_x > 0)
+					chassis_move.y_set = -100;
+				
+				//发666过来表示识别不到，按照给定方向动
+				else if(shijue_data.ball_x == 0)
 				{
-					//里程计清零
+					chassis_move.y = 0;
+					chassis_move.y_set = 0;
+				}
+				
+				if(shijue_data.obstacle_distance  < obstacle_distance_tol)
+				{
 					chassis_code_reset_flag = 1;
 					modeN_task_start = 0;
 					currentTargIndex ++;
@@ -571,6 +583,7 @@ void flow_task(void const * argument)
 				{
 					arm_control_mode = 11;
 					mode9_task_start = 1;
+					a_new_ball_in = 1;
 					osDelay(4000);
 					start_time = Time_s;
 				}
@@ -595,7 +608,7 @@ void flow_task(void const * argument)
 					bogan_jiqiu_flag = 0;
 				}				
 				
-				if(/*zhuanpanji_ball_num == 6*/Time_s - start_time > 15)
+				if(/*zhuanpanji_ball_num == 6*/Time_s - start_time > 20)
 				{
 					bogan_control(2);
 //					osDelay(500);//这里延迟一下，防止最后一次击球还没成功，机械臂就抬起来了
@@ -1052,21 +1065,6 @@ void flow_task(void const * argument)
 			}
 			
 			
-//			else if(target.mode == 22)
-//			{
-//				if(lizhuang_ball_num != 2 && ball_error != 1)
-//				{
-//					ball_error ++;
-//					currentTargIndex -= 3;
-//				}
-//				else
-//				{
-//					ball_error = 0;
-//					currentTargIndex ++;
-//				}
-//					
-//			}
-			
 			//测试用
 			else if(target.mode == 66)
 			{
@@ -1103,6 +1101,68 @@ void flow_task(void const * argument)
 				}
 			}
 			
+			else if(target.mode == 24)
+			{
+				//设置底盘运动目标
+				if(modeN_task_start == 0)
+				{
+					chassis_behaviour_mode = target.chassis_mode;
+					chassis_move.x_set = target.para1;
+					chassis_move.y_set = target.para2;
+					chassis_move.vx_max_speed = target.V_max;
+					chassis_move.vx_min_speed = -target.V_max;
+					chassis_move.vy_max_speed = target.V_max;
+					chassis_move.vy_min_speed = -target.V_max;
+					modeN_task_start = 1;
+				}
+				
+				gray_sensor_read();
+				
+				if(gray_data[1] == 0)//车前灰度
+				{
+					
+					chassis_code_reset_flag = 1;
+					modeN_task_start = 0;
+					currentTargIndex ++;
+				}
+			}
+			
+			else if(target.mode == 23)
+			{
+				//设置底盘运动目标
+				if(modeN_task_start == 0)
+				{
+					chassis_behaviour_mode = target.chassis_mode;
+					chassis_move.x_set = target.para1;
+					chassis_move.y_set = target.para2;
+					chassis_move.vx_max_speed = target.V_max;
+					chassis_move.vx_min_speed = -target.V_max;
+					chassis_move.vy_max_speed = target.V_max;
+					chassis_move.vy_min_speed = -target.V_max;
+					modeN_task_start = 1;
+				}
+				
+				gray_sensor_read();
+				
+				if(gray_data[1] == 1 && x_home_finish == 0)//车前灰度
+				{
+					x_home_finish = 1;
+					chassis_move.x_set = 0;
+					chassis_move.x = 0;
+				}
+				if(gray_data[0] == 1 && y_home_finish == 0)//车右灰度
+				{
+					y_home_finish = 1;
+					chassis_move.y_set = 0;
+					chassis_move.y = 0;
+				}
+				if(x_home_finish == 1 && y_home_finish == 1)
+				{
+					chassis_code_reset_flag = 1;
+					currentTargIndex ++;
+				}
+			}
+			
 			
 			if(currentTargIndex == 32 && IC_store_start == 0) 
 			{
@@ -1113,7 +1173,7 @@ void flow_task(void const * argument)
 			
 			if(currentTargIndex <= 21) 
 				TX_shijue_mode = 0;
-			else if(currentTargIndex <= 29)
+			else if(currentTargIndex <= 30)
 				TX_shijue_mode = 1;
 			else if(currentTargIndex == 31)
 				TX_shijue_mode = 2;

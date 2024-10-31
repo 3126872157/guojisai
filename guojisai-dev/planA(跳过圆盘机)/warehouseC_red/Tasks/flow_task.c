@@ -164,13 +164,12 @@ TargetPoints targ_point[] = {
 		{4,		 non,	 	non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹取第二个
 
 		//阶梯平台到圆盘机过渡
-/*22*/	{1,		 -20,	 	0,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},//阶梯平台完成，后退20
+/*22*/	{1,		 -5,	 	0,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},//阶梯平台完成，后退20
 		{1,		 0,	 		0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//逆时针旋转180，以便视觉锁障
-		{1,		 0,		  	-120,		90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//锁障前
-		{6,		 0,		  	-200,		0,			10,				CHASSIS_MOVE_AND_ROTATE},//缓慢平移锁障
-		{7,		 200,		 0,			0,			5,				CHASSIS_MOVE_AND_ROTATE},//锁障后向前，待距离小于给定值，作避障动作
+		{24,	 0,		  	-200,		90,			30.0f,			CHASSIS_MOVE_AND_ROTATE},//识别十字，停，做假避障
+		{1,		 30,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//先往前一点，做假避障
 		{1,		 0,	 		40,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//避障动作
-		{1,		 90,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//避障动作
+		{1,		 110,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//避障动作
 		{1,		 0,	 		-45,		90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//避障动作，这里会偏一点，加一点补偿，误识别十字当做白线要处理一下
 /*30*/	{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 	
@@ -178,21 +177,21 @@ TargetPoints targ_point[] = {
 ///*31*/	{9,		 non,		non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//机械臂就位,拨杆拨球
 	
 		//圆盘机到仓库过渡
-/*32*/	{1,		 -5,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退5
-/*33*/	{1,		 0,	 		150,		90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//左移150cm，差不多到立仓
+/*31*/	{1,		 -5,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退5
+/*32*/	{1,		 0,	 		150,		90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//左移150cm，差不多到立仓
 
 		//立仓倒垛（重复三次）
-/*34*/	{10,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//视觉平移记录3个二维码对应的位置 ，向左移动
+/*33*/	{10,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//视觉平移记录3个二维码对应的位置 ，向左移动
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{19,	 0,		  	100,		0,			2,				CHASSIS_MOVE_AND_ROTATE},//立仓改版视觉横移锁球
 		{11,	 non,	    non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹球
 		{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，以识别二维码，最好慢一点，并根据二维码数字记录当前列数
-/*39*/	{14,	 0,	      	-100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//锁最右边的二维码，定位用
+/*38*/	{14,	 0,	      	-100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//锁最右边的二维码，定位用
 		{1,	 	 0,	 		-20,		90,			5,				CHASSIS_MOVE_AND_ROTATE},//右移到倒垛位，可以单开一个倒垛模式，让速度变慢
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{15,	 non,	    non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		
-/*43*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，来锁球和二维码，防止偷窥注意距离
+/*42*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，来锁球和二维码，防止偷窥注意距离
 		{16,	 0,	 		100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//左移，锁列2二维码
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{19,	 0,			100,		0,			2,				CHASSIS_MOVE_AND_ROTATE},//立仓改版视觉横移锁球
@@ -200,15 +199,15 @@ TargetPoints targ_point[] = {
 		{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，以识别二维码，并根据二维码数字记录当前列数
 		{14,	 0,	      	-100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//锁最右边的二维码，定位用
 		{1,	 	0,	 		-20,		90,			5,				CHASSIS_MOVE_AND_ROTATE},//右移到倒垛位，可以单开一个倒垛模式，让速度变慢
-/*51*/	{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
+/*50*/	{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{15,	 non,	    non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		
-/*53*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，来锁球和二维码
+/*52*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，来锁球和二维码
 		{14,	 0,	 		100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//左移，锁列3二维码
-/*55*/	{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
+/*54*/	{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{19,	 0,		  	100,		0,			2,				CHASSIS_MOVE_AND_ROTATE},//立仓改版视觉横移锁球
 		{11,	 non,	    non,		non,		non,			CHASSIS_MOVE_AND_ROTATE},//夹球
-/*58*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，以识别二维码，并根据二维码数字记录当前列数
+/*57*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，以识别二维码，并根据二维码数字记录当前列数
 		{14,	 0,	      	-100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//锁最右边的二维码，定位用
 		{1,	 	 0,	 		-20,		90,			5,				CHASSIS_MOVE_AND_ROTATE},//右移到倒垛位，可以单开一个倒垛模式，让速度变慢
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
@@ -216,8 +215,8 @@ TargetPoints targ_point[] = {
 		{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退
 
 		//立仓放球
-/*64*/	{14,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//从最右边往左走，锁列3二维码
-/*65*/	{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
+/*63*/	{14,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//从最右边往左走，锁列3二维码
+/*64*/	{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{18,	 1,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 2,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 3,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
@@ -226,9 +225,9 @@ TargetPoints targ_point[] = {
 		{18,	 3,/*行号*/	3,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		
 		
-/*72*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，锁二维码
+/*71*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，锁二维码
 		
-/*73*/	{16,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//从最右边往左走，锁列2二维码
+/*72*/	{16,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//从最右边往左走，锁列2二维码
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{18,	 1,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 2,/*行号*/	2,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
@@ -240,7 +239,7 @@ TargetPoints targ_point[] = {
 		
 		{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退，锁二维码
 		
-/*82*/	{17,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//从最右边往左走，锁列1二维码
+/*81*/	{17,	 0,	      	100,		0,			5,				CHASSIS_MOVE_AND_ROTATE},//从最右边往左走，锁列1二维码
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
 		{18,	 1,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 2,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
@@ -249,15 +248,15 @@ TargetPoints targ_point[] = {
 		{18,	 2,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		{18,	 3,/*行号*/	1,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 		
-/*90*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退
+/*89*/	{1,		 -20,	 	0,			90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退
 
 		//干扰球去阶梯平台
-/*91*/	{1,		 0,	 		0,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},//旋转180
+/*90*/	{1,		 0,	 		0,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},//旋转180
 		{1,		 0,	 		-20,		-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},
 		{1,		 120,	 	0,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},
 		{1,		 0,	 		50,			-90,		50.0f,			CHASSIS_MOVE_AND_ROTATE},
 		{2,		 100,	     0,			90,			5,				CHASSIS_MOVE_AND_ROTATE},//前进灰度识别白线后停
-/*96*/	{20,	 1,/*行号*/	4,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
+/*95*/	{20,	 1,/*行号*/	4,/*列号*/	non,		non,			CHASSIS_MOVE_AND_ROTATE},//放球
 
 		//回家
 		{1,		 -20,	 	0,			-90,			50.0f,			CHASSIS_MOVE_AND_ROTATE},//后退
@@ -266,7 +265,7 @@ TargetPoints targ_point[] = {
 		{22,	   -50,	 	50,			0,				5,				CHASSIS_MOVE_AND_ROTATE},//横向回家
 		{23,	   10,	 	-10,		0,				5,				CHASSIS_MOVE_AND_ROTATE},//纵向回家
 		{1,		  -3,	 	3,			0,				5,				CHASSIS_MOVE_AND_ROTATE},
-/*103*/	{66,	non,	 	non,		non,		non,			CHASSIS_V}
+/*102*/	{66,	non,	 	non,		non,		non,			CHASSIS_V}
 	
 	
 };
@@ -361,22 +360,22 @@ void flow_task(void const * argument)
 				//逻辑待完善！！！！！！！！！！！！！！！！！
 				if(gray_data[1] == 0)
 				{
-					if(currentTargIndex != 30)
-					{
+//					if(currentTargIndex != 30)
+//					{
 						chassis_code_reset_flag = 1;
 						modeN_task_start = 0;
 						currentTargIndex ++;
-					}
-					else
-					{
-						if((bizhang_distance + 90.0f + chassis_move.x) > bizhang_distance_total)
-						{
-							chassis_code_reset_flag = 1;
-							V_mode_x_speed = 0;
-							modeN_task_start = 0;
-							currentTargIndex ++;
-						}
-					}
+//					}
+//					else
+//					{
+//						if((bizhang_distance + 90.0f + chassis_move.x) > bizhang_distance_total)
+//						{
+//							chassis_code_reset_flag = 1;
+//							V_mode_x_speed = 0;
+//							modeN_task_start = 0;
+//							currentTargIndex ++;
+//						}
+//					}
 				}
 			}
 			//横移视觉找球
@@ -1038,6 +1037,35 @@ void flow_task(void const * argument)
 			}
 			
 			
+			else if(target.mode == 24)
+			{
+				//设置底盘运动目标
+				if(modeN_task_start == 0)
+				{
+					chassis_behaviour_mode = target.chassis_mode;
+					chassis_move.x_set = target.para1;
+					chassis_move.y_set = target.para2;
+					chassis_move.vx_max_speed = target.V_max;
+					chassis_move.vx_min_speed = -target.V_max;
+					chassis_move.vy_max_speed = target.V_max;
+					chassis_move.vy_min_speed = -target.V_max;
+					modeN_task_start = 1;
+				}
+				
+				gray_sensor_read();
+				
+				//逻辑待完善！！！！！！！！！！！！！！！！！
+				if(gray_data[1] == 0)
+				{
+					if(chassis_move.x > 80)
+					{
+						chassis_code_reset_flag = 1;
+						V_mode_x_speed = 0;
+						modeN_task_start = 0;
+						currentTargIndex ++;
+					}
+				}
+			}
 //			else if(target.mode == 22)
 //			{
 //				if(lizhuang_ball_num != 2 && ball_error != 1)
@@ -1090,7 +1118,7 @@ void flow_task(void const * argument)
 			}
 			
 			
-			if(currentTargIndex == 32 && IC_store_start == 0) 
+			if(currentTargIndex == 31 && IC_store_start == 0) 
 			{
 				record_start_flag1 = 1;
 				IC_store_start = 1;
@@ -1099,10 +1127,10 @@ void flow_task(void const * argument)
 			
 			if(currentTargIndex <= 21) 
 				TX_shijue_mode = 0;
-			else if(currentTargIndex <= 29)
-				TX_shijue_mode = 1;
-			else if(currentTargIndex == 31)
-				TX_shijue_mode = 2;
+//			else if(currentTargIndex <= 29)
+//				TX_shijue_mode = 1;
+//			else if(currentTargIndex == 31)
+//				TX_shijue_mode = 2;
 			else if(currentTargIndex <= 130)
 				TX_shijue_mode = 3;
 		}

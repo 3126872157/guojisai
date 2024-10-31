@@ -22,11 +22,11 @@ float piancha = 75;//摄像头到夹爪的距离偏差
 /******************需要调试的值*********************/
 float jie_ti_ping_tai[3] = {260, 200, 150};	//阶梯平台y，从高往低0,1,2
 
-float li_cang[3] = {355, 235, 95};//立仓从高往低0,1,2
+float li_cang[3] = {365, 240, 110};//立仓从高往低0,1,2
 
 float jieti_x = 500;//阶梯平台x
 
-uint8_t zhuanpan_y = 235;//转盘机y
+uint8_t zhuanpan_y = 250;//转盘机y
 
 
 /******************需要调试的值*********************/
@@ -41,9 +41,9 @@ uint16_t extra_time = 1000;
 
 void set_bodanpan_pos(void)
 {
-	point.x = 275;
+	point.x = 285;
 	point.y = -25;
-	point.total_angle = 180;
+	point.total_angle = 185;
 }
 
 void set_normal_pos(void)
@@ -155,21 +155,9 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)//arm_control_mode = 2 , 3
 				extra_time = 200;
 				a_new_ball_in = 1;
 				arm_ctrl_signal = 1;
-//				uint8_t num = 0;
-//				float distance_total = 0;
-//				while(num < 100)
-//				{
-//					distance_total += shijue_data.ball_y;
-//					num ++;
-//					osDelay(1);
-//				}
-//				if(fabs(shijue_data.ball_x - 666) > 2)
-//				{
-//					point.x += 10.0f + (distance_total/100.0f - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
-//				}
 			
 				point.x = jieti_x;		//阶梯的坐标
-				point.y = jie_ti_ping_tai[jie_ti_num] + 50;
+				point.y = jie_ti_ping_tai[jie_ti_num] + 60;
 				claw_control(400);	//担心碰到边沿，先关闭夹爪,400
 				point.total_angle = 110;//阶梯平台末端角度,100
 				arm_current_step ++;
@@ -217,10 +205,6 @@ void jie_ti_ping_tai_take(uint8_t jie_ti_num)//arm_control_mode = 2 , 3
 				point.total_angle = 110;
 				arm_current_step ++;
 				break;
-//			case 5:					//对准拨蛋盘
-//				set_bodanpan_pos();
-//				arm_current_step ++;
-//				break;
 			case 7:					//放球
 				extra_time = 0;
 			
@@ -597,7 +581,7 @@ void daoduo_put(uint8_t li_cang_num)//arm_control_mode 13 14
 				arm_current_step ++;
 				break;
 			case 4:
-				extra_time = 0;
+				extra_time = 300;
 			
 				set_normal_pos();//回归
 				claw_control(600);
@@ -622,18 +606,18 @@ void daoduo_put_diceng(void)//arm_control_mode = 12
 				arm_ctrl_signal = 1;
 				huadao_control(2);
 				point.x = 380;		//立仓的坐标
-				point.y = li_cang[2];
+				point.y = li_cang[2] - 10;
 				point.total_angle = 110;
 				arm_current_step ++;
 				break;
 			case 1:
-				extra_time = 0;
+				extra_time = 300;
 			
 				point.x = 470;
 				arm_current_step ++;
 				break;
 			case 2:
-				extra_time = 0;
+				extra_time = 300;
 			
 				claw_control(470);
 				point.y = li_cang[2] - 40;
@@ -696,16 +680,12 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球 //arm_
 				if(fabs(shijue_data.ball_x - 666) > 2)
 				{
 					point.x += shijue_data.ball_distance * sinf(70*D2R) - shijue_data.ball_y * cosf(70*D2R)-pianzhi_x;
-//					point.x += (140.0f - distance_total / 100.0f * pianzhi_test) / tanf(lizhuang_angle) - 95.0f * cosf(lizhuang_angle);
-//					point.x += 10.0f + (distance_total/100.0f - piancha) * cosf(lizhuang_angle) - shijue_data.ball_y * sinf(lizhuang_angle);
 				}
 				else
 				{
 					arm_shijue_error ++;
 				}
-				//point.x = 590;
-				//point.y -=  shijue_data.ball_distance*cosf(70*D2R) - shijue_data.ball_y * sinf(70*D2R)-pianzhi_y;	
-				point.y = 210;//调高了一点点，原本220,原本的原本210
+				point.y = 225;//调高了一点点，原本215
 				arm_current_step ++;
 				break;
 			case 2:
@@ -756,10 +736,6 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球 //arm_
 				extra_time = 0;
 			
 				set_normal_pos();
-//				if(lizhuang_success_flag == 1)
-//				{
-//					lizhuang_success_flag = 0;
-//				}
 				claw_control(600);
 				arm_current_step ++;
 				break;
@@ -768,7 +744,6 @@ void lizhuang_shijue_take(void)//先用视觉横移到球所在平面，再通过测距夹球 //arm_
 				extra_time = 1000;
 				arm_current_step = 0;
 				arm_ctrl_signal = 0;
-			
 				break;
 		}
 }
@@ -781,7 +756,6 @@ void zhuanpanji_take(void)//arm_control_mode 11
 		{
 			case 0:
 				extra_time = 0;
-			
 				arm_ctrl_signal = 1;
 				claw_control(510);
 				tulun_control(0);
@@ -814,7 +788,7 @@ void zhuanpanji_take(void)//arm_control_mode 11
 			
 				point.x = 410;	//圆盘机x调整,435
 				point.y = zhuanpan_y;
-				point.total_angle = 85;
+				point.total_angle = 88;
 				arm_current_step ++;
 				break;
 			case 4:

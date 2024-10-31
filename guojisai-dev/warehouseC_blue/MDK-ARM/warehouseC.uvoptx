@@ -372,6 +372,11 @@
           <WinNumber>2</WinNumber>
           <ItemText>IC_date_test2</ItemText>
         </Ww>
+        <Ww>
+          <count>26</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>test_pos,0x0A</ItemText>
+        </Ww>
       </WatchWindow2>
       <Tracepoint>
         <THDelay>0</THDelay>
